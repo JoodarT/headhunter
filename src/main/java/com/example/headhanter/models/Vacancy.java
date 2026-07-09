@@ -6,9 +6,7 @@ import jdk.jfr.Category;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 
 
 @Slf4j
@@ -42,6 +40,8 @@ public class Vacancy {
 
 
     private Category category;
+
+
 
     private User author;
 
