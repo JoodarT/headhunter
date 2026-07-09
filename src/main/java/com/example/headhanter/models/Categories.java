@@ -6,9 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class categories {
+public class Categories {
 
-    String name;
-    Integer parentId;
-    Integer id;
+    private String name;
+    private Integer parentId;
+    private Integer id;
 }
