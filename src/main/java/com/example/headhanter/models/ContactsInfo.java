@@ -9,13 +9,13 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+
+
 public class ContactsInfo {
     private Integer typeId;
     private Integer resumeId;
     private String values;
     private Integer id;
 
-    public ContactsInfo(Integer typeId) {
-        this.typeId = typeId;
-    }
+
 }

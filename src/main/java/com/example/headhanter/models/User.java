@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class Users {
+public class User {
 
 
    private long id;
