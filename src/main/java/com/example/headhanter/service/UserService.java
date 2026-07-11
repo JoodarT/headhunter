@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     public User getFakeAuthor() {
+
         return new User(1L, "Test", "Testov", "example@mail.ru");
     }
 }
