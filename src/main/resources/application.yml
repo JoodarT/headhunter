@@ -1,0 +1,9 @@
+
+
+spring:
+  application:
+    name: headhanter
+
+
+server:
+  port: 8998
