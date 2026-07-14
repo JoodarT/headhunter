@@ -24,20 +24,20 @@ public class ResumeController {
 
     @PostMapping
     public ResponseEntity<Resume> createResume(@RequestBody Resume resume) {
-        Resume created = resumeService.createResume(resume);
+        Resume created = resumeService.save(resume);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Resume> updateResume(@PathVariable Long id, @RequestBody Resume resume) {
-        return resumeService.updateResume(id, resume)
+        return resumeService.update(id, resume)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResume(@PathVariable Long id) {
-        if (resumeService.deleteResume(id)) {
+        if (resumeService.delete(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();

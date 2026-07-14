@@ -17,25 +17,23 @@ public class ResumeService {
     @Autowired
     private VacancyService vacancyService;
 
-    public Resume createResume(Resume resume) {
+    public Resume save(Resume resume) {
         resume.setId(currentId++);
         resumes.add(resume);
         return resume;
     }
 
-    public Optional<Resume> updateResume(Long id, Resume updated) {
+    public Optional<Resume> update(Long id, Resume updated) {
         return resumes.stream()
                 .filter(r -> r.getId().equals(id))
                 .peek(r -> {
                     r.setTitle(updated.getTitle());
                     r.setExpectedSalary(updated.getExpectedSalary());
-                    r.setEducationList(updated.getEducationList());
-                    r.setWorkExperienceList(updated.getWorkExperienceList());
                 })
                 .findFirst();
     }
 
-    public boolean deleteResume(Long id) {
+    public boolean delete(Long id) {
         return resumes.removeIf(r -> r.getId().equals(id));
     }
 
