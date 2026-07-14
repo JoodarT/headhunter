@@ -1,60 +1,52 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.models.Vacancy;
-import com.example.headhanter.models.Category;
-import com.example.headhanter.models.RespondedApplicant;
-import com.example.headhanter.service.VacancyService;
-import com.example.headhanter.service.ResponseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.headhanter.models.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/vacancies")
 public class VacancyController {
 
-    @Autowired
-    private VacancyService vacancyService;
+    private static final List<Vacancy> vacancies = new ArrayList<>();
+    private static final AtomicLong idGenerator = new AtomicLong(1);
 
-    @Autowired
-    private ResponseService responseService;
+    public static Vacancy findVacancyById(Long id) {
+        return vacancies.stream()
+                .filter(v -> v.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 
     @PostMapping
     public ResponseEntity<Vacancy> createVacancy(@RequestBody Vacancy vacancy) {
-        Vacancy created = vacancyService.save(vacancy);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Vacancy> updateVacancy(@PathVariable Long id, @RequestBody Vacancy vacancy) {
-        return vacancyService.update(id, vacancy)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {
-        if (vacancyService.delete(id)) {
-            return ResponseEntity.noContent().build();
+        User employer = UserController.findUserById(vacancy.getEmployerId());
+        if (employer == null) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.notFound().build();
+
+        vacancy.setId(idGenerator.getAndIncrement());
+        vacancies.add(vacancy);
+        return new ResponseEntity<>(vacancy, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Vacancy>> getAllVacancies() {
-        return ResponseEntity.ok(vacancyService.getAllVacancies());
+    public List<Vacancy> getAllVacancies() {
+        return vacancies;
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<Vacancy>> getByCategory(@PathVariable Category category) {
-        return ResponseEntity.ok(vacancyService.getVacanciesByCategory(category));
-    }
-
-    @GetMapping("/{id}/responses")
-    public ResponseEntity<List<RespondedApplicant>> getResponses(@PathVariable Long id) {
-        return ResponseEntity.ok(responseService.getResponsesForVacancy(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<Vacancy> getVacancyById(@PathVariable Long id) {
+        Vacancy vacancy = findVacancyById(id);
+        if (vacancy != null) {
+            return ResponseEntity.ok(vacancy);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

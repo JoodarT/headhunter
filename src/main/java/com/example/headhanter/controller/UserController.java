@@ -1,59 +1,71 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.models.User;
-import com.example.headhanter.models.AccountType;
-import com.example.headhanter.service.UserService;
-import com.example.headhanter.service.FileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private static final List<User> users = new ArrayList<>();
+    private static final AtomicLong idGenerator = new AtomicLong(1);
 
-    @Autowired
-    private FileService fileService;
+    public static User findUserById(Long id) {
+        return users.stream()
+                .filter(u -> u.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        User created = userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        user.setId(idGenerator.getAndIncrement());
+        users.add(user);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @GetMapping("/applicants")
-    public ResponseEntity<List<User>> getApplicants() {
-        return ResponseEntity.ok(userService.getUsersByType(AccountType.APPLICANT));
+    @GetMapping
+    public List<User> getAllUsers() {
+        return users;
     }
 
-    @GetMapping("/employers")
-    public ResponseEntity<List<User>> getEmployers() {
-        return ResponseEntity.ok(userService.getUsersByType(AccountType.EMPLOYER));
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = findUserById(id);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
     }
-
-    @PostMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-        if (userService.getUserById(id).isEmpty()) {
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        User existingUser = findUserById(id);
+        if (existingUser == null) {
             return ResponseEntity.notFound().build();
         }
-        String fileName = fileService.saveUploadedFile(file, "/avatars");
-        userService.updateAvatar(id, fileName);
-        return ResponseEntity.ok(fileName);
+        existingUser.setName(updatedUser.getName());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setAccountType(updatedUser.getAccountType());
+        existingUser.setContacts(updatedUser.getContacts());
+        existingUser.setAvatarFileName(updatedUser.getAvatarFileName());
+
+        return ResponseEntity.ok(existingUser);
     }
 
-    @GetMapping("/{id}/avatar")
-    public ResponseEntity<?> getAvatar(@PathVariable Long id) {
-        return userService.getUserById(id)
-                .map(User::getAvatarFileName)
-                .map(name -> fileService.getOutputFile(name, "/avatars", MediaType.IMAGE_JPEG))
-                .orElse(ResponseEntity.notFound().build());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        User user = findUserById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        users.remove(user);
+        return ResponseEntity.noContent().build();
     }
 }

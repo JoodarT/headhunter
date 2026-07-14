@@ -1,9 +1,8 @@
-
-
-spring:
-  application:
-    name: headhanter
-
-
 server:
-  port: 8998
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

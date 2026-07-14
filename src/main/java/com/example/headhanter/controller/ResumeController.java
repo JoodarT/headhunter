@@ -1,63 +1,69 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.models.Resume;
-import com.example.headhanter.models.Category;
-import com.example.headhanter.models.RespondedApplicant;
-import com.example.headhanter.service.ResumeService;
-import com.example.headhanter.service.ResponseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/resumes")
 public class ResumeController {
 
-    @Autowired
-    private ResumeService resumeService;
+    private static final List<Resume> resumes = new ArrayList<>();
+    private static final AtomicLong idGenerator = new AtomicLong(1);
 
-    @Autowired
-    private ResponseService responseService;
+    public static Resume findResumeById(Long id) {
+        return resumes.stream()
+                .filter(r -> r.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 
     @PostMapping
     public ResponseEntity<Resume> createResume(@RequestBody Resume resume) {
-        Resume created = resumeService.save(resume);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        resume.setId(idGenerator.getAndIncrement());
+        resumes.add(resume);
+        return new ResponseEntity<>(resume, HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public List<Resume> getAllResumes() {
+        return resumes;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Resume> getResumeById(@PathVariable Long id) {
+        Resume resume = findResumeById(id);
+        if (resume != null) {
+            return ResponseEntity.ok(resume);
+        }
+        return ResponseEntity.notFound().build();
+    }
     @PutMapping("/{id}")
-    public ResponseEntity<Resume> updateResume(@PathVariable Long id, @RequestBody Resume resume) {
-        return resumeService.update(id, resume)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Resume> updateResume(@PathVariable Long id, @RequestBody Resume updatedResume) {
+        Resume existingResume = findResumeById(id);
+        if (existingResume == null) {
+            return ResponseEntity.notFound().build();
+        }
+        existingResume.setApplicantName(updatedResume.getApplicantName());
+        existingResume.setTitle(updatedResume.getTitle());
+        existingResume.setSkills(updatedResume.getSkills());
+        existingResume.setExpectedSalary(updatedResume.getExpectedSalary());
+
+        return ResponseEntity.ok(existingResume);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResume(@PathVariable Long id) {
-        if (resumeService.delete(id)) {
-            return ResponseEntity.noContent().build();
+        Resume resume = findResumeById(id);
+        if (resume == null) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Resume>> getAllResumes() {
-        return ResponseEntity.ok(resumeService.getAllResumes());
-    }
-
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<Resume>> getByCategory(@PathVariable Category category) {
-        return ResponseEntity.ok(resumeService.getResumesByCategory(category));
-    }
-
-    @PostMapping("/apply")
-    public ResponseEntity<RespondedApplicant> apply(
-            @RequestParam Long vacancyId,
-            @RequestParam Long resumeId) {
-        RespondedApplicant response = responseService.applyToVacancy(vacancyId, resumeId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        resumes.remove(resume);
+        return ResponseEntity.noContent().build();
     }
 }
