@@ -1,33 +1,33 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.models.Vacancy;
-import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-
-
+import java.util.List;
 
 @RestController
-@RequestMapping("/vacancy")
-
+@RequestMapping("/vacancies")
 public class VacancyController {
 
-    private final VacancyService vacancyService;
-
     @Autowired
-    public VacancyController(VacancyService vacancyService){
-        this.vacancyService = vacancyService;
+    private VacancyService vacancyService;
+
+    @PostMapping
+    public ResponseEntity<Vacancy> createVacancy(@RequestBody Vacancy vacancy) {
+        Vacancy created = vacancyService.save(vacancy);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @GetMapping("/demo")
-    public Vacancy getDemoVacancy() {
-        return vacancyService.createDemoVacancy();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {
+        boolean deleted = vacancyService.delete(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
