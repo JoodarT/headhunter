@@ -1,17 +1,19 @@
 package com.example.headhanter.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.List;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 public class User {
    private Long id;
-   private String name;
-   private String surname;
    private String email;
+   private String password;
+   private String name;
+   private AccountType accountType;
+   private List<ContactsInfo> contacts;
+   private String avatarFileName;
 }

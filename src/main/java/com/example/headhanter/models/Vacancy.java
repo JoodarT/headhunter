@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vacancy {
     private Long id;
-    private String name;
+    private Long employerId;
+    private String title;
     private String description;
-    private User author;
+    private Double salary;
+    private Category category;
 }

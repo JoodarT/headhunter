@@ -1,26 +1,18 @@
 package com.example.headhanter.models;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "messages")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "responded_applicants_id", nullable = false)
     private RespondedApplicant respondedApplicant;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
-
     private LocalDateTime timestamp;
 }
