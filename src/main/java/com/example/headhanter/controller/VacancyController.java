@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/vacancies")
 public class VacancyController {
@@ -24,8 +22,7 @@ public class VacancyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {
-        boolean deleted = vacancyService.delete(id);
-        if (deleted) {
+        if (vacancyService.deleteVacancy(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
