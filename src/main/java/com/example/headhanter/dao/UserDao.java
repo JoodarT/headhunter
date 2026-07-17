@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 
-public class CustomerDao {
+public class UserDao {
     private Integer id;
     private String name;
     private String password;
