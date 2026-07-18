@@ -26,12 +26,13 @@ public class VacancyService {
     }
 
     public Vacancy updateVacancy(Long id, Vacancy updatedVacancy) {
-        Vacancy existingVacancy = vacancyDao.findById(id);
+        Vacancy existingVacancy = vacancyDao.findWithoutIncrementingViews(id);
         if (existingVacancy != null) {
             existingVacancy.setTitle(updatedVacancy.getTitle());
             existingVacancy.setDescription(updatedVacancy.getDescription());
             existingVacancy.setSalary(updatedVacancy.getSalary());
             existingVacancy.setCategory(updatedVacancy.getCategory());
+            existingVacancy.setEmployerId(updatedVacancy.getEmployerId());
 
             vacancyDao.update(existingVacancy);
             return existingVacancy;
@@ -46,8 +47,15 @@ public class VacancyService {
         return vacancyDao.findByCategory(category);
     }
 
+    public List<Vacancy> getVacanciesByMinSalary(Double minSalary) {
+        if (minSalary == null || minSalary < 0) {
+            return vacancyDao.findAll();
+        }
+        return vacancyDao.findByMinSalary(minSalary);
+    }
+
     public boolean deleteVacancy(Long id) {
-        if (vacancyDao.findById(id) != null) {
+        if (vacancyDao.findWithoutIncrementingViews(id) != null) {
             vacancyDao.deleteById(id);
             return true;
         }

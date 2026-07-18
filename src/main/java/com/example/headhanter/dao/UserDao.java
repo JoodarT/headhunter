@@ -1,6 +1,7 @@
 package com.example.headhanter.dao;
 
 import com.example.headhanter.models.User;
+import com.example.headhanter.models.Vacancy;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -67,5 +68,15 @@ public class UserDao {
     public void deleteById(Long id) {
         String sql = "DELETE FROM users WHERE id = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    public void save(Vacancy vacancy) {
+        String sql = "INSERT INTO vacancies (title, description, salary, category, views) VALUES (?, ?, ?, ?, 0)";
+        jdbcTemplate.update(sql,
+                vacancy.getTitle(),
+                vacancy.getDescription(),
+                vacancy.getSalary(),
+                vacancy.getCategory()
+        );
     }
 }

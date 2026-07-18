@@ -7,22 +7,19 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
-  spring:
-    datasource:
-      url: jdbc:h2:mem:headhanterdb;MODE=PostgreSQL
-      driver-class-name: org.h2.Driver
-      username: sa
-      password: ""
-    h2:
-      console:
-        enabled: true
-        path: /h2-console
-    sql:
-      init:
-        mode: always
+spring:
+  datasource:
+    url: jdbc:h2:mem:headhanterdb;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
-
-databaseChangeLog:
-  - include:
-      file: db/changelog/changeset/001-create-initial-tables.yaml
-
+  sql:
+    init:
+      mode: never

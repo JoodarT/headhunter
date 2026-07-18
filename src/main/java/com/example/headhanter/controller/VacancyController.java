@@ -36,6 +36,11 @@ public class VacancyController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/salary")
+    public List<Vacancy> getVacanciesByMinSalary(@RequestParam(name = "minSalary", required = false) Double minSalary) {
+        return vacancyService.getVacanciesByMinSalary(minSalary);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Vacancy> updateVacancy(@PathVariable Long id, @RequestBody Vacancy updatedVacancy) {
         Vacancy vacancy = vacancyService.updateVacancy(id, updatedVacancy);
