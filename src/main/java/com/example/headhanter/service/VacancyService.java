@@ -39,6 +39,13 @@ public class VacancyService {
         return null;
     }
 
+    public List<Vacancy> getVacanciesByCategory(String category) {
+        if (category == null || category.trim().isEmpty()) {
+            return vacancyDao.findAll();
+        }
+        return vacancyDao.findByCategory(category);
+    }
+
     public boolean deleteVacancy(Long id) {
         if (vacancyDao.findById(id) != null) {
             vacancyDao.deleteById(id);

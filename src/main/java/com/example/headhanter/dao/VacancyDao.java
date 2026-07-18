@@ -36,6 +36,10 @@ public class VacancyDao {
             return null;
         }
     }
+    public List<Vacancy> findByCategory(String category) {
+        String sql = "SELECT * FROM vacancies WHERE category = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), category);
+    }
 
     public void update(Vacancy vacancy) {
         String sql = "UPDATE vacancies SET title = ?, description = ?, salary = ?, category = ? WHERE id = ?";

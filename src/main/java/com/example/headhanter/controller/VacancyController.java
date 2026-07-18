@@ -53,4 +53,9 @@ public class VacancyController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/category")
+    public List<Vacancy> getVacanciesByCategory(@RequestParam(name = "category", required = false) String category) {
+        return vacancyService.getVacanciesByCategory(category);
+    }
 }
