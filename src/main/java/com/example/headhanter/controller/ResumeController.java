@@ -1,69 +1,56 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.models.Resume;
+import com.example.headhanter.service.ResumeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/resumes")
+@RequiredArgsConstructor
 public class ResumeController {
 
-    private static final List<Resume> resumes = new ArrayList<>();
-    private static final AtomicLong idGenerator = new AtomicLong(1);
-
-    public static Resume findResumeById(Long id) {
-        return resumes.stream()
-                .filter(r -> r.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-    }
+    private final ResumeService resumeService;
 
     @PostMapping
     public ResponseEntity<Resume> createResume(@RequestBody Resume resume) {
-        resume.setId(idGenerator.getAndIncrement());
-        resumes.add(resume);
-        return new ResponseEntity<>(resume, HttpStatus.CREATED);
+        Resume created = resumeService.createResume(resume);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping
     public List<Resume> getAllResumes() {
-        return resumes;
+        return resumeService.getAllResumes();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Resume> getResumeById(@PathVariable Long id) {
-        Resume resume = findResumeById(id);
+        Resume resume = resumeService.getResumeById(id);
         if (resume != null) {
             return ResponseEntity.ok(resume);
         }
         return ResponseEntity.notFound().build();
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<Resume> updateResume(@PathVariable Long id, @RequestBody Resume updatedResume) {
-        Resume existingResume = findResumeById(id);
-        if (existingResume == null) {
-            return ResponseEntity.notFound().build();
+        Resume resume = resumeService.updateResume(id, updatedResume);
+        if (resume != null) {
+            return ResponseEntity.ok(resume);
         }
-        existingResume.setApplicantName(updatedResume.getApplicantName());
-        existingResume.setTitle(updatedResume.getTitle());
-        existingResume.setSkills(updatedResume.getSkills());
-        existingResume.setExpectedSalary(updatedResume.getExpectedSalary());
-
-        return ResponseEntity.ok(existingResume);
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResume(@PathVariable Long id) {
-        Resume resume = findResumeById(id);
-        if (resume == null) {
-            return ResponseEntity.notFound().build();
+        boolean deleted = resumeService.deleteResume(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
         }
-        resumes.remove(resume);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
 }
