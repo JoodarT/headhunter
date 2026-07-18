@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS customer (
     password VARCHAR(45)
     );
 
-
 CREATE TABLE IF NOT EXISTS users (
                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                      name VARCHAR(255),
@@ -28,7 +27,8 @@ CREATE TABLE IF NOT EXISTS vacancies (
                                          title VARCHAR(255),
     description TEXT,
     salary DOUBLE,
-    category VARCHAR(255)
+    category VARCHAR(255), -- ЧЕТКО ЗДЕСЬ: Добавлена пропущенная запятая
+    views INT DEFAULT 0
     );
 
 CREATE TABLE IF NOT EXISTS responded_applicants (
@@ -38,8 +38,7 @@ CREATE TABLE IF NOT EXISTS responded_applicants (
                                                     confirmation BOOLEAN DEFAULT FALSE
 );
 
-
-
+-- Тестовые данные
 INSERT INTO customer(name, password) VALUES ('tupac', 'qwerty');
 
 INSERT INTO users (name, email, password, phone, account_type)
@@ -54,11 +53,11 @@ VALUES ('Абдышукур Абдымомунов', 'Java Developer', 'IT', 'Ja
 INSERT INTO resumes (applicant_name, title, category, skills, expected_salary)
 VALUES ('Абдышукур Абдымомунов', 'Android Developer', 'IT', 'Kotlin, Android SDK', 100000.0);
 
-INSERT INTO vacancies (title, description, salary, category)
-VALUES ('Java Разработчик', 'Ищем специалиста на Spring Boot', 130000.0, 'IT');
+INSERT INTO vacancies (title, description, salary, category, views)
+VALUES ('Java Разработчик', 'Ищем специалиста на Spring Boot', 130000.0, 'IT', 0);
 
-INSERT INTO vacancies (title, description, salary, category)
-VALUES ('Фронтенд Инженер', 'Требуется знание React', 110000.0, 'IT');
+INSERT INTO vacancies (title, description, salary, category, views)
+VALUES ('Фронтенд Инженер', 'Требуется знание React', 110000.0, 'IT', 0);
 
 INSERT INTO responded_applicants (resume_id, vacancy_id, confirmation)
 VALUES (1, 1, false);

@@ -28,14 +28,14 @@ public class VacancyDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class));
     }
 
-    public Vacancy findById(Long id) {
-        String sql = "SELECT * FROM vacancies WHERE id = ?";
-        try {
-            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Vacancy.class), id);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
+//    public Vacancy findById(Long id) {
+//        String sql = "SELECT * FROM vacancies WHERE id = ?";
+//        try {
+//            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Vacancy.class), id);
+//        } catch (EmptyResultDataAccessException e) {
+//            return null;
+//        }
+//    }
     public List<Vacancy> findByCategory(String category) {
         String sql = "SELECT * FROM vacancies WHERE category = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), category);
@@ -49,5 +49,17 @@ public class VacancyDao {
     public void deleteById(Long id) {
         String sql = "DELETE FROM vacancies WHERE id = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    public Vacancy findById(Long id) {
+        String updateSql = "UPDATE vacancies SET views = views + 1 WHERE id = ?";
+        jdbcTemplate.update(updateSql, id);
+
+        String selectSql = "SELECT * FROM vacancies WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(selectSql, new BeanPropertyRowMapper<>(Vacancy.class), id);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
