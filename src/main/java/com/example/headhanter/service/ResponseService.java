@@ -55,6 +55,16 @@ public class ResponseService {
         return false;
     }
 
+    public List<RespondedApplicant> getResponsesByVacancyId(Long vacancyId) {
+        List<Map<String, Object>> rows = respondedApplicantDao.findByVacancyIdRaw(vacancyId);
+        List<RespondedApplicant> responses = new ArrayList<>();
+
+        for (Map<String, Object> row : rows) {
+            responses.add(mapToModel(row));
+        }
+        return responses;
+    }
+
     private RespondedApplicant mapToModel(Map<String, Object> row) {
         RespondedApplicant applicant = new RespondedApplicant();
         applicant.setId((Long) row.get("id"));

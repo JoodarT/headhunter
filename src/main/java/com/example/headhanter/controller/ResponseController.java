@@ -15,6 +15,11 @@ public class ResponseController {
 
     private final ResponseService responseService;
 
+    @GetMapping("/by-vacancy/{vacancyId}")
+    public List<RespondedApplicant> getResponsesByVacancy(@PathVariable Long vacancyId) {
+        return responseService.getResponsesByVacancyId(vacancyId);
+    }
+
     @PostMapping
     public ResponseEntity<Void> respond(@RequestParam Long resumeId, @RequestParam Long vacancyId) {
         responseService.respondToVacancy(resumeId, vacancyId);

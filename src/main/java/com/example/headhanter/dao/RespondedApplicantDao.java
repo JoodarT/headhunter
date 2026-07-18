@@ -13,6 +13,11 @@ public class RespondedApplicantDao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    public List<Map<String, Object>> findByVacancyIdRaw(Long vacancyId) {
+        String sql = "SELECT * FROM responded_applicants WHERE vacancy_id = ?";
+        return jdbcTemplate.queryForList(sql, vacancyId);
+    }
+
     public void save(Long resumeId, Long vacancyId) {
         String sql = "INSERT INTO responded_applicants (resume_id, vacancy_id, confirmation) VALUES (?, ?, false)";
         jdbcTemplate.update(sql, resumeId, vacancyId);
