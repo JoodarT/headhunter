@@ -13,7 +13,8 @@ public class User {
    private String email;
    private String password;
    private String name;
-   private AccountType accountType;
+   private String phone;
+   private String accountType;
    private List<ContactsInfo> contacts;
    private String avatarFileName;
 }

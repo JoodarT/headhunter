@@ -1,71 +1,80 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.models.User;
+import com.example.headhanter.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    private static final List<User> users = new ArrayList<>();
-    private static final AtomicLong idGenerator = new AtomicLong(1);
-
-    public static User findUserById(Long id) {
-        return users.stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-    }
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        user.setId(idGenerator.getAndIncrement());
-        users.add(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        User created = userService.createUser(user);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-        return users;
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = findUserById(id);
+        User user = userService.getUserById(id);
         if (user != null) {
             return ResponseEntity.ok(user);
         }
         return ResponseEntity.notFound().build();
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User existingUser = findUserById(id);
-        if (existingUser == null) {
-            return ResponseEntity.notFound().build();
+        User user = userService.updateUser(id, updatedUser);
+        if (user != null) {
+            return ResponseEntity.ok(user);
         }
-        existingUser.setName(updatedUser.getName());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setAccountType(updatedUser.getAccountType());
-        existingUser.setContacts(updatedUser.getContacts());
-        existingUser.setAvatarFileName(updatedUser.getAvatarFileName());
-
-        return ResponseEntity.ok(existingUser);
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        User user = findUserById(id);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+        boolean deleted = userService.deleteUser(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
         }
-        users.remove(user);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/search-by-name")
+    public List<User> searchByName(@RequestParam String name) {
+        return userService.getUsersByName(name);
+    }
+
+    @GetMapping("/search-by-phone")
+    public List<User> searchByPhone(@RequestParam String phone) {
+        return userService.getUsersByPhone(phone);
+    }
+
+    @GetMapping("/search-by-email")
+    public ResponseEntity<User> searchByEmail(@RequestParam String email) {
+        User user = userService.getUserByEmail(email);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/exists")
+    public boolean exists(@RequestParam String email) {
+        return userService.checkUserExists(email);
     }
 }
