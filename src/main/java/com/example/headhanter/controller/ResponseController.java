@@ -37,9 +37,15 @@ public class ResponseController {
         return responseService.getAllResponses();
     }
 
+//    @PutMapping("/{id}/confirm")
+//    public ResponseEntity<Void> confirm(@PathVariable Long id, @RequestParam boolean status) {
+//        boolean updated = responseService.updateConfirmation(id, status);
+//        return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+//    }
+
     @PutMapping("/{id}/confirm")
-    public ResponseEntity<Void> confirm(@PathVariable Long id, @RequestParam boolean status) {
-        boolean updated = responseService.updateConfirmation(id, status);
-        return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    public String confirmApplicant(@PathVariable Long id, @RequestParam boolean status) {
+        responseService.updateConfirmationStatus(id, status);
+        return "Статус отклика успешно обновлен на: " + status;
     }
 }

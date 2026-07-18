@@ -93,4 +93,7 @@ public class ResponseService {
 
         return applicant;
     }
+    public void updateConfirmationStatus(Long responseId, boolean status) {
+        respondedApplicantDao.updateConfirmation(responseId, status);
+    }
 }

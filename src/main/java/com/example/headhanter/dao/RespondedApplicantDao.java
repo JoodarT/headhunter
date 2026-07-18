@@ -48,4 +48,9 @@ public class RespondedApplicantDao {
         String sql = "DELETE FROM responded_applicants WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
+
+//    public void updateConfirmation(Long responseId, boolean status) {
+//        String sql = "UPDATE responded_applicants SET confirmation = ? WHERE id = ?";
+//        jdbcTemplate.update(sql, status, responseId);
+//    }
 }
