@@ -24,17 +24,7 @@ public class VacancyController {
                 .orElse(null);
     }
 
-    @PostMapping
-    public ResponseEntity<Vacancy> createVacancy(@RequestBody Vacancy vacancy) {
-        User employer = UserController.findUserById(vacancy.getEmployerId());
-        if (employer == null) {
-            return ResponseEntity.badRequest().build();
-        }
 
-        vacancy.setId(idGenerator.getAndIncrement());
-        vacancies.add(vacancy);
-        return new ResponseEntity<>(vacancy, HttpStatus.CREATED);
-    }
 
     @GetMapping
     public List<Vacancy> getAllVacancies() {
