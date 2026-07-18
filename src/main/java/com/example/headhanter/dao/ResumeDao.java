@@ -15,6 +15,11 @@ public class ResumeDao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    public List<Resume> findByCategory(String category) {
+        String sql = "SELECT * FROM resumes WHERE category = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), category);
+    }
+
     public Resume save(Resume resume) {
         String sql = "INSERT INTO resumes (applicant_name, title, category, skills, expected_salary) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, resume.getApplicantName(), resume.getTitle(), resume.getCategory(), resume.getSkills(), resume.getExpectedSalary());

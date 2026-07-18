@@ -46,6 +46,13 @@ public class ResumeService {
         return resumeDao.searchResumes(keyword);
     }
 
+    public List<Resume> getResumesByCategory(String category) {
+        if (category == null || category.trim().isEmpty()) {
+            return resumeDao.findAll();
+        }
+        return resumeDao.findByCategory(category);
+    }
+
 
 
     public boolean deleteResume(Long id) {

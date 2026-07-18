@@ -27,6 +27,11 @@ public class ResumeController {
         return resumeService.searchResumes(keyword);
     }
 
+    @GetMapping("/category")
+    public List<Resume> getResumesByCategory(@RequestParam(name = "category", required = false) String category) {
+        return resumeService.getResumesByCategory(category);
+    }
+
     @GetMapping
     public List<Resume> getAllResumes() {
         return resumeService.getAllResumes();
