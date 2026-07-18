@@ -1,6 +1,7 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.models.RespondedApplicant;
+import com.example.headhanter.models.Vacancy;
 import com.example.headhanter.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,11 @@ public class ResponseController {
     @GetMapping("/by-vacancy/{vacancyId}")
     public List<RespondedApplicant> getResponsesByVacancy(@PathVariable Long vacancyId) {
         return responseService.getResponsesByVacancyId(vacancyId);
+    }
+
+    @GetMapping("/my-vacancies/{resumeId}")
+    public List<Vacancy> getMyRespondedVacancies(@PathVariable Long resumeId) {
+        return responseService.getVacanciesRespondedByResume(resumeId);
     }
 
     @PostMapping

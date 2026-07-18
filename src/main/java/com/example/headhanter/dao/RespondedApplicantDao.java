@@ -23,6 +23,11 @@ public class RespondedApplicantDao {
         jdbcTemplate.update(sql, resumeId, vacancyId);
     }
 
+    public List<Map<String, Object>> findByResumeIdRaw(Long resumeId) {
+        String sql = "SELECT * FROM responded_applicants WHERE resume_id = ?";
+        return jdbcTemplate.queryForList(sql, resumeId);
+    }
+
     public List<Map<String, Object>> findAllRaw() {
         String sql = "SELECT * FROM responded_applicants";
         return jdbcTemplate.queryForList(sql);

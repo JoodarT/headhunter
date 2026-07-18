@@ -4,6 +4,7 @@ import com.example.headhanter.dao.RespondedApplicantDao;
 import com.example.headhanter.dao.ResumeDao;
 import com.example.headhanter.dao.VacancyDao;
 import com.example.headhanter.models.RespondedApplicant;
+import com.example.headhanter.models.Vacancy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,20 @@ public class ResponseService {
             responses.add(mapToModel(row));
         }
         return responses;
+    }
+
+    public List<Vacancy> getVacanciesRespondedByResume(Long resumeId) {
+        List<Map<String, Object>> rows = respondedApplicantDao.findByResumeIdRaw(resumeId);
+        List<Vacancy> respondedVacancies = new ArrayList<>();
+
+        for (Map<String, Object> row : rows) {
+            Long vacancyId = (Long) row.get("vacancy_id");
+            Vacancy vacancy = vacancyDao.findById(vacancyId);
+            if (vacancy != null) {
+                respondedVacancies.add(vacancy);
+            }
+        }
+        return respondedVacancies;
     }
 
     private RespondedApplicant mapToModel(Map<String, Object> row) {
