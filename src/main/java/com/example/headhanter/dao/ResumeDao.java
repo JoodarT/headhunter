@@ -23,6 +23,12 @@ public class ResumeDao {
         return jdbcTemplate.queryForObject(selectSql, new BeanPropertyRowMapper<>(Resume.class), resume.getApplicantName());
     }
 
+    public List<Resume> searchResumes(String keyword) {
+        String sql = "SELECT * FROM resumes WHERE title LIKE ? OR skills LIKE ?";
+        String searchPattern = "%" + keyword + "%";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), searchPattern, searchPattern);
+    }
+
     public List<Resume> findAll() {
         String sql = "SELECT * FROM resumes";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));

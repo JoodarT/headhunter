@@ -22,6 +22,11 @@ public class ResumeController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+    @GetMapping("/search")
+    public List<Resume> searchResumes(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword) {
+        return resumeService.searchResumes(keyword);
+    }
+
     @GetMapping
     public List<Resume> getAllResumes() {
         return resumeService.getAllResumes();
