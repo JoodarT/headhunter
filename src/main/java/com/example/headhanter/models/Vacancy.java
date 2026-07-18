@@ -15,5 +15,5 @@ public class Vacancy {
     private String title;
     private String description;
     private Double salary;
-    private Category category;
+    private String category;
 }
