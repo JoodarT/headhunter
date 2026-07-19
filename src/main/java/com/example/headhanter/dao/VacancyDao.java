@@ -2,12 +2,18 @@ package com.example.headhanter.dao;
 
 import com.example.headhanter.models.Vacancy;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class VacancyDao {
@@ -16,55 +22,74 @@ public class VacancyDao {
 
     public Vacancy save(Vacancy vacancy) {
         String sql = "INSERT INTO vacancies (title, description, salary, category, views, employer_id) VALUES (?, ?, ?, ?, 0, ?)";
-        jdbcTemplate.update(sql, vacancy.getTitle(), vacancy.getDescription(), vacancy.getSalary(), vacancy.getCategory(), vacancy.getEmployerId());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        String selectSql = "SELECT * FROM vacancies ORDER BY id DESC LIMIT 1";
-        return jdbcTemplate.queryForObject(selectSql, new BeanPropertyRowMapper<>(Vacancy.class));
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, vacancy.getTitle());
+            ps.setString(2, vacancy.getDescription());
+            ps.setObject(3, vacancy.getSalary());
+            ps.setString(4, vacancy.getCategory());
+            ps.setLong(5, vacancy.getEmployerId());
+            return ps;
+        }, keyHolder);
+
+        Long generatedId = keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
+        log.debug("Выполнен INSERT для вакансии. Сгенерирован ID: {}", generatedId);
+
+        return findWithoutIncrementingViews(generatedId);
     }
 
     public List<Vacancy> findAll() {
         String sql = "SELECT * FROM vacancies";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class));
+        List<Vacancy> result = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class));
+        log.debug("Выполнен SELECT всех вакансий. Найдено записей: {}", result.size());
+        return result;
     }
 
     public Vacancy findById(Long id) {
+        log.debug("Выполняется инкремент просмотров (UPDATE) для вакансии с ID: {}", id);
         String updateSql = "UPDATE vacancies SET views = views + 1 WHERE id = ?";
         jdbcTemplate.update(updateSql, id);
 
-        String selectSql = "SELECT * FROM vacancies WHERE id = ?";
-        try {
-            return jdbcTemplate.queryForObject(selectSql, new BeanPropertyRowMapper<>(Vacancy.class), id);
-        } catch (Exception e) {
-            return null;
-        }
+        return findWithoutIncrementingViews(id);
     }
 
     public Vacancy findWithoutIncrementingViews(Long id) {
         String sql = "SELECT * FROM vacancies WHERE id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Vacancy.class), id);
+            Vacancy vacancy = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Vacancy.class), id);
+            log.debug("Выполнен SELECT для ID: {}. Найдено: {}", id, vacancy != null);
+            return vacancy;
         } catch (Exception e) {
+            log.warn("Вакансия с ID: {} не найдена в базе данных. Ошибка: {}", id, e.getMessage());
             return null;
         }
     }
 
     public List<Vacancy> findByCategory(String category) {
         String sql = "SELECT * FROM vacancies WHERE category = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), category);
+        List<Vacancy> result = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), category);
+        log.debug("Выполнен SELECT по категории '{}'. Найдено записей: {}", category, result.size());
+        return result;
     }
 
     public List<Vacancy> findByMinSalary(Double minSalary) {
         String sql = "SELECT * FROM vacancies WHERE salary >= ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), minSalary);
+        List<Vacancy> result = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), minSalary);
+        log.debug("Выполнен SELECT по зарплате >= {}. Найдено записей: {}", minSalary, result.size());
+        return result;
     }
 
     public void update(Vacancy vacancy) {
         String sql = "UPDATE vacancies SET title = ?, description = ?, salary = ?, category = ?, employer_id = ? WHERE id = ?";
-        jdbcTemplate.update(sql, vacancy.getTitle(), vacancy.getDescription(), vacancy.getSalary(), vacancy.getCategory(), vacancy.getEmployerId(), vacancy.getId());
+        int rowsAffected = jdbcTemplate.update(sql, vacancy.getTitle(), vacancy.getDescription(), vacancy.getSalary(), vacancy.getCategory(), vacancy.getEmployerId(), vacancy.getId());
+        log.debug("Выполнен UPDATE для вакансии с ID: {}. Изменено строк: {}", vacancy.getId(), rowsAffected);
     }
 
     public void deleteById(Long id) {
         String sql = "DELETE FROM vacancies WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        int rowsAffected = jdbcTemplate.update(sql, id);
+        log.debug("Выполнен DELETE для ID: {}. Удалено строк: {}", id, rowsAffected);
     }
 }

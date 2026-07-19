@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 
 springdoc:
   api-docs:
@@ -23,3 +23,13 @@ spring:
   sql:
     init:
       mode: never
+
+  logging:
+    level:
+      root: INFO
+      com.example.headhanter: DEBUG
+
+  spring:
+    output:
+      ansi:
+        enabled: ALWAYS

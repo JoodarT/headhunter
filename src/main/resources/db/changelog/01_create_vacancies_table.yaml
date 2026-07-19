@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: 01-create-vacancies-table
       author: joodar
       changes:
         - createTable:

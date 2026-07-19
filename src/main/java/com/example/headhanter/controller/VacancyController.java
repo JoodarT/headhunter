@@ -3,12 +3,14 @@ package com.example.headhanter.controller;
 import com.example.headhanter.models.Vacancy;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/vacancies")
 @RequiredArgsConstructor
@@ -18,17 +20,20 @@ public class VacancyController {
 
     @PostMapping
     public ResponseEntity<Vacancy> createVacancy(@RequestBody Vacancy vacancy) {
+        log.info("API: POST /vacancies");
         Vacancy created = vacancyService.createVacancy(vacancy);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping
     public List<Vacancy> getAllVacancies() {
+        log.info("API: GET /vacancies");
         return vacancyService.getAllVacancies();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Vacancy> getVacancyById(@PathVariable Long id) {
+        log.info("API: GET /vacancies/{}", id);
         Vacancy vacancy = vacancyService.getVacancyById(id);
         if (vacancy != null) {
             return ResponseEntity.ok(vacancy);
@@ -38,11 +43,13 @@ public class VacancyController {
 
     @GetMapping("/salary")
     public List<Vacancy> getVacanciesByMinSalary(@RequestParam(name = "minSalary", required = false) Double minSalary) {
+        log.info("API: GET /vacancies/salary?minSalary={}", minSalary);
         return vacancyService.getVacanciesByMinSalary(minSalary);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Vacancy> updateVacancy(@PathVariable Long id, @RequestBody Vacancy updatedVacancy) {
+        log.info("API: PUT /vacancies/{}", id);
         Vacancy vacancy = vacancyService.updateVacancy(id, updatedVacancy);
         if (vacancy != null) {
             return ResponseEntity.ok(vacancy);
@@ -52,6 +59,7 @@ public class VacancyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {
+        log.info("API: DELETE /vacancies/{}", id);
         boolean deleted = vacancyService.deleteVacancy(id);
         if (deleted) {
             return ResponseEntity.noContent().build();
@@ -61,6 +69,7 @@ public class VacancyController {
 
     @GetMapping("/category")
     public List<Vacancy> getVacanciesByCategory(@RequestParam(name = "category", required = false) String category) {
+        log.info("API: GET /vacancies/category?category={}", category);
         return vacancyService.getVacanciesByCategory(category);
     }
 }
