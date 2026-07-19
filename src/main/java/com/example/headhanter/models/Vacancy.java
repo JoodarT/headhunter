@@ -2,7 +2,7 @@ package com.example.headhanter.models;
 
 import lombok.*;
 
-
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class Vacancy {
