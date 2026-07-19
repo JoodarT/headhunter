@@ -1,16 +1,15 @@
 package com.example.headhanter.controller;
 
-import com.example.headhanter.models.Vacancy;
+import com.example.headhanter.dto.VacancyCreateDto;
+import com.example.headhanter.dto.VacancyResponseDto;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/vacancies")
 @RequiredArgsConstructor
@@ -19,57 +18,29 @@ public class VacancyController {
     private final VacancyService vacancyService;
 
     @PostMapping
-    public ResponseEntity<Vacancy> createVacancy(@RequestBody Vacancy vacancy) {
-        log.info("API: POST /vacancies");
-        Vacancy created = vacancyService.createVacancy(vacancy);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<VacancyResponseDto> create(@RequestBody VacancyCreateDto dto) {
+        VacancyResponseDto created = vacancyService.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
-    public List<Vacancy> getAllVacancies() {
-        log.info("API: GET /vacancies");
-        return vacancyService.getAllVacancies();
+    public ResponseEntity<List<VacancyResponseDto>> getAll() {
+        return ResponseEntity.ok(vacancyService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vacancy> getVacancyById(@PathVariable Long id) {
-        log.info("API: GET /vacancies/{}", id);
-        Vacancy vacancy = vacancyService.getVacancyById(id);
-        if (vacancy != null) {
-            return ResponseEntity.ok(vacancy);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/salary")
-    public List<Vacancy> getVacanciesByMinSalary(@RequestParam(name = "minSalary", required = false) Double minSalary) {
-        log.info("API: GET /vacancies/salary?minSalary={}", minSalary);
-        return vacancyService.getVacanciesByMinSalary(minSalary);
+    public ResponseEntity<VacancyResponseDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(vacancyService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vacancy> updateVacancy(@PathVariable Long id, @RequestBody Vacancy updatedVacancy) {
-        log.info("API: PUT /vacancies/{}", id);
-        Vacancy vacancy = vacancyService.updateVacancy(id, updatedVacancy);
-        if (vacancy != null) {
-            return ResponseEntity.ok(vacancy);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<VacancyResponseDto> update(@PathVariable Long id, @RequestBody VacancyCreateDto dto) {
+        return ResponseEntity.ok(vacancyService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {
-        log.info("API: DELETE /vacancies/{}", id);
-        boolean deleted = vacancyService.deleteVacancy(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/category")
-    public List<Vacancy> getVacanciesByCategory(@RequestParam(name = "category", required = false) String category) {
-        log.info("API: GET /vacancies/category?category={}", category);
-        return vacancyService.getVacanciesByCategory(category);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        vacancyService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
