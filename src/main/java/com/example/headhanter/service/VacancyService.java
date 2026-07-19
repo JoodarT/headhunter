@@ -85,4 +85,6 @@ public class VacancyService {
         log.warn("Не удалось удалить вакансию: вакансия с ID: {} не найдена", id);
         return false;
     }
+
+
 }
