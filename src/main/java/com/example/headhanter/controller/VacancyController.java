@@ -17,29 +17,28 @@ public class VacancyController {
 
     private final VacancyService vacancyService;
 
-    @PostMapping
-    public ResponseEntity<VacancyResponseDto> create(@RequestBody VacancyCreateDto dto) {
-        VacancyResponseDto created = vacancyService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    @PostMapping("/create")
+    public ResponseEntity<VacancyResponseDto> createVacancy(@RequestBody VacancyCreateDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.create(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<VacancyResponseDto>> getAll() {
+    public ResponseEntity<List<VacancyResponseDto>> getAllVacancies() {
         return ResponseEntity.ok(vacancyService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VacancyResponseDto> getById(@PathVariable Long id) {
+    public ResponseEntity<VacancyResponseDto> getVacancyById(@PathVariable Long id) {
         return ResponseEntity.ok(vacancyService.getById(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<VacancyResponseDto> update(@PathVariable Long id, @RequestBody VacancyCreateDto dto) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<VacancyResponseDto> updateVacancy(@PathVariable Long id, @RequestBody VacancyCreateDto dto) {
         return ResponseEntity.ok(vacancyService.update(id, dto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {
         vacancyService.delete(id);
         return ResponseEntity.noContent().build();
     }
