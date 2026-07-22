@@ -1,38 +1,5 @@
 databaseChangeLog:
-  - changeSet:
-      id: 1
-      author: joodar
-      changes:
-        - createTable:
-            tableName: vacancies
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: employer_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-              - column:
-                  name: title
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: description
-                  type: varchar(2000)
-              - column:
-                  name: salary
-                  type: double
-              - column:
-                  name: category
-                  type: varchar(255)
-              - column:
-                  name: views
-                  type: int
-                  defaultValueNumeric: 0
+  - include:
+      file: db/changelog/01_create_vacancies_table.yaml
+  - include:
+      file: db/changelog/02_create_all_missing_tables_and_relations.yaml
