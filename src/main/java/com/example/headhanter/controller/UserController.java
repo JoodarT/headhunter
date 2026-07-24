@@ -32,6 +32,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
+        // Сервис сам выбросит NoSuchElementException, если пользователь не найден
         return userService.getUserById(id);
     }
 
@@ -71,6 +72,7 @@ public class UserController {
             @PathVariable Long userId,
             @RequestParam("file") MultipartFile file
     ) {
+
         return userService.uploadAvatar(userId, file);
     }
 }
