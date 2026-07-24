@@ -1,11 +1,13 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.models.User;
+import com.example.headhanter.service.FileService;
 import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final FileService fileService;
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -76,5 +79,23 @@ public class UserController {
     @GetMapping("/exists")
     public boolean exists(@RequestParam String email) {
         return userService.checkUserExists(email);
+    }
+
+    @PostMapping("/upload-avatar/{userId}")
+    public ResponseEntity<User> uploadAvatar(
+            @PathVariable Long userId,
+            @RequestParam("file") MultipartFile file
+    ) {
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String avatarUrl = fileService.saveAvatar(file);
+
+        user.setAvatarFileName(avatarUrl);
+        User updatedUser = userService.updateUser(userId, user);
+
+        return ResponseEntity.ok(updatedUser);
     }
 }
