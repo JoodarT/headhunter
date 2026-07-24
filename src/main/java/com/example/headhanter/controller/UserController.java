@@ -1,8 +1,9 @@
 package com.example.headhanter.controller;
 
+import com.example.headhanter.dto.UserDto;
 import com.example.headhanter.models.User;
-import com.example.headhanter.service.FileService;
 import com.example.headhanter.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final FileService fileService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User created = userService.createUser(user);
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto userDto) {
+        User created = userService.createUser(userDto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -31,30 +31,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        }
-        return ResponseEntity.notFound().build();
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User user = userService.updateUser(id, updatedUser);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        }
-        return ResponseEntity.notFound().build();
+    public User updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
+        return userService.updateUser(id, userDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        boolean deleted = userService.deleteUser(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
 
     @GetMapping("/search-by-name")
@@ -68,12 +57,8 @@ public class UserController {
     }
 
     @GetMapping("/search-by-email")
-    public ResponseEntity<User> searchByEmail(@RequestParam String email) {
-        User user = userService.getUserByEmail(email);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        }
-        return ResponseEntity.notFound().build();
+    public User searchByEmail(@RequestParam String email) {
+        return userService.getUserByEmail(email);
     }
 
     @GetMapping("/exists")
@@ -82,20 +67,10 @@ public class UserController {
     }
 
     @PostMapping("/upload-avatar/{userId}")
-    public ResponseEntity<User> uploadAvatar(
+    public User uploadAvatar(
             @PathVariable Long userId,
             @RequestParam("file") MultipartFile file
     ) {
-        User user = userService.getUserById(userId);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        String avatarUrl = fileService.saveAvatar(file);
-
-        user.setAvatarFileName(avatarUrl);
-        User updatedUser = userService.updateUser(userId, user);
-
-        return ResponseEntity.ok(updatedUser);
+        return userService.uploadAvatar(userId, file);
     }
 }
