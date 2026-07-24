@@ -9,6 +9,6 @@ public class VacancyResponseDto {
     private String title;
     private String description;
     private Double salary;
-    private String category;
+    private Long category;
     private Integer views;
 }

@@ -3,6 +3,7 @@ package com.example.headhanter.controller;
 import com.example.headhanter.dto.VacancyCreateDto;
 import com.example.headhanter.dto.VacancyResponseDto;
 import com.example.headhanter.service.VacancyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,8 @@ public class VacancyController {
 
     private final VacancyService vacancyService;
 
-    @PostMapping("/create")
-    public ResponseEntity<VacancyResponseDto> createVacancy(@RequestBody VacancyCreateDto dto) {
+    @PostMapping
+    public ResponseEntity<VacancyResponseDto> createVacancy(@Valid @RequestBody VacancyCreateDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.create(dto));
     }
 
@@ -32,12 +33,17 @@ public class VacancyController {
         return ResponseEntity.ok(vacancyService.getById(id));
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<VacancyResponseDto> updateVacancy(@PathVariable Long id, @RequestBody VacancyCreateDto dto) {
+    @GetMapping("/responded/user/{userId}")
+    public ResponseEntity<List<VacancyResponseDto>> getRespondedVacanciesByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(vacancyService.getRespondedVacanciesByUser(userId));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<VacancyResponseDto> updateVacancy(@PathVariable Long id, @Valid @RequestBody VacancyCreateDto dto) {
         return ResponseEntity.ok(vacancyService.update(id, dto));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {
         vacancyService.delete(id);
         return ResponseEntity.noContent().build();

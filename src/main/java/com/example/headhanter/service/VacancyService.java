@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,13 +30,21 @@ public class VacancyService {
         vacancy.setTitle(dto.getTitle());
         vacancy.setDescription(dto.getDescription());
         vacancy.setSalary(dto.getSalary());
-        vacancy.setCategory(dto.getCategory());
+        vacancy.setCategoryId(dto.getCategoryId());
         vacancy.setViews(0);
 
         Vacancy savedVacancy = vacancyDao.save(vacancy);
         log.debug("Вакансия успешно сохранена в БД с ID: {}", savedVacancy.getId());
 
         return mapToResponseDto(savedVacancy);
+    }
+
+    public List<VacancyResponseDto> getRespondedVacanciesByUser(Long userId) {
+        List<Vacancy> vacancies = vacancyDao.findRespondedVacanciesByUserId(userId);
+
+        return vacancies.stream()
+                .map(this::mapToResponseDto)
+                .toList();
     }
 
     public List<VacancyResponseDto> getAll() {
@@ -63,13 +72,13 @@ public class VacancyService {
 
         if (existingVacancy == null) {
             log.warn("Не удалось обновить вакансию: вакансия с ID: {} не найдена", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Вакансия не найдена");
+            throw new NoSuchElementException("Вакансия с ID: " + id + " не найдена"); // Используем NoSuchElementException для нашего GlobalExceptionHandler
         }
 
         existingVacancy.setTitle(dto.getTitle());
         existingVacancy.setDescription(dto.getDescription());
         existingVacancy.setSalary(dto.getSalary());
-        existingVacancy.setCategory(dto.getCategory());
+        existingVacancy.setCategoryId(dto.getCategoryId());
         existingVacancy.setEmployerId(dto.getEmployerId());
 
         vacancyDao.update(existingVacancy);
@@ -95,7 +104,7 @@ public class VacancyService {
         dto.setTitle(vacancy.getTitle());
         dto.setDescription(vacancy.getDescription());
         dto.setSalary(vacancy.getSalary());
-        dto.setCategory(vacancy.getCategory());
+        dto.setCategory(vacancy.getCategoryId());
         dto.setViews(vacancy.getViews());
         return dto;
     }

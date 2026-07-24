@@ -76,7 +76,7 @@ public class UserDao {
                 vacancy.getTitle(),
                 vacancy.getDescription(),
                 vacancy.getSalary(),
-                vacancy.getCategory()
+                vacancy.getCategoryId()
         );
     }
 }
