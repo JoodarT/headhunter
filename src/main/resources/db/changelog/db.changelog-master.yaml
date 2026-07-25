@@ -3,7 +3,5 @@ databaseChangeLog:
       file: db/changelog/migration/01_create_vacancies_table.yaml
   - include:
       file: db/changelog/migration/02_create_all_missing_tables_and_relations.yaml
-
   - include:
-      file: migration/03_insert_test_data.yaml
-      relativeToChangelogFile: true
+      file: db/changelog/migration/03_insert_test_data.yaml
