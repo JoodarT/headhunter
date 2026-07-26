@@ -5,3 +5,15 @@ databaseChangeLog:
       file: db/changelog/migration/02_create_all_missing_tables_and_relations.yaml
   - include:
       file: db/changelog/migration/03_insert_test_data.yaml
+
+  - include:
+      file: db/changelog/migration/04_create_authorities_tables.yaml
+  - include:
+      file: db/changelog/migration/05_create_roles_table.yaml
+
+  - include:
+      file: db/changelog/migration/06_insert_users.yaml
+
+
+
+
