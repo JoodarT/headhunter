@@ -24,12 +24,12 @@ spring:
     init:
       mode: never
 
-  logging:
-    level:
-      root: INFO
-      com.example.headhanter: DEBUG
+  output:
+    ansi:
+      enabled: ALWAYS
 
-  spring:
-    output:
-      ansi:
-        enabled: ALWAYS
+logging:
+  level:
+    root: INFO
+    com.example.headhanter: DEBUG
+    org.springframework.security: DEBUG

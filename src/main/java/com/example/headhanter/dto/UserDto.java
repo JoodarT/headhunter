@@ -2,29 +2,29 @@ package com.example.headhanter.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
 
-    @NotBlank(message = "Имя пользователя обязательное поле")
-    String name;
+    @NotBlank(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 100, message = "Имя должно содержать от 2 до 100 символов")
+    private String name;
 
-    @NotBlank(message = "Email обязателен")
-    @Email(message = "Email должен быть корректным адресом электронной почты")
-    String email;
+    @NotBlank(message = "Email обязателен для заполнения")
+    @Email(message = "Некорректный формат email адреса")
+    private String email;
 
-    @NotBlank(message = "Пароль обязателен")
-    @Size(min = 4, max = 24, message = "Пароль должен быть от 4 до 24 символов")
-    String password;
+    @NotBlank(message = "Пароль не может быть пустым")
+    @Size(min = 3, max = 50, message = "Длина пароля должна быть от 3 символов")
+    private String password;
 
-    @NotBlank(message = "Телефон обязателен")
-    String phone;
+    @NotBlank(message = "Номер телефона обязателен")
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Некорректный формат телефона (пример: +79001112233)")
+    private String phone;
 
     @NotBlank(message = "Укажите тип аккаунта (APPLICANT или EMPLOYER)")
-    String accountType;
+    private String accountType;
 }

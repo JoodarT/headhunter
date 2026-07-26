@@ -13,6 +13,7 @@ public class ErrorResponseDto {
     private String title;
     private List<String> reasons;
 
+
     public ErrorResponseDto(String title, String reason) {
         this.title = title;
         this.reasons = List.of(reason);

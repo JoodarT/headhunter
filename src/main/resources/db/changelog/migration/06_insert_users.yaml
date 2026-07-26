@@ -8,7 +8,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "applicant1@mail.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "Иван Иванов" }
               - column: { name: phone, value: "+79001112233" }
               - column: { name: account_type, value: "APPLICANT" }
@@ -17,7 +17,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "applicant2@mail.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "Анна Петрова" }
               - column: { name: phone, value: "+79002223344" }
               - column: { name: account_type, value: "APPLICANT" }
@@ -26,7 +26,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "applicant3@mail.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "Алексей Сидоров" }
               - column: { name: phone, value: "+79003334455" }
               - column: { name: account_type, value: "APPLICANT" }
@@ -35,7 +35,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "applicant4@mail.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "Елена Кузнецова" }
               - column: { name: phone, value: "+79004445566" }
               - column: { name: account_type, value: "APPLICANT" }
@@ -44,7 +44,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "applicant5@mail.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "Михаил Васильев" }
               - column: { name: phone, value: "+79005556677" }
               - column: { name: account_type, value: "APPLICANT" }
@@ -54,7 +54,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "employer1@company.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "ООО Технологии" }
               - column: { name: phone, value: "+78001001122" }
               - column: { name: account_type, value: "EMPLOYER" }
@@ -63,7 +63,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "employer2@company.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "Яндекс HR" }
               - column: { name: phone, value: "+78002002233" }
               - column: { name: account_type, value: "EMPLOYER" }
@@ -72,7 +72,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "employer3@company.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "Сбер Стафф" }
               - column: { name: phone, value: "+78003003344" }
               - column: { name: account_type, value: "EMPLOYER" }
@@ -81,7 +81,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "employer4@company.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "IT Startups Inc" }
               - column: { name: phone, value: "+78004004455" }
               - column: { name: account_type, value: "EMPLOYER" }
@@ -91,7 +91,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "admin@headhunter.com" }
-              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd0P1Rwt6quu701e" }
+              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
               - column: { name: name, value: "Главный Админ" }
               - column: { name: phone, value: "+79990000000" }
               - column: { name: account_type, value: "ADMIN" }

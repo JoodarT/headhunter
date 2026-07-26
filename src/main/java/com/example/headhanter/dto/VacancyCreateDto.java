@@ -1,26 +1,26 @@
 package com.example.headhanter.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
 public class VacancyCreateDto {
 
     @NotBlank(message = "Название вакансии не может быть пустым")
+    @Size(min = 3, max = 150, message = "Название вакансии должно быть от 3 до 150 символов")
     private String title;
 
-    @NotBlank(message = "Описание не может быть пустым")
+    @NotBlank(message = "Описание вакансии обязательно")
+    @Size(min = 10, max = 3000, message = "Описание должно содержать минимум 10 символов")
     private String description;
 
-    @NotNull(message = "Укажите зарплату")
-    @Positive(message = "Зарплата должна быть больше 0")
+    @NotNull(message = "Укажите уровень зарплаты")
+    @Min(value = 0, message = "Зарплата не может быть отрицательной")
     private Double salary;
 
-    @NotNull(message = "Укажите ID категории")
+    @NotNull(message = "Категория должна быть указана")
     private Long categoryId;
 
-    @NotNull(message = "Укажите ID работодателя")
+    @NotNull(message = "Работодатель должен быть указан")
     private Long employerId;
 }
