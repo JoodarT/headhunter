@@ -5,8 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -20,12 +24,32 @@ public class ResumeDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), category);
     }
 
-    public Resume save(Resume resume) {
-        String sql = "INSERT INTO resumes (applicant_name, title, category, skills, expected_salary) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, resume.getApplicantName(), resume.getTitle(), resume.getCategory(), resume.getSkills(), resume.getExpectedSalary());
+    public List<Resume> findByUserId(Long userId) {
+        String sql = "SELECT * FROM resumes WHERE user_id = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), userId);
+    }
 
-        String selectSql = "SELECT * FROM resumes WHERE applicant_name = ? ORDER BY id DESC LIMIT 1";
-        return jdbcTemplate.queryForObject(selectSql, new BeanPropertyRowMapper<>(Resume.class), resume.getApplicantName());
+    public Resume save(Resume resume) {
+        String sql = "INSERT INTO resumes (user_id, applicant_name, title, category, skills, expected_salary) VALUES (?, ?, ?, ?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setObject(1, resume.getUserId());
+            ps.setString(2, resume.getApplicantName());
+            ps.setString(3, resume.getTitle());
+            ps.setString(4, resume.getCategory());
+            ps.setString(5, resume.getSkills());
+            ps.setObject(6, resume.getExpectedSalary());
+            return ps;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            resume.setId(keyHolder.getKey().longValue());
+        }
+
+        return resume;
     }
 
     public List<Resume> searchResumes(String keyword) {

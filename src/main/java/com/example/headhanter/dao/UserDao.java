@@ -1,12 +1,16 @@
 package com.example.headhanter.dao;
 
 import com.example.headhanter.models.User;
-import com.example.headhanter.models.Vacancy;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -42,8 +46,23 @@ public class UserDao {
 
     public User save(User user) {
         String sql = "INSERT INTO users (name, email, password, phone, account_type) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getPassword(), user.getPhone(), user.getAccountType());
-        return findByEmail(user.getEmail());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getPhone());
+            ps.setString(5, user.getAccountType());
+            return ps;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            user.setId(keyHolder.getKey().longValue());
+        }
+
+        return user;
     }
 
     public List<User> findAll() {
@@ -68,15 +87,5 @@ public class UserDao {
     public void deleteById(Long id) {
         String sql = "DELETE FROM users WHERE id = ?";
         jdbcTemplate.update(sql, id);
-    }
-
-    public void save(Vacancy vacancy) {
-        String sql = "INSERT INTO vacancies (title, description, salary, category, views) VALUES (?, ?, ?, ?, 0)";
-        jdbcTemplate.update(sql,
-                vacancy.getTitle(),
-                vacancy.getDescription(),
-                vacancy.getSalary(),
-                vacancy.getCategoryId()
-        );
     }
 }

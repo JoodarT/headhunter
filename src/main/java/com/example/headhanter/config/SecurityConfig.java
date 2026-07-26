@@ -5,6 +5,7 @@ import com.example.headhanter.models.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,9 +30,24 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/vacancies/my/**").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers("/api/resumes/my/**").hasRole(Role.APPLICANT.name())
-                        .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/vacancies/**").hasRole(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.PUT, "/vacancies/**").hasRole(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.DELETE, "/vacancies/**").hasRole(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.GET, "/vacancies/**").authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "/resumes/**").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.PUT, "/resumes/**").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.DELETE, "/resumes/**").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.GET, "/resumes/**").authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "/responses").hasRole(Role.APPLICANT.name()) // Откликнуться на вакансию
+                        .requestMatchers("/responses/by-vacancy/**", "/responses/*/confirm").hasRole(Role.EMPLOYER.name()) // Просмотр откликов и подтверждение работодателем
+                        .requestMatchers("/responses/my-vacancies/**").hasRole(Role.APPLICANT.name())
+
+                        .requestMatchers("/users/**").hasRole(Role.ADMIN.name())
+
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
