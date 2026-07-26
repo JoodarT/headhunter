@@ -4,6 +4,7 @@ import com.example.headhanter.dao.UserDao;
 import com.example.headhanter.dto.UserDto;
 import com.example.headhanter.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ public class UserService {
 
     private final UserDao userDao;
     private final FileService fileService;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getUsersByName(String name) {
         return userDao.findByName(name);
@@ -41,7 +43,7 @@ public class UserService {
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setPhone(dto.getPhone());
         user.setAccountType(dto.getAccountType());
 
@@ -65,7 +67,11 @@ public class UserService {
 
         existingUser.setName(dto.getName());
         existingUser.setEmail(dto.getEmail());
-        existingUser.setPassword(dto.getPassword());
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
         existingUser.setPhone(dto.getPhone());
         existingUser.setAccountType(dto.getAccountType());
 

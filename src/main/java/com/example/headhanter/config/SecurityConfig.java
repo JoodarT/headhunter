@@ -56,26 +56,26 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(encoder.encode("123"))
-                .roles(Role.ADMIN.name())
-                .build();
-
-        UserDetails employer = User.builder()
-                .username("employer")
-                .password(encoder.encode("123"))
-                .roles(Role.EMPLOYER.name())
-                .build();
-
-        UserDetails applicant = User.builder()
-                .username("applicant")
-                .password(encoder.encode("123"))
-                .roles(Role.APPLICANT.name())
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, employer, applicant);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password(encoder.encode("123"))
+//                .roles(Role.ADMIN.name())
+//                .build();
+//
+//        UserDetails employer = User.builder()
+//                .username("employer")
+//                .password(encoder.encode("123"))
+//                .roles(Role.EMPLOYER.name())
+//                .build();
+//
+//        UserDetails applicant = User.builder()
+//                .username("applicant")
+//                .password(encoder.encode("123"))
+//                .roles(Role.APPLICANT.name())
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(admin, employer, applicant);
+//    }
 }
