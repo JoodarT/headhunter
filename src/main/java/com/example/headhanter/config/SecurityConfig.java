@@ -1,5 +1,7 @@
 package com.example.headhanter.config;
 
+import com.example.headhanter.models.Role;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,10 +29,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/vacancies/my/**").hasRole(Role.EMPLOYER.name())
+                        .requestMatchers("/api/resumes/my/**").hasRole(Role.APPLICANT.name())
+                        .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Для корректного отображения H2-консоли
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
@@ -40,15 +45,21 @@ public class SecurityConfig {
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(encoder.encode("123"))
-                .roles("ADMIN")
+                .roles(Role.ADMIN.name())
                 .build();
 
-        UserDetails user = User.builder()
-                .username("user")
-                .password(encoder.encode("qwerty"))
-                .roles("USER")
+        UserDetails employer = User.builder()
+                .username("employer")
+                .password(encoder.encode("123"))
+                .roles(Role.EMPLOYER.name())
                 .build();
 
-        return new InMemoryUserDetailsManager(admin, user);
+        UserDetails applicant = User.builder()
+                .username("applicant")
+                .password(encoder.encode("123"))
+                .roles(Role.APPLICANT.name())
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, employer, applicant);
     }
 }
