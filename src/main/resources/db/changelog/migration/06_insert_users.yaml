@@ -26,7 +26,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "applicant3@mail.com" }
-              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
+              - column: { name: password, value: '$2a$10$e0MYzXyjpJS7Pd0RVvHwHe1wg82dG58u91A1E.03J.J9gA.N3r/I2' }
               - column: { name: name, value: "Алексей Сидоров" }
               - column: { name: phone, value: "+79003334455" }
               - column: { name: account_type, value: "APPLICANT" }
@@ -91,7 +91,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "admin@headhunter.com" }
-              - column: { name: password, value: '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a' }
+              - column: { name: password, value: '$2a$10$e0MYzXyjpJS7Pd0RVvHwHe1wg82dG58u91A1E.03J.J9gA.N3r/I2' }
               - column: { name: name, value: "Главный Админ" }
               - column: { name: phone, value: "+79990000000" }
               - column: { name: account_type, value: "ADMIN" }
