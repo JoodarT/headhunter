@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
-    private final FileService fileService; // если есть загрузка файлов
+    private final FileService fileService;
 
     @Override
     public User createUser(UserDto userDto) {
@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        // Хэшируем пароль перед сохранением в БД
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setPhone(userDto.getPhone());
         user.setAccountType(userDto.getAccountType());
@@ -102,10 +101,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User uploadAvatar(Long userId, MultipartFile file) {
         User user = getUserById(userId);
-        if (fileService != null && !file.isEmpty()) {
-            String avatarPath = fileService.saveFile(file);
+
+        if (file != null && !file.isEmpty()) {
+            String avatarPath = fileService.saveAvatar(file);
+            user.setAvatarFileName(avatarPath);
             userDao.update(user);
         }
+
         return user;
     }
 }

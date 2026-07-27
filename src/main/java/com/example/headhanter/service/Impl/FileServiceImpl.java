@@ -1,7 +1,6 @@
 package com.example.headhanter.service.Impl;
 
 import com.example.headhanter.service.FileService;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
