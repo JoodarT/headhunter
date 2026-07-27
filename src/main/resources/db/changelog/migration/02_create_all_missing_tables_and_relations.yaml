@@ -1,0 +1,273 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: joodar
+      changes:
+        # 1. Таблица категорий
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+        # 2. Таблица пользователей
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+              - column:
+                  name: phone
+                  type: varchar(255)
+              - column:
+                  name: avatar_url
+                  type: varchar(512)
+              - column:
+                  name: account_type
+                  type: varchar(50)
+
+        # 3. Приводим таблицу vacancies к правильным связям
+        - dropColumn:
+            tableName: vacancies
+            columnName: category
+        - addColumn:
+            tableName: vacancies
+            columns:
+              - column:
+                  name: category_id
+                  type: bigint
+
+        # 4. Внешние ключи для таблицы vacancies
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: employer_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_vacancies_users
+
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_vacancies_categories
+
+        # 5. Таблица типов контактов
+        - createTable:
+            tableName: contact_types
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+        # 6. Таблица резюме
+        - createTable:
+            tableName: resumes
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_resumes_users
+                    references: users(id)
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_resumes_categories
+                    references: categories(id)
+              - column:
+                  name: title
+                  type: varchar(255)
+
+        # 7. Таблица контактной информации
+        - createTable:
+            tableName: contact_info
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: resume_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_contact_info_resumes
+                    references: resumes(id)
+              - column:
+                  name: contact_type_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_contact_info_types
+                    references: contact_types(id)
+              - column:
+                  name: value
+                  type: varchar(255)
+
+        # 8. Информация об образовании
+        - createTable:
+            tableName: education_info
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: resume_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_education_resumes
+                    references: resumes(id)
+              - column:
+                  name: institution
+                  type: varchar(255)
+              - column:
+                  name: program
+                  type: varchar(255)
+              - column:
+                  name: start_date
+                  type: date
+              - column:
+                  name: end_date
+                  type: date
+
+        # 9. Информация об опыте работы
+        - createTable:
+            tableName: work_experience_info
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: resume_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_work_experience_resumes
+                    references: resumes(id)
+              - column:
+                  name: company_name
+                  type: varchar(255)
+              - column:
+                  name: position
+                  type: varchar(255)
+              - column:
+                  name: responsibilities
+                  type: text
+              - column:
+                  name: start_date
+                  type: date
+              - column:
+                  name: end_date
+                  type: date
+
+        # 10. Таблица откликов на вакансии
+        - createTable:
+            tableName: responded_applicants
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: vacancy_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_responded_vacancies
+                    references: vacancies(id)
+              - column:
+                  name: resume_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_responded_resumes
+                    references: resumes(id)
+              - column:
+                  name: confirmation
+                  type: boolean
+
+        # 11. Таблица сообщений
+        - createTable:
+            tableName: messages
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: responded_applicant_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_messages_responded
+                    references: responded_applicants(id)
+              - column:
+                  name: content
+                  type: text
+              - column:
+                  name: timestamp
+                  type: timestamp

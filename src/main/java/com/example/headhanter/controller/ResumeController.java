@@ -1,7 +1,9 @@
 package com.example.headhanter.controller;
 
-import com.example.headhanter.models.Resume;
+import com.example.headhanter.dto.ResumeCreateDto;
+import com.example.headhanter.dto.ResumeResponseDto;
 import com.example.headhanter.service.ResumeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,50 +19,45 @@ public class ResumeController {
     private final ResumeService resumeService;
 
     @PostMapping
-    public ResponseEntity<Resume> createResume(@RequestBody Resume resume) {
-        Resume created = resumeService.createResume(resume);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<ResumeResponseDto> createResume(@Valid @RequestBody ResumeCreateDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(resumeService.createResume(dto));
     }
 
     @GetMapping("/search")
-    public List<Resume> searchResumes(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword) {
-        return resumeService.searchResumes(keyword);
+    public ResponseEntity<List<ResumeResponseDto>> searchResumes(
+            @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword
+    ) {
+        return ResponseEntity.ok(resumeService.searchResumes(keyword));
     }
 
     @GetMapping("/category")
-    public List<Resume> getResumesByCategory(@RequestParam(name = "category", required = false) String category) {
-        return resumeService.getResumesByCategory(category);
+    public ResponseEntity<List<ResumeResponseDto>> getResumesByCategory(
+            @RequestParam(name = "category", required = false) String category
+    ) {
+        return ResponseEntity.ok(resumeService.getResumesByCategory(category));
     }
 
     @GetMapping
-    public List<Resume> getAllResumes() {
-        return resumeService.getAllResumes();
+    public ResponseEntity<List<ResumeResponseDto>> getAllResumes() {
+        return ResponseEntity.ok(resumeService.getAllResumes());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Resume> getResumeById(@PathVariable Long id) {
-        Resume resume = resumeService.getResumeById(id);
-        if (resume != null) {
-            return ResponseEntity.ok(resume);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<ResumeResponseDto> getResumeById(@PathVariable Long id) {
+        return ResponseEntity.ok(resumeService.getResumeById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Resume> updateResume(@PathVariable Long id, @RequestBody Resume updatedResume) {
-        Resume resume = resumeService.updateResume(id, updatedResume);
-        if (resume != null) {
-            return ResponseEntity.ok(resume);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<ResumeResponseDto> updateResume(
+            @PathVariable Long id,
+            @Valid @RequestBody ResumeCreateDto dto
+    ) {
+        return ResponseEntity.ok(resumeService.updateResume(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResume(@PathVariable Long id) {
-        boolean deleted = resumeService.deleteResume(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        resumeService.deleteResume(id);
+        return ResponseEntity.noContent().build();
     }
 }

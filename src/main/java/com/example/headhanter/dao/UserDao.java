@@ -4,8 +4,13 @@ import com.example.headhanter.models.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -41,8 +46,23 @@ public class UserDao {
 
     public User save(User user) {
         String sql = "INSERT INTO users (name, email, password, phone, account_type) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getPassword(), user.getPhone(), user.getAccountType());
-        return findByEmail(user.getEmail());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getPhone());
+            ps.setString(5, user.getAccountType());
+            return ps;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            user.setId(keyHolder.getKey().longValue());
+        }
+
+        return user;
     }
 
     public List<User> findAll() {

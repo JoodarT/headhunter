@@ -1,11 +1,14 @@
 package com.example.headhanter.controller;
 
+import com.example.headhanter.dto.UserDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,9 +19,13 @@ public class UserController {
 
     private final UserService userService;
 
+
+
+
+
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User created = userService.createUser(user);
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto userDto) {
+        User created = userService.createUser(userDto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -28,30 +35,20 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        }
-        return ResponseEntity.notFound().build();
+    public User getUserById(@PathVariable Long id) {
+        // Сервис сам выбросит NoSuchElementException, если пользователь не найден
+        return userService.getUserById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User user = userService.updateUser(id, updatedUser);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        }
-        return ResponseEntity.notFound().build();
+    public User updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
+        return userService.updateUser(id, userDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        boolean deleted = userService.deleteUser(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
 
     @GetMapping("/search-by-name")
@@ -65,16 +62,21 @@ public class UserController {
     }
 
     @GetMapping("/search-by-email")
-    public ResponseEntity<User> searchByEmail(@RequestParam String email) {
-        User user = userService.getUserByEmail(email);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        }
-        return ResponseEntity.notFound().build();
+    public User searchByEmail(@RequestParam String email) {
+        return userService.getUserByEmail(email);
     }
 
     @GetMapping("/exists")
     public boolean exists(@RequestParam String email) {
         return userService.checkUserExists(email);
+    }
+
+    @PostMapping("/upload-avatar/{userId}")
+    public User uploadAvatar(
+            @PathVariable Long userId,
+            @RequestParam("file") MultipartFile file
+    ) {
+
+        return userService.uploadAvatar(userId, file);
     }
 }

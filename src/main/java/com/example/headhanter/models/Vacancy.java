@@ -1,20 +1,18 @@
 package com.example.headhanter.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vacancy {
     private Long id;
-    private Long employerId;
     private String title;
     private String description;
     private Double salary;
-    private String category;
+    private Long categoryId;
     private Integer views;
+    private Long employerId;
 }
