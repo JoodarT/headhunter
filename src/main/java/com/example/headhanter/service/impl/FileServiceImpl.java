@@ -1,4 +1,4 @@
-package com.example.headhanter.service.Impl;
+package com.example.headhanter.service.impl;
 
 import com.example.headhanter.service.FileService;
 import org.springframework.stereotype.Service;

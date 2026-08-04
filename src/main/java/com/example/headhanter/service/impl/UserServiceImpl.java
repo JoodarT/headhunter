@@ -1,4 +1,4 @@
-package com.example.headhanter.service.Impl;
+package com.example.headhanter.service.impl;
 
 import com.example.headhanter.dao.UserDao;
 import com.example.headhanter.dto.UserDto;

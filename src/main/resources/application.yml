@@ -9,7 +9,8 @@ springdoc:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:headhanterdb;MODE=PostgreSQL
+    url: jdbc:h2:file:./data/headhanterdb;MODE=PostgreSQL;AUTO_SERVER=TRUE
+
     driver-class-name: org.h2.Driver
     username: sa
     password: ""
