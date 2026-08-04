@@ -1,6 +1,9 @@
 package com.example.headhanter.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -23,10 +26,14 @@ public class ResumeCreateDto {
 
     private Double expectedSalary;
 
-
+    @Valid
     private List<EducationInfoDto> educations;
 
+    @Valid
+    @NotEmpty(message = "Добавьте хотя бы одно место работы")
     private List<WorkExperienceInfoDto> workExperiences;
 
+    @Valid
+    @NotNull(message = "Контактная информация обязательна")
     private List<ContactsInfoDto> contacts;
 }

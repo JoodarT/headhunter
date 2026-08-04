@@ -1,11 +1,16 @@
 package com.example.headhanter.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class EducationInfoDto {
+
+    @NotBlank(message = "Учебное заведение обязательно")
     private String institution;
-    private String program;
-    private Integer startYear;
-    private Integer endYear;
+
+    @NotBlank(message = "Специальность обязательна")
+    private String faculty;
+
+    private Integer graduationYear;
 }
