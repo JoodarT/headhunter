@@ -1,7 +1,7 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.dto.VacancyCreateDto;
-import com.example.headhanter.dto.VacancyResponseDto;
+import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.service.VacancyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

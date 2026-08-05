@@ -1,5 +1,8 @@
-package com.example.headhanter.dto;
+package com.example.headhanter.dto.response;
 
+import com.example.headhanter.dto.ContactsInfoDto;
+import com.example.headhanter.dto.EducationInfoDto;
+import com.example.headhanter.dto.WorkExperienceInfoDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

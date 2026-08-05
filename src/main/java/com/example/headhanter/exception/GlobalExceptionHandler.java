@@ -1,7 +1,7 @@
 package com.example.headhanter.exception;
 
-import com.example.headhanter.dto.ErrorResponseDto;
-import com.example.headhanter.dto.ValidationErrorResponse;
+import com.example.headhanter.dto.response.ErrorResponseDto;
+import com.example.headhanter.dto.response.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

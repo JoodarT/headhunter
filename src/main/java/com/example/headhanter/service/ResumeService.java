@@ -2,7 +2,7 @@ package com.example.headhanter.service;
 
 import com.example.headhanter.dao.ResumeDao;
 import com.example.headhanter.dto.ResumeCreateDto;
-import com.example.headhanter.dto.ResumeResponseDto;
+import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.models.Resume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.example.headhanter.controller;
 
 import com.example.headhanter.dto.ResumeCreateDto;
-import com.example.headhanter.dto.ResumeResponseDto;
+import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.service.ResumeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

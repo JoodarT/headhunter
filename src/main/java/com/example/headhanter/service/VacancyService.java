@@ -1,7 +1,7 @@
 package com.example.headhanter.service;
 
 import com.example.headhanter.dto.VacancyCreateDto;
-import com.example.headhanter.dto.VacancyResponseDto;
+import com.example.headhanter.dto.response.VacancyResponseDto;
 
 import java.util.List;
 
