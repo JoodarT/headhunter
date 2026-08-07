@@ -54,8 +54,7 @@ public class UserDao {
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.setString(4, user.getPhone());
-            ps.setString(5, user.getAccountType());
-            return ps;
+            ps.setString(5, user.getAccountType() != null ? user.getAccountType().name() : null);            return ps;
         }, keyHolder);
 
         if (keyHolder.getKey() != null) {

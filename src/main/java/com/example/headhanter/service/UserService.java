@@ -1,6 +1,6 @@
 package com.example.headhanter.service;
 
-import com.example.headhanter.dto.UserDto;
+import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.User;
 import org.springframework.web.multipart.MultipartFile;
 

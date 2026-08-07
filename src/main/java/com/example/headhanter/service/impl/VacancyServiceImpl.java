@@ -2,7 +2,7 @@ package com.example.headhanter.service.impl;
 
 import com.example.headhanter.dao.UserDao;
 import com.example.headhanter.dao.VacancyDao;
-import com.example.headhanter.dto.VacancyCreateDto;
+import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.models.Vacancy;

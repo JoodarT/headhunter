@@ -1,16 +1,11 @@
 package com.example.headhanter.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Resume {
-
     private Long id;
     private Long userId;
     private String applicantName;
@@ -18,4 +13,9 @@ public class Resume {
     private String category;
     private String skills;
     private Double expectedSalary;
+    private LocalDateTime updateTime;
+
+    private ContactsInfo contactInfo;
+    private List<WorkExperienceInfo> experiences;
+    private List<EducationInfo> educations;
 }

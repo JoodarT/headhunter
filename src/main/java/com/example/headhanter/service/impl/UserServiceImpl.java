@@ -1,7 +1,7 @@
 package com.example.headhanter.service.impl;
 
 import com.example.headhanter.dao.UserDao;
-import com.example.headhanter.dto.UserDto;
+import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.FileService;
 import com.example.headhanter.service.UserService;

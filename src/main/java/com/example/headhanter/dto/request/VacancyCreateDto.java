@@ -1,4 +1,4 @@
-package com.example.headhanter.dto;
+package com.example.headhanter.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;

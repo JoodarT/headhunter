@@ -1,6 +1,7 @@
-package com.example.headhanter.dto;
+package com.example.headhanter.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 @Data
@@ -12,8 +13,8 @@ public class WorkExperienceInfoDto {
     @NotBlank(message = "Должность обязательна")
     private String position;
 
-    @NotBlank(message = "Период работы обязателен")
+    @NotBlank(message = "Укажите период работы")
     private String period;
 
-    private String description;
+    private String responsibilities;
 }
