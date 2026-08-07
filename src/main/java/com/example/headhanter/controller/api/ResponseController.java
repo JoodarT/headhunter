@@ -1,4 +1,4 @@
-package com.example.headhanter.controller;
+package com.example.headhanter.controller.api;
 
 import com.example.headhanter.models.RespondedApplicant;
 import com.example.headhanter.models.Vacancy;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/responses")
+@RequestMapping("api/responses")
 @RequiredArgsConstructor
 public class ResponseController {
 

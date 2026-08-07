@@ -1,4 +1,4 @@
-package com.example.headhanter.controller;
+package com.example.headhanter.controller.api;
 
 import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vacancies")
+@RequestMapping("api/vacancies")
 @RequiredArgsConstructor
 @Tag(name = "Вакансии", description = "Управление вакансиями: создание, обновление, удаление и поиск")
 @SecurityRequirement(name = "basicAuth")

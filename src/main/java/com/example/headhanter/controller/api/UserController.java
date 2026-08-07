@@ -1,4 +1,4 @@
-package com.example.headhanter.controller;
+package com.example.headhanter.controller.api;
 
 import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.User;
@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/users")
 @RequiredArgsConstructor
 public class UserController {
 

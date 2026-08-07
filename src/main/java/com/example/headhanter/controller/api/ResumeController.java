@@ -1,4 +1,4 @@
-package com.example.headhanter.controller;
+package com.example.headhanter.controller.api;
 
 import com.example.headhanter.dto.request.ResumeCreateDto;
 import com.example.headhanter.dto.response.ResumeResponseDto;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/resumes")
+@RequestMapping("api/resumes")
 @RequiredArgsConstructor
 public class ResumeController {
 

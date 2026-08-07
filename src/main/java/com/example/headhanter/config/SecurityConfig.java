@@ -4,7 +4,6 @@ import com.example.headhanter.models.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -27,27 +26,30 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/vacancies/**").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers(HttpMethod.PUT, "/vacancies/**").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers(HttpMethod.DELETE, "/vacancies/**").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers(HttpMethod.GET, "/vacancies/**").authenticated()
+                        .requestMatchers("/", "/register", "/profile/**", "/resumes/**", "/vacancies/**").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/resumes/**").hasRole(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.PUT, "/resumes/**").hasRole(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.DELETE, "/resumes/**").hasRole(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.GET, "/resumes/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/users", "/users").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/responses").hasRole(Role.APPLICANT.name())
-                        .requestMatchers("/responses/by-vacancy/**", "/responses/*/confirm").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers("/responses/my-vacancies/**").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.POST, "/api/vacancies/**").hasAuthority(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/vacancies/**").hasAuthority(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/vacancies/**").hasAuthority(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/vacancies/**").authenticated()
 
-                        .requestMatchers("/users/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/resumes/**").hasAuthority(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/resumes/**").hasAuthority(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/resumes/**").hasAuthority(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.GET, "/api/resumes/**").authenticated()
 
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/responses").hasAuthority(Role.APPLICANT.name())
+                        .requestMatchers("/api/responses/by-vacancy/**", "/api/responses/*/confirm").hasAuthority(Role.EMPLOYER.name())
+                        .requestMatchers("/api/responses/my-vacancies/**").hasAuthority(Role.APPLICANT.name())
+
+                        .anyRequest().permitAll()
                 )
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
