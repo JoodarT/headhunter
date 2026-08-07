@@ -10,10 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class ViewController{
+public class ViewController {
 
     private final ResumeService resumeService;
     private final VacancyService vacancyService;
@@ -30,9 +31,34 @@ public class ViewController{
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute UserDto userDto) {
-        userService.createUser(userDto);
-        return "redirect:/profile";
+    public String registerUser(@ModelAttribute UserDto userDto, Model model) {
+        try {
+            userService.createUser(userDto);
+            return "redirect:/login?registered";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage() != null ? e.getMessage() : "Ошибка при регистрации");
+            model.addAttribute("userDto", userDto);
+            return "register";
+        }
+    }
+
+    @GetMapping("/login")
+    public String showLoginPage(
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "logout", required = false) String logout,
+            @RequestParam(value = "registered", required = false) String registered,
+            Model model
+    ) {
+        if (error != null) {
+            model.addAttribute("error", true);
+        }
+        if (logout != null) {
+            model.addAttribute("logout", true);
+        }
+        if (registered != null) {
+            model.addAttribute("registered", true);
+        }
+        return "login";
     }
 
     @GetMapping("/profile")

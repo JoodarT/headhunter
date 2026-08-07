@@ -28,7 +28,8 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
-                        .requestMatchers("/", "/register", "/profile/**", "/resumes/**", "/vacancies/**").permitAll()
+                        .requestMatchers("/", "/register", "/login", "/resumes/**", "/vacancies/**").permitAll()
+                        .requestMatchers("/profile/**").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/users", "/users").permitAll()
 
@@ -48,8 +49,19 @@ public class SecurityConfig {
 
                         .anyRequest().permitAll()
                 )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/profile", true)
+                        .failureUrl("/login?error")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                )
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
