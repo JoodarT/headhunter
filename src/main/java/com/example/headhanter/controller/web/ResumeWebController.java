@@ -19,12 +19,21 @@ public class ResumeWebController {
     private final ResumeService resumeService;
     private final UserService userService;
 
+    @GetMapping
+    public String getAllResumes(@RequestParam(value = "search", required = false) String search, Model model) {
+        if (search != null && !search.trim().isEmpty()) {
+            model.addAttribute("resumes", resumeService.searchResumes(search));
+        } else {
+            model.addAttribute("resumes", resumeService.getAllResumes());
+        }
+        return "resumes-list";
+    }
+
     @GetMapping("/create")
     public String showCreateResumePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails == null) {
             return "redirect:/login";
         }
-
         model.addAttribute("resumeDto", new ResumeCreateDto());
         return "resume-create";
     }
@@ -37,12 +46,10 @@ public class ResumeWebController {
         if (userDetails == null) {
             return "redirect:/login";
         }
-
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         resumeDto.setUserId(currentUser.getId());
 
         resumeService.createResume(resumeDto);
-
         return "redirect:/resumes";
     }
 
@@ -55,7 +62,6 @@ public class ResumeWebController {
         if (userDetails == null) {
             return "redirect:/login";
         }
-
         var resume = resumeService.getResumeById(id);
         model.addAttribute("resume", resume);
 
@@ -71,12 +77,19 @@ public class ResumeWebController {
         if (userDetails == null) {
             return "redirect:/login";
         }
-
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         resumeDto.setUserId(currentUser.getId());
 
         resumeService.updateResume(id, resumeDto);
+        return "redirect:/resumes";
+    }
 
+    @PostMapping("/{id}/delete")
+    public String deleteResume(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        resumeService.deleteResume(id);
         return "redirect:/resumes";
     }
 }

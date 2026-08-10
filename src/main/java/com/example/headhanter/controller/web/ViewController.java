@@ -84,11 +84,11 @@ public class ViewController {
         return "profile-edit";
     }
 
-    @GetMapping("/resumes")
-    public String showResumesPage(Model model) {
-        model.addAttribute("resumes", resumeService.getAllResumes());
-        return "resumes";
-    }
+//    @GetMapping("/resumes")
+//    public String showResumesPage(Model model) {
+//        model.addAttribute("resumes", resumeService.getAllResumes());
+//        return "resumes";
+//    }
 
     @GetMapping("/vacancies")
     public String showVacanciesPage(Model model) {
