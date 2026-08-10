@@ -1,6 +1,7 @@
 package com.example.headhanter.service;
 
 import com.example.headhanter.dao.UserDao;
+import com.example.headhanter.models.Role;
 import com.example.headhanter.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +25,9 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Пользователь с email " + email + " не найден");
         }
 
-        String roleName = String.valueOf(user.getAccountType());
+        Role accountType = user.getAccountType();
+
+        String roleName = (accountType != null) ? accountType.name() : "USER";
 
         String authority = roleName.startsWith("ROLE_") ? roleName : "ROLE_" + roleName;
 
