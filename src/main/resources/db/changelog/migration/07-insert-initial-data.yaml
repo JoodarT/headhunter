@@ -48,23 +48,22 @@ databaseChangeLog:
         - sql:
             comment: Добавление 15 вакансий
             sql: |
-              INSERT INTO vacancies (name, description, salary, category_id, user_id, is_active, created_date) VALUES
-              ('Java Developer', 'Разработка сервисов на Spring Boot', 150000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'azamat@company.kg'), true, NOW()),
-              ('Frontend Developer (React)', 'Создание веб-интерфейсов', 120000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'bakyt@company.kg'), true, NOW()),
-              ('DevOps Engineer', 'Поддержка CI/CD и Docker', 180000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'nurbek@company.kg'), true, NOW()),
-              ('QA Automation', 'Автоматизация тестирования на Java', 95000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'ulan@company.kg'), true, NOW()),
-              ('Python / Data Science', 'Анализ данных и машинное обучение', 200000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'marat@company.kg'), true, NOW()),
-              ('Системный администратор', 'Обслуживание Linux серверов', 80000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'aibek@company.kg'), true, NOW()),
-              ('Специалист по кибербезопасности', 'Аудит и защита данных', 170000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'gulnara@company.kg'), true, NOW()),
-              ('Android Developer', 'Мобильные приложения на Kotlin', 140000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'daniyar@company.kg'), true, NOW()),
-              ('iOS Developer', 'Разработка под iOS на Swift', 145000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'chingiz@company.kg'), true, NOW()),
-              ('Game Developer', 'Создание игр на Unity/C#', 130000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'almaz@company.kg'), true, NOW()),
-              ('1C Программист', 'Настройка и сопровождение 1С', 110000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'bermet@company.kg'), true, NOW()),
-              ('UI/UX Дизайнер', 'Проектирование интерфейсов', 90000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'mirbek@company.kg'), true, NOW()),
-              ('Database Administrator', 'Администрирование PostgreSQL', 160000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'kanat@company.kg'), true, NOW()),
-              ('Project Manager', 'Управление проектами по Scrum', 135000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'asel@company.kg'), true, NOW()),
-              ('Бизнес-аналитик', 'Сбор и формализация требований', 120000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'erkin@company.kg'), true, NOW());
-
+              INSERT INTO vacancies (title, description, salary, category_id, employer_id, views) VALUES
+              ('Java Developer', 'Разработка сервисов на Spring Boot', 150000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'azamat@company.kg'), 0),
+              ('Frontend Developer (React)', 'Создание веб-интерфейсов', 120000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'bakyt@company.kg'), 0),
+              ('DevOps Engineer', 'Поддержка CI/CD и Docker', 180000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'nurbek@company.kg'), 0),
+              ('QA Automation', 'Автоматизация тестирования на Java', 95000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'ulan@company.kg'), 0),
+              ('Python / Data Science', 'Анализ данных и машинное обучение', 200000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'marat@company.kg'), 0),
+              ('Системный администратор', 'Обслуживание Linux серверов', 80000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'aibek@company.kg'), 0),
+              ('Специалист по кибербезопасности', 'Аудит и защита данных', 170000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'gulnara@company.kg'), 0),
+              ('Android Developer', 'Мобильные приложения на Kotlin', 140000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'daniyar@company.kg'), 0),
+              ('iOS Developer', 'Разработка под iOS на Swift', 145000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'chingiz@company.kg'), 0),
+              ('Game Developer', 'Создание игр на Unity/C#', 130000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'almaz@company.kg'), 0),
+              ('1C Программист', 'Настройка и сопровождение 1С', 110000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'bermet@company.kg'), 0),
+              ('UI/UX Дизайнер', 'Проектирование интерфейсов', 90000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'mirbek@company.kg'), 0),
+              ('Database Administrator', 'Администрирование PostgreSQL', 160000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'kanat@company.kg'), 0),
+              ('Project Manager', 'Управление проектами по Scrum', 135000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'asel@company.kg'), 0),
+              ('Бизнес-аналитик', 'Сбор и формализация требований', 120000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'erkin@company.kg'), 0);
   - changeSet:
       id: 07-insert-resumes
       author: joodar
@@ -72,7 +71,7 @@ databaseChangeLog:
         - sql:
             comment: Добавление 15 резюме
             sql: |
-              INSERT INTO resumes (name, category_id, user_id, salary, is_active, created_date) VALUES
+              INSERT INTO resumes (title, category_id, user_id, salary, is_active, created_date) VALUES
               ('Middle Java Разработчик', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'aisuluu@mail.kg'), 160000.00, true, NOW()),
               ('Junior Frontend Разработчик', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'nursultan@mail.kg'), 70000.00, true, NOW()),
               ('DevOps Инженер', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'cholpon@mail.kg'), 190000.00, true, NOW()),

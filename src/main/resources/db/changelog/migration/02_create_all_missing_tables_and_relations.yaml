@@ -53,7 +53,7 @@ databaseChangeLog:
                   name: account_type
                   type: varchar(50)
 
-        # 3. Приводим таблицу vacancies к правильным связям
+        # 3. Модификация таблицы vacancies
         - dropColumn:
             tableName: vacancies
             columnName: category
@@ -123,6 +123,16 @@ databaseChangeLog:
               - column:
                   name: title
                   type: varchar(255)
+              - column:
+                  name: salary
+                  type: decimal(12,2)
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+              - column:
+                  name: created_date
+                  type: timestamp
 
         # 7. Таблица контактной информации
         - createTable:
