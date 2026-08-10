@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: 07-insert-users
+      author: joodar
+      changes:
+        - sql:
+            comment: Добавление 15 работодателей и 15 соискателей
+            sql: |
+              INSERT INTO users (name, email, password, phone, account_type) VALUES
+              -- Работодатели
+              ('Азамат Бакиров', 'azamat@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111001', 'EMPLOYER'),
+              ('Бакыт Токтогулов', 'bakyt@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111002', 'EMPLOYER'),
+              ('Нурбек Асанов', 'nurbek@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111003', 'EMPLOYER'),
+              ('Улан Джумабеков', 'ulan@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111004', 'EMPLOYER'),
+              ('Марат Касымов', 'marat@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111005', 'EMPLOYER'),
+              ('Айбек Султанов', 'aibek@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111006', 'EMPLOYER'),
+              ('Гульнара Садыкова', 'gulnara@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111007', 'EMPLOYER'),
+              ('Данияр Эрматов', 'daniyar@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111008', 'EMPLOYER'),
+              ('Чингиз Исмаилов', 'chingiz@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111009', 'EMPLOYER'),
+              ('Алмаз Осмонов', 'almaz@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111010', 'EMPLOYER'),
+              ('Бермет Жумалиева', 'bermet@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111011', 'EMPLOYER'),
+              ('Мирбек Абдыкадыров', 'mirbek@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111012', 'EMPLOYER'),
+              ('Канат Исаев', 'kanat@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111013', 'EMPLOYER'),
+              ('Асель Турсунова', 'asel@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111014', 'EMPLOYER'),
+              ('Эркин Кубатов', 'erkin@company.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996555111015', 'EMPLOYER'),
+
+              -- Соискатели
+              ('Айсулуу Тыныбекова', 'aisuluu@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222001', 'APPLICANT'),
+              ('Нурсултан Мусаев', 'nursultan@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222002', 'APPLICANT'),
+              ('Чолпон Орозбекова', 'cholpon@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222003', 'APPLICANT'),
+              ('Акылбек Маматов', 'akylbek@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222004', 'APPLICANT'),
+              ('Динара Айтиева', 'dinara@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222005', 'APPLICANT'),
+              ('Султан Бекбоев', 'sultan@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222006', 'APPLICANT'),
+              ('Нургиза Касымова', 'nurgiza@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222007', 'APPLICANT'),
+              ('Эльдияр Кенжебеков', 'eldiyar@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222008', 'APPLICANT'),
+              ('Зарина Алиева', 'zarina@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222009', 'APPLICANT'),
+              ('Бактияр Ташматов', 'baktiyar@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222010', 'APPLICANT'),
+              ('Айжан Мамытова', 'aizhan@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222011', 'APPLICANT'),
+              ('Темирлан Рыскулов', 'temirlan@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222012', 'APPLICANT'),
+              ('Мадина Шакирова', 'madina@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222013', 'APPLICANT'),
+              ('Жоомарт Ибраимов', 'zhoomart@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222014', 'APPLICANT'),
+              ('Айпери Нурланова', 'aiperi@mail.kg', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', '+996700222015', 'APPLICANT');
+
+  - changeSet:
+      id: 07-insert-vacancies
+      author: joodar
+      changes:
+        - sql:
+            comment: Добавление 15 вакансий
+            sql: |
+              INSERT INTO vacancies (name, description, salary, category_id, user_id, is_active, created_date) VALUES
+              ('Java Developer', 'Разработка сервисов на Spring Boot', 150000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'azamat@company.kg'), true, NOW()),
+              ('Frontend Developer (React)', 'Создание веб-интерфейсов', 120000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'bakyt@company.kg'), true, NOW()),
+              ('DevOps Engineer', 'Поддержка CI/CD и Docker', 180000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'nurbek@company.kg'), true, NOW()),
+              ('QA Automation', 'Автоматизация тестирования на Java', 95000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'ulan@company.kg'), true, NOW()),
+              ('Python / Data Science', 'Анализ данных и машинное обучение', 200000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'marat@company.kg'), true, NOW()),
+              ('Системный администратор', 'Обслуживание Linux серверов', 80000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'aibek@company.kg'), true, NOW()),
+              ('Специалист по кибербезопасности', 'Аудит и защита данных', 170000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'gulnara@company.kg'), true, NOW()),
+              ('Android Developer', 'Мобильные приложения на Kotlin', 140000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'daniyar@company.kg'), true, NOW()),
+              ('iOS Developer', 'Разработка под iOS на Swift', 145000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'chingiz@company.kg'), true, NOW()),
+              ('Game Developer', 'Создание игр на Unity/C#', 130000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'almaz@company.kg'), true, NOW()),
+              ('1C Программист', 'Настройка и сопровождение 1С', 110000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'bermet@company.kg'), true, NOW()),
+              ('UI/UX Дизайнер', 'Проектирование интерфейсов', 90000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'mirbek@company.kg'), true, NOW()),
+              ('Database Administrator', 'Администрирование PostgreSQL', 160000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'kanat@company.kg'), true, NOW()),
+              ('Project Manager', 'Управление проектами по Scrum', 135000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'asel@company.kg'), true, NOW()),
+              ('Бизнес-аналитик', 'Сбор и формализация требований', 120000.00, (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'erkin@company.kg'), true, NOW());
+
+  - changeSet:
+      id: 07-insert-resumes
+      author: joodar
+      changes:
+        - sql:
+            comment: Добавление 15 резюме
+            sql: |
+              INSERT INTO resumes (name, category_id, user_id, salary, is_active, created_date) VALUES
+              ('Middle Java Разработчик', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'aisuluu@mail.kg'), 160000.00, true, NOW()),
+              ('Junior Frontend Разработчик', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'nursultan@mail.kg'), 70000.00, true, NOW()),
+              ('DevOps Инженер', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'cholpon@mail.kg'), 190000.00, true, NOW()),
+              ('QA Инженер', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'akylbek@mail.kg'), 100000.00, true, NOW()),
+              ('Data Scientist / ML', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'dinara@mail.kg'), 210000.00, true, NOW()),
+              ('Системный администратор', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'sultan@mail.kg'), 85000.00, true, NOW()),
+              ('Инженер по безопасности', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'nurgiza@mail.kg'), 175000.00, true, NOW()),
+              ('Android / Kotlin Разработчик', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'eldiyar@mail.kg'), 145000.00, true, NOW()),
+              ('iOS / Swift Разработчик', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'zarina@mail.kg'), 150000.00, true, NOW()),
+              ('Unity Game Developer', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'baktiyar@mail.kg'), 135000.00, true, NOW()),
+              ('Программист 1С', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'aizhan@mail.kg'), 105000.00, true, NOW()),
+              ('UI/UX / Веб-дизайнер', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'temirlan@mail.kg'), 95000.00, true, NOW()),
+              ('PostgreSQL DBA', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'madina@mail.kg'), 165000.00, true, NOW()),
+              ('IT Project Manager', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'zhoomart@mail.kg'), 140000.00, true, NOW()),
+              ('Системный / Бизнес-аналитик', (SELECT id FROM categories LIMIT 1), (SELECT id FROM users WHERE email = 'aiperi@mail.kg'), 125000.00, true, NOW());
