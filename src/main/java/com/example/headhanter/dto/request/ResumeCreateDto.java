@@ -9,21 +9,21 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data // <-- Важно! Генерирует геттеры и сеттеры
+@Data
 public class ResumeCreateDto {
 
     @NotNull(message = "ID пользователя обязателен")
     private Long userId;
 
-    private String applicantName; // <-- Если называется иначе, переименуйте здесь или в сервисе
+    private String applicantName;
 
     @NotBlank(message = "Название резюме обязательно")
     private String title;
 
     @NotBlank(message = "Укажите категорию")
-    private String category; // <-- Проверьте наличие
+    private String category;
 
-    private String skills; // <-- Именно этого поля не хватает для dto.getSkills()
+    private String skills;
 
     @NotNull(message = "Укажите желаемую зарплату")
     @Positive(message = "Зарплата должна быть больше 0")

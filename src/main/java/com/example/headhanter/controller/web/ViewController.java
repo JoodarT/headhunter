@@ -1,10 +1,13 @@
-package com.example.headhanter.controller;
+package com.example.headhanter.controller.web;
 
 import com.example.headhanter.dto.request.UserDto;
+import com.example.headhanter.models.User;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,14 +65,22 @@ public class ViewController {
     }
 
     @GetMapping("/profile")
-    public String showProfilePage(Model model) {
-        model.addAttribute("user", userService.getAllUsers().stream().findFirst().orElse(null));
+    public String showProfilePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        User user = userService.getUserByEmail(userDetails.getUsername());
+        model.addAttribute("user", user);
         return "profile";
     }
 
     @GetMapping("/profile/edit")
-    public String showProfileEditPage(Model model) {
-        model.addAttribute("user", userService.getAllUsers().stream().findFirst().orElse(null));
+    public String showProfileEditPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        User user = userService.getUserByEmail(userDetails.getUsername());
+        model.addAttribute("user", user);
         return "profile-edit";
     }
 
