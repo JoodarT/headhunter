@@ -10,6 +10,6 @@ public interface VacancyService {
     List<VacancyResponseDto> getAll();
     VacancyResponseDto getById(Long id);
     List<VacancyResponseDto> getRespondedVacanciesByUser(Long userId);
-    VacancyResponseDto update(Long id, VacancyCreateDto dto);
-    void delete(Long id);
+    VacancyResponseDto update(Long id, VacancyCreateDto dto, Long currentUserId);
+    void delete(Long id, Long currentUserId);
 }

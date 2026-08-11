@@ -90,9 +90,9 @@ public class ViewController {
 //        return "resumes";
 //    }
 
-    @GetMapping("/vacancies")
-    public String showVacanciesPage(Model model) {
-        model.addAttribute("vacancies", vacancyService.getAll());
-        return "vacancies";
-    }
+//    @GetMapping("/vacancies")
+//    public String showVacanciesPage(Model model) {
+//        model.addAttribute("vacancies", vacancyService.getAll());
+//        return "vacancies";
+//    }
 }

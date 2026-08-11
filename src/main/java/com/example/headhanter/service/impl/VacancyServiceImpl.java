@@ -4,14 +4,11 @@ import com.example.headhanter.dao.UserDao;
 import com.example.headhanter.dao.VacancyDao;
 import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
-import com.example.headhanter.models.User;
 import com.example.headhanter.models.Vacancy;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -76,8 +73,8 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public VacancyResponseDto update(Long id, VacancyCreateDto dto) {
-        log.info("Запрос на обновление вакансии с ID: {}", id);
+    public VacancyResponseDto update(Long id, VacancyCreateDto dto, Long currentUserId) {
+        log.info("Запрос на обновление вакансии с ID: {} пользователем с ID: {}", id, currentUserId);
         Vacancy existingVacancy = vacancyDao.findWithoutIncrementingViews(id);
 
         if (existingVacancy == null) {
@@ -85,7 +82,7 @@ public class VacancyServiceImpl implements VacancyService {
             throw new NoSuchElementException("Вакансия с ID: " + id + " не найдена");
         }
 
-        checkOwnership(existingVacancy.getEmployerId());
+        checkOwnership(existingVacancy.getEmployerId(), currentUserId);
 
         existingVacancy.setTitle(dto.getTitle());
         existingVacancy.setDescription(dto.getDescription());
@@ -99,30 +96,22 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void delete(Long id) {
-        log.info("Запрос на удаление вакансии с ID: {}", id);
+    public void delete(Long id, Long currentUserId) {
+        log.info("Запрос на удаление вакансии с ID: {} пользователем с ID: {}", id, currentUserId);
         Vacancy existingVacancy = vacancyDao.findWithoutIncrementingViews(id);
         if (existingVacancy == null) {
             log.warn("Не удалось удалить вакансию: вакансия с ID: {} не найдена", id);
             throw new NoSuchElementException("Вакансия с ID: " + id + " не найдена");
         }
 
-        checkOwnership(existingVacancy.getEmployerId());
+        checkOwnership(existingVacancy.getEmployerId(), currentUserId);
 
         vacancyDao.deleteById(id);
         log.debug("Вакансия с ID: {} успешно удалена", id);
     }
 
-    private void checkOwnership(Long employerId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AccessDeniedException("Вы не авторизованы");
-        }
-
-        String currentEmail = authentication.getName();
-        User currentUser = userDao.findByEmail(currentEmail);
-
-        if (currentUser == null || !currentUser.getId().equals(employerId)) {
+    private void checkOwnership(Long employerId, Long currentUserId) {
+        if (currentUserId == null || employerId == null || !employerId.equals(currentUserId)) {
             throw new AccessDeniedException("Вы можете изменять или удалять только свои вакансии");
         }
     }

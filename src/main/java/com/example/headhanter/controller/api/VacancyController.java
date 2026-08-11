@@ -2,6 +2,8 @@ package com.example.headhanter.controller.api;
 
 import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
+import com.example.headhanter.models.User;
+import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +29,7 @@ import java.util.List;
 public class VacancyController {
 
     private final VacancyService vacancyService;
+    private final UserService userService;
 
     @PostMapping
     @Operation(summary = "Создать новую вакансию", description = "Доступно только пользователям с ролью EMPLOYER")
@@ -34,7 +39,15 @@ public class VacancyController {
             @ApiResponse(responseCode = "401", description = "Пользователь не аутентифицирован"),
             @ApiResponse(responseCode = "403", description = "Отказ в доступе (нужна роль EMPLOYER)")
     })
-    public ResponseEntity<VacancyResponseDto> createVacancy(@Valid @RequestBody VacancyCreateDto dto) {
+    public ResponseEntity<VacancyResponseDto> createVacancy(
+            @Valid @RequestBody VacancyCreateDto dto,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        dto.setEmployerId(currentUser.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.create(dto));
     }
 
@@ -86,8 +99,14 @@ public class VacancyController {
     public ResponseEntity<VacancyResponseDto> updateVacancy(
             @Parameter(description = "ID обновляемой вакансии", example = "1")
             @PathVariable Long id,
-            @Valid @RequestBody VacancyCreateDto dto) {
-        return ResponseEntity.ok(vacancyService.update(id, dto));
+            @Valid @RequestBody VacancyCreateDto dto,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        return ResponseEntity.ok(vacancyService.update(id, dto, currentUser.getId()));
     }
 
     @DeleteMapping("/{id}")
@@ -100,8 +119,14 @@ public class VacancyController {
     })
     public ResponseEntity<Void> deleteVacancy(
             @Parameter(description = "ID удаляемой вакансии", example = "1")
-            @PathVariable Long id) {
-        vacancyService.delete(id);
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        vacancyService.delete(id, currentUser.getId());
         return ResponseEntity.noContent().build();
     }
 }
