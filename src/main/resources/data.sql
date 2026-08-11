@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS vacancies (
                                          title VARCHAR(255),
     description TEXT,
     salary DOUBLE,
-    category VARCHAR(255), -- ЧЕТКО ЗДЕСЬ: Добавлена пропущенная запятая
+    category VARCHAR(255),
     views INT DEFAULT 0
     );
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS responded_applicants (
                                                     confirmation BOOLEAN DEFAULT FALSE
 );
 
--- Тестовые данные
+
 INSERT INTO customer(name, password) VALUES ('tupac', 'qwerty');
 
 INSERT INTO users (name, email, password, phone, account_type)
@@ -59,5 +59,11 @@ VALUES ('Java Разработчик', 'Ищем специалиста на Spr
 INSERT INTO vacancies (title, description, salary, category, views)
 VALUES ('Фронтенд Инженер', 'Требуется знание React', 110000.0, 'IT', 0);
 
+
+
 INSERT INTO responded_applicants (resume_id, vacancy_id, confirmation)
-VALUES (1, 1, false);
+VALUES (
+           (SELECT id FROM resumes WHERE title = 'Java Developer' AND applicant_name = 'Абдышукур Абдымомунов' LIMIT 1),
+       (SELECT id FROM vacancies WHERE title = 'Java Разработчик' LIMIT 1),
+    false
+    );

@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class ContactsInfo {
-    private Long id;
-    private ContactType type;
-    private String value;
+    private String phone;
+    private String email;
+    private String telegram;
+    private String linkedin;
 }

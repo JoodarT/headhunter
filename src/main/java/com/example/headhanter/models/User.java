@@ -14,7 +14,7 @@ public class User {
    private String password;
    private String name;
    private String phone;
-   private String accountType;
+   private Role accountType;
    private List<ContactsInfo> contacts;
-   private String avatarFileName;
+   private String avatarUrl;
 }

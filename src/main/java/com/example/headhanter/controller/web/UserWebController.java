@@ -1,0 +1,102 @@
+package com.example.headhanter.controller.web;
+
+import com.example.headhanter.dto.request.UserDto;
+import com.example.headhanter.models.User;
+import com.example.headhanter.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@Slf4j
+@Controller
+@RequestMapping("/profile")
+@RequiredArgsConstructor
+public class UserWebController {
+
+    private final UserService userService;
+
+    @GetMapping
+    public String showProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        User user = userService.getUserByEmail(userDetails.getUsername());
+        model.addAttribute("user", user);
+        return "profile";
+    }
+
+    @GetMapping("/edit")
+    public String showEditProfilePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+
+        UserDto userDto = new UserDto();
+        userDto.setEmail(currentUser.getEmail());
+        userDto.setName(currentUser.getName());
+        userDto.setPhone(currentUser.getPhone());
+        userDto.setAccountType(currentUser.getAccountType());
+
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("userId", currentUser.getId());
+        return "profile-edit";
+    }
+
+    @PostMapping("/edit")
+    public String updateProfile(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @ModelAttribute("userDto") UserDto userDto
+    ) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        userService.updateUser(currentUser.getId(), userDto);
+
+        if (userDto.getEmail() != null && !currentUser.getEmail().equals(userDto.getEmail())) {
+            UserDetails updatedUserDetails = org.springframework.security.core.userdetails.User
+                    .withUsername(userDto.getEmail())
+                    .password(userDetails.getPassword())
+                    .authorities(userDetails.getAuthorities())
+                    .build();
+
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(
+                            updatedUserDetails,
+                            userDetails.getPassword(),
+                            userDetails.getAuthorities()
+                    )
+            );
+        }
+
+        return "redirect:/profile";
+    }
+
+    @PostMapping("/avatar/{userId}")
+    public String uploadAvatar(
+            @PathVariable("userId") Long userId,
+            @RequestParam("file") MultipartFile file,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+
+        if (currentUser.getId().equals(userId)) {
+            userService.uploadAvatar(userId, file);
+        }
+
+        return "redirect:/profile";
+    }
+}
