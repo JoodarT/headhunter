@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,8 @@ public class ResumeService {
     public ResumeResponseDto createResume(ResumeCreateDto dto) {
         Resume resume = new Resume();
         mapDtoToEntity(dto, resume);
-        resume.setUpdateTime(LocalDateTime.now());
+        resume.setCreatedDate(LocalDateTime.now());
+        resume.setIsActive(true);
 
         Resume savedResume = resumeDao.save(resume);
         return mapToDto(savedResume);
@@ -65,7 +67,6 @@ public class ResumeService {
         }
 
         mapDtoToEntity(dto, existingResume);
-        existingResume.setUpdateTime(LocalDateTime.now());
 
         resumeDao.update(existingResume);
         return mapToDto(existingResume);
@@ -81,12 +82,12 @@ public class ResumeService {
         return resumes.stream().map(this::mapToDto).toList();
     }
 
-    public List<ResumeResponseDto> getResumesByCategory(String category) {
+    public List<ResumeResponseDto> getResumesByCategory(Long categoryId) {
         List<Resume> resumes;
-        if (category == null || category.trim().isEmpty()) {
+        if (categoryId == null) {
             resumes = resumeDao.findAll();
         } else {
-            resumes = resumeDao.findByCategory(category);
+            resumes = resumeDao.findByCategoryId(categoryId);
         }
         return resumes.stream().map(this::mapToDto).toList();
     }
@@ -107,11 +108,19 @@ public class ResumeService {
 
     private void mapDtoToEntity(ResumeCreateDto dto, Resume resume) {
         resume.setUserId(dto.getUserId());
-        resume.setApplicantName(dto.getApplicantName());
         resume.setTitle(dto.getTitle());
-        resume.setCategory(dto.getCategory());
-        resume.setSkills(dto.getSkills());
-        resume.setExpectedSalary(dto.getExpectedSalary());
+
+        if (dto.getCategory() != null && !dto.getCategory().isBlank()) {
+            try {
+                resume.setCategoryId(Long.parseLong(dto.getCategory()));
+            } catch (NumberFormatException e) {
+                resume.setCategoryId(null);
+            }
+        }
+
+        if (dto.getExpectedSalary() != null) {
+            resume.setSalary(BigDecimal.valueOf(dto.getExpectedSalary()));
+        }
 
         if (dto.getContactInfo() != null) {
             ContactsInfo contactInfo = new ContactsInfo();
@@ -127,7 +136,6 @@ public class ResumeService {
                 WorkExperienceInfo exp = new WorkExperienceInfo();
                 exp.setCompanyName(eDto.getCompanyName());
                 exp.setPosition(eDto.getPosition());
-                exp.setPeriod(eDto.getPeriod());
                 exp.setResponsibilities(eDto.getResponsibilities());
                 return exp;
             }).toList();
@@ -139,7 +147,6 @@ public class ResumeService {
                 EducationInfo edu = new EducationInfo();
                 edu.setInstitution(eDto.getInstitution());
                 edu.setFaculty(eDto.getFaculty());
-                edu.setGraduationYear(eDto.getGraduationYear());
                 return edu;
             }).toList();
             resume.setEducations(educations);
@@ -150,12 +157,14 @@ public class ResumeService {
         ResumeResponseDto dto = new ResumeResponseDto();
         dto.setId(resume.getId());
         dto.setUserId(resume.getUserId());
-        dto.setApplicantName(resume.getApplicantName());
+        dto.setCategoryId(resume.getCategoryId());
         dto.setTitle(resume.getTitle());
-        dto.setCategory(resume.getCategory());
-        dto.setSkills(resume.getSkills());
-        dto.setExpectedSalary(resume.getExpectedSalary());
-        dto.setUpdateTime(resume.getUpdateTime());
+
+        if (resume.getSalary() != null) {
+            dto.setExpectedSalary(resume.getSalary().doubleValue());
+        }
+
+        dto.setCreatedDate(resume.getCreatedDate());
 
         if (resume.getContactInfo() != null) {
             ContactsInfoDto cDto = new ContactsInfoDto();
@@ -171,7 +180,6 @@ public class ResumeService {
                 WorkExperienceInfoDto eDto = new WorkExperienceInfoDto();
                 eDto.setCompanyName(exp.getCompanyName());
                 eDto.setPosition(exp.getPosition());
-                eDto.setPeriod(exp.getPeriod());
                 eDto.setResponsibilities(exp.getResponsibilities());
                 return eDto;
             }).toList();
@@ -185,7 +193,6 @@ public class ResumeService {
                 EducationInfoDto eDto = new EducationInfoDto();
                 eDto.setInstitution(edu.getInstitution());
                 eDto.setFaculty(edu.getFaculty());
-                eDto.setGraduationYear(edu.getGraduationYear());
                 return eDto;
             }).toList();
             dto.setEducations(eduDtos);

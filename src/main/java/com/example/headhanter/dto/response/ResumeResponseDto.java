@@ -16,12 +16,10 @@ import java.util.List;
 public class ResumeResponseDto {
     private Long id;
     private Long userId;
-    private String applicantName;
+    private Long categoryId;
     private String title;
-    private String category;
-    private String skills;
     private Double expectedSalary;
-    private LocalDateTime updateTime;
+    private LocalDateTime createdDate;
 
     private ContactsInfoDto contactInfo;
     private List<WorkExperienceInfoDto> experiences;

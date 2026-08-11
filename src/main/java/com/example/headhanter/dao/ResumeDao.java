@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -19,9 +21,9 @@ public class ResumeDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public List<Resume> findByCategory(String category) {
-        String sql = "SELECT * FROM resumes WHERE category = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), category);
+    public List<Resume> findByCategoryId(Long categoryId) {
+        String sql = "SELECT * FROM resumes WHERE category_id = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), categoryId);
     }
 
     public List<Resume> findByUserId(Long userId) {
@@ -30,18 +32,18 @@ public class ResumeDao {
     }
 
     public Resume save(Resume resume) {
-        String sql = "INSERT INTO resumes (user_id, applicant_name, title, category, skills, expected_salary) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO resumes (user_id, category_id, title, salary, is_active, created_date) VALUES (?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setObject(1, resume.getUserId());
-            ps.setString(2, resume.getApplicantName());
+            ps.setObject(2, resume.getCategoryId());
             ps.setString(3, resume.getTitle());
-            ps.setString(4, resume.getCategory());
-            ps.setString(5, resume.getSkills());
-            ps.setObject(6, resume.getExpectedSalary());
+            ps.setBigDecimal(4, resume.getSalary());
+            ps.setBoolean(5, resume.getIsActive() != null ? resume.getIsActive() : true);
+            ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
             return ps;
         }, keyHolder);
 
@@ -53,9 +55,9 @@ public class ResumeDao {
     }
 
     public List<Resume> searchResumes(String keyword) {
-        String sql = "SELECT * FROM resumes WHERE title LIKE ? OR skills LIKE ?";
+        String sql = "SELECT * FROM resumes WHERE title LIKE ?";
         String searchPattern = "%" + keyword + "%";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), searchPattern, searchPattern);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), searchPattern);
     }
 
     public List<Resume> findAll() {
@@ -73,8 +75,8 @@ public class ResumeDao {
     }
 
     public void update(Resume resume) {
-        String sql = "UPDATE resumes SET applicant_name = ?, title = ?, category = ?, skills = ?, expected_salary = ? WHERE id = ?";
-        jdbcTemplate.update(sql, resume.getApplicantName(), resume.getTitle(), resume.getCategory(), resume.getSkills(), resume.getExpectedSalary(), resume.getId());
+        String sql = "UPDATE resumes SET category_id = ?, title = ?, salary = ?, is_active = ? WHERE id = ?";
+        jdbcTemplate.update(sql, resume.getCategoryId(), resume.getTitle(), resume.getSalary(), resume.getIsActive(), resume.getId());
     }
 
     public void deleteById(Long id) {

@@ -95,8 +95,8 @@ public class VacancyWebController {
         dto.setEmployerId(vacancy.getEmployerId());
         dto.setTitle(vacancy.getTitle());
         dto.setDescription(vacancy.getDescription());
-        dto.setSalary(vacancy.getSalary());
-        dto.setCategoryId(vacancy.getCategory());
+        dto.setSalary(vacancy.getSalary() != null ? vacancy.getSalary().doubleValue() : null);
+        dto.setCategoryId(vacancy.getCategoryId());
 
         model.addAttribute("vacancyDto", dto);
         model.addAttribute("vacancyId", id);

@@ -1,6 +1,7 @@
 package com.example.headhanter.models;
 
 import lombok.Data;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,12 +9,11 @@ import java.util.List;
 public class Resume {
     private Long id;
     private Long userId;
-    private String applicantName;
+    private Long categoryId;
     private String title;
-    private String category;
-    private String skills;
-    private Double expectedSalary;
-    private LocalDateTime updateTime;
+    private BigDecimal salary;
+    private Boolean isActive;
+    private LocalDateTime createdDate;
 
     private ContactsInfo contactInfo;
     private List<WorkExperienceInfo> experiences;

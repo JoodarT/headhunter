@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -32,7 +33,9 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setEmployerId(dto.getEmployerId());
         vacancy.setTitle(dto.getTitle());
         vacancy.setDescription(dto.getDescription());
-        vacancy.setSalary(dto.getSalary());
+        if (dto.getSalary() != null) {
+            vacancy.setSalary(BigDecimal.valueOf(dto.getSalary()));
+        }
         vacancy.setCategoryId(dto.getCategoryId());
         vacancy.setViews(0);
 
@@ -86,7 +89,11 @@ public class VacancyServiceImpl implements VacancyService {
 
         existingVacancy.setTitle(dto.getTitle());
         existingVacancy.setDescription(dto.getDescription());
-        existingVacancy.setSalary(dto.getSalary());
+        if (dto.getSalary() != null) {
+            existingVacancy.setSalary(BigDecimal.valueOf(dto.getSalary()));
+        } else {
+            existingVacancy.setSalary(null);
+        }
         existingVacancy.setCategoryId(dto.getCategoryId());
         existingVacancy.setEmployerId(dto.getEmployerId());
 
@@ -124,8 +131,10 @@ public class VacancyServiceImpl implements VacancyService {
         dto.setTitle(vacancy.getTitle());
         dto.setDescription(vacancy.getDescription());
         dto.setSalary(vacancy.getSalary());
-        dto.setCategory(vacancy.getCategoryId());
+        dto.setCategoryId(vacancy.getCategoryId());
         dto.setViews(vacancy.getViews());
+        dto.setIsActive(vacancy.getIsActive());
+        dto.setUpdateTime(vacancy.getUpdateTime());
         return dto;
     }
 }

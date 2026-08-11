@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -21,16 +23,18 @@ public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
 
     public Vacancy save(Vacancy vacancy) {
-        String sql = "INSERT INTO vacancies (title, description, salary, category_id, views, employer_id) VALUES (?, ?, ?, ?, 0, ?)";
+        String sql = "INSERT INTO vacancies (title, description, salary, category_id, views, employer_id, is_active, update_time) VALUES (?, ?, ?, ?, 0, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, vacancy.getTitle());
             ps.setString(2, vacancy.getDescription());
-            ps.setObject(3, vacancy.getSalary());
-            ps.setObject(4, vacancy.getCategoryId()); // исправлено на categoryId
+            ps.setBigDecimal(3, vacancy.getSalary());
+            ps.setObject(4, vacancy.getCategoryId());
             ps.setObject(5, vacancy.getEmployerId());
+            ps.setBoolean(6, vacancy.getIsActive() != null ? vacancy.getIsActive() : true);
+            ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
             return ps;
         }, keyHolder);
 
@@ -74,7 +78,6 @@ public class VacancyDao {
         return result;
     }
 
-    // Тот самый недостающий метод со связью JOIN для замечания ментора!
     public List<Vacancy> findRespondedVacanciesByUserId(Long userId) {
         String sql = """
             SELECT v.* 
@@ -89,8 +92,17 @@ public class VacancyDao {
     }
 
     public void update(Vacancy vacancy) {
-        String sql = "UPDATE vacancies SET title = ?, description = ?, salary = ?, category_id = ?, employer_id = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, vacancy.getTitle(), vacancy.getDescription(), vacancy.getSalary(), vacancy.getCategoryId(), vacancy.getEmployerId(), vacancy.getId());
+        String sql = "UPDATE vacancies SET title = ?, description = ?, salary = ?, category_id = ?, employer_id = ?, update_time = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(
+                sql,
+                vacancy.getTitle(),
+                vacancy.getDescription(),
+                vacancy.getSalary(),
+                vacancy.getCategoryId(),
+                vacancy.getEmployerId(),
+                Timestamp.valueOf(LocalDateTime.now()),
+                vacancy.getId()
+        );
         log.debug("Выполнен UPDATE для вакансии с ID: {}. Изменено строк: {}", vacancy.getId(), rowsAffected);
     }
 
