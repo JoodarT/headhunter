@@ -8,6 +8,7 @@ import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -99,14 +100,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User uploadAvatar(Long userId, MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("Загружаемый файл пуст!");
+        }
+
         User user = getUserById(userId);
 
-        if (file != null && !file.isEmpty()) {
-            String avatarPath = fileService.saveAvatar(file);
-            user.setAvatarFileName(avatarPath);
-            userDao.update(user);
-        }
+        String savedFileName = fileService.saveAvatar(file);
+
+        user.setAvatarFileName(savedFileName);
+        userDao.update(user);
 
         return user;
     }

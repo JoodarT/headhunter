@@ -20,7 +20,9 @@
         <div class="col-md-6 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="card-title text-primary">${(resume.title)!""}</h5>
+                    <h5 class="card-title">
+                        <a href="/resumes/${resume.id}" class="text-decoration-none">${(resume.title)!""}</a>
+                    </h5>
                     <h6 class="card-subtitle mb-2 text-muted">${(resume.applicantName)!"Аноним"}</h6>
 
                     <p class="card-text mb-1">
@@ -37,16 +39,16 @@
                 </div>
 
                 <#-- Кнопки управления (Редактирование / Удаление) -->
-                <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end gap-2 pb-3">
-                    <a href="/resumes/${resume.id}/edit" class="btn btn-sm btn-outline-primary">Редактировать</a>
+                <#if currentUser?? && resume.userId?? && resume.userId == currentUser.id>
+                <a href="/resumes/${resume.id}/edit" class="btn btn-sm btn-outline-primary">Редактировать</a>
 
-                    <form action="/resumes/${resume.id}/delete" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить это резюме?');">
-                        <#if _csrf??>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    </#if>
-                    <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
-                    </form>
-                </div>
+                <form action="/resumes/${resume.id}/delete" method="post" class="d-inline" onsubmit="return confirm('Удалить резюме?');">
+                    <#if _csrf??>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </#if>
+                <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                </form>
+            </#if>
             </div>
         </div>
     </#list>

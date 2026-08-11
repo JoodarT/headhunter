@@ -21,7 +21,6 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
 
-    // Внедряем ваш CustomUserDetailsService
     public SecurityConfig(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
@@ -31,7 +30,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Явно связываем UserDetailsService и PasswordEncoder в Provider
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -49,11 +47,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                // Связываем наш DaoAuthenticationProvider с цепочкой фильтров
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+
+
 
                         .requestMatchers("/", "/register", "/login", "/resumes/**", "/vacancies/**").permitAll()
                         .requestMatchers("/profile/**").authenticated()

@@ -51,7 +51,7 @@ public class ResumeController {
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         dto.setUserId(currentUser.getId());
 
-        ResumeResponseDto updatedResume = resumeService.updateResume(id, dto);
+        ResumeResponseDto updatedResume = resumeService.updateResume(id, dto, currentUser.getId());
 
         return ResponseEntity.ok(updatedResume);
     }

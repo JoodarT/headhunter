@@ -26,7 +26,7 @@ public class ResumeWebController {
         } else {
             model.addAttribute("resumes", resumeService.getAllResumes());
         }
-        return "resumes-list";
+        return "resumes";
     }
 
     @GetMapping("/create")
@@ -62,9 +62,15 @@ public class ResumeWebController {
         if (userDetails == null) {
             return "redirect:/login";
         }
-        var resume = resumeService.getResumeById(id);
-        model.addAttribute("resume", resume);
 
+        var resume = resumeService.getResumeById(id);
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+
+        if (resume.getUserId() == null || !resume.getUserId().equals(currentUser.getId())) {
+            return "redirect:/resumes?error=forbidden";
+        }
+
+        model.addAttribute("resume", resume);
         return "resume-edit";
     }
 
@@ -80,16 +86,44 @@ public class ResumeWebController {
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         resumeDto.setUserId(currentUser.getId());
 
-        resumeService.updateResume(id, resumeDto);
+        resumeService.updateResume(id, resumeDto, currentUser.getId());
         return "redirect:/resumes";
     }
 
     @PostMapping("/{id}/delete")
-    public String deleteResume(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
+    public String deleteResume(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
         if (userDetails == null) {
             return "redirect:/login";
         }
-        resumeService.deleteResume(id);
+
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+
+        resumeService.deleteResume(id, currentUser.getId());
+
         return "redirect:/resumes";
+    }
+
+    @GetMapping("/{id}")
+    public String showResumeDetail(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model
+    ) {
+        var resume = resumeService.getResumeById(id);
+        model.addAttribute("resume", resume);
+
+        boolean isOwner = false;
+        if (userDetails != null) {
+            User currentUser = userService.getUserByEmail(userDetails.getUsername());
+            if (resume.getUserId() != null && resume.getUserId().equals(currentUser.getId())) {
+                isOwner = true;
+            }
+        }
+        model.addAttribute("isOwner", isOwner);
+
+        return "resume-detail";
     }
 }

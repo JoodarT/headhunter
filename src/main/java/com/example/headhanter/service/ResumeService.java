@@ -11,6 +11,7 @@ import com.example.headhanter.models.EducationInfo;
 import com.example.headhanter.models.Resume;
 import com.example.headhanter.models.WorkExperienceInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -53,10 +54,14 @@ public class ResumeService {
                 .toList();
     }
 
-    public ResumeResponseDto updateResume(Long id, ResumeCreateDto dto) {
+    public ResumeResponseDto updateResume(Long id, ResumeCreateDto dto, Long currentUserId) {
         Resume existingResume = resumeDao.findById(id);
         if (existingResume == null) {
             throw new NoSuchElementException("Резюме с ID " + id + " не найдено");
+        }
+
+        if (existingResume.getUserId() == null || !existingResume.getUserId().equals(currentUserId)) {
+            throw new AccessDeniedException("У вас нет прав на редактирование этого резюме");
         }
 
         mapDtoToEntity(dto, existingResume);
@@ -86,14 +91,19 @@ public class ResumeService {
         return resumes.stream().map(this::mapToDto).toList();
     }
 
-    public boolean deleteResume(Long id) {
-        if (resumeDao.findById(id) == null) {
+    public boolean deleteResume(Long id, Long currentUserId) {
+        Resume existingResume = resumeDao.findById(id);
+        if (existingResume == null) {
             throw new NoSuchElementException("Резюме с ID " + id + " не найдено");
         }
+
+        if (existingResume.getUserId() == null || !existingResume.getUserId().equals(currentUserId)) {
+            throw new AccessDeniedException("У вас нет прав на удаление этого резюме");
+        }
+
         resumeDao.deleteById(id);
         return true;
     }
-
 
     private void mapDtoToEntity(ResumeCreateDto dto, Resume resume) {
         resume.setUserId(dto.getUserId());

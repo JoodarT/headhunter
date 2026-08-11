@@ -45,7 +45,7 @@ public class UserDao {
     }
 
     public User save(User user) {
-        String sql = "INSERT INTO users (name, email, password, phone, account_type) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (name, email, password, phone, account_type, avatar_file_name) VALUES (?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -54,7 +54,9 @@ public class UserDao {
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.setString(4, user.getPhone());
-            ps.setString(5, user.getAccountType() != null ? user.getAccountType().name() : null);            return ps;
+            ps.setString(5, user.getAccountType() != null ? user.getAccountType().name() : null);
+            ps.setString(6, user.getAvatarFileName());
+            return ps;
         }, keyHolder);
 
         if (keyHolder.getKey() != null) {
@@ -79,8 +81,17 @@ public class UserDao {
     }
 
     public void update(User user) {
-        String sql = "UPDATE users SET name = ?, email = ?, password = ?, phone = ?, account_type = ? WHERE id = ?";
-        jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getPassword(), user.getPhone(), user.getAccountType(), user.getId());
+        String sql = "UPDATE users SET name = ?, email = ?, password = ?, phone = ?, account_type = ?, avatar_file_name = ? WHERE id = ?";
+        jdbcTemplate.update(
+                sql,
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getPhone(),
+                user.getAccountType() != null ? user.getAccountType().name() : null,
+                user.getAvatarFileName(),
+                user.getId()
+        );
     }
 
     public void deleteById(Long id) {

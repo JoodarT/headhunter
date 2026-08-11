@@ -64,25 +64,25 @@ public class ViewController {
         return "login";
     }
 
-    @GetMapping("/profile")
-    public String showProfilePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        if (userDetails == null) {
-            return "redirect:/login";
-        }
-        User user = userService.getUserByEmail(userDetails.getUsername());
-        model.addAttribute("user", user);
-        return "profile";
-    }
+//    @GetMapping("/profile")
+//    public String showProfilePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+//        if (userDetails == null) {
+//            return "redirect:/login";
+//        }
+//        User user = userService.getUserByEmail(userDetails.getUsername());
+//        model.addAttribute("user", user);
+//        return "profile";
+//    }
 
-    @GetMapping("/profile/edit")
-    public String showProfileEditPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        if (userDetails == null) {
-            return "redirect:/login";
-        }
-        User user = userService.getUserByEmail(userDetails.getUsername());
-        model.addAttribute("user", user);
-        return "profile-edit";
-    }
+//    @GetMapping("/profile/edit")
+//    public String showProfileEditPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+//        if (userDetails == null) {
+//            return "redirect:/login";
+//        }
+//        User user = userService.getUserByEmail(userDetails.getUsername());
+//        model.addAttribute("user", user);
+//        return "profile-edit";
+//    }
 
 //    @GetMapping("/resumes")
 //    public String showResumesPage(Model model) {
