@@ -62,13 +62,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User updateUser(Long id, UserDto userDto) {
-        User existingUser = getUserById(id);
+        User existingUser = userDao.findById(id);
 
-        existingUser.setName(userDto.getName());
-        existingUser.setEmail(userDto.getEmail());
-        existingUser.setPhone(userDto.getPhone());
-        existingUser.setAccountType(userDto.getAccountType());
+        if (existingUser == null) {
+            throw new NoSuchElementException("Пользователь с ID " + id + " не найден в userDao.findById");
+        }
+
+        if (userDto.getName() != null) {
+            existingUser.setName(userDto.getName());
+        }
+        if (userDto.getEmail() != null) {
+            existingUser.setEmail(userDto.getEmail());
+        }
+        if (userDto.getPhone() != null) {
+            existingUser.setPhone(userDto.getPhone());
+        }
+        if (userDto.getAccountType() != null) {
+            existingUser.setAccountType(userDto.getAccountType());
+        }
 
         if (userDto.getPassword() != null && !userDto.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -102,16 +115,26 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User uploadAvatar(Long userId, MultipartFile file) {
+        System.out.println("DEBUG: 1. Начало uploadAvatar для userId: " + userId);
+
         if (file == null || file.isEmpty()) {
+            System.out.println("DEBUG: ❌ Ошибка — файл пуст или null!");
             throw new IllegalArgumentException("Загружаемый файл пуст!");
         }
 
+        System.out.println("DEBUG: 2. Файл получен. Имя: " + file.getOriginalFilename() + ", Размер: " + file.getSize() + " байт");
+
         User user = getUserById(userId);
+        System.out.println("DEBUG: 3. Пользователь найден в БД: " + user.getName() + ", Текущий avatarUrl: " + user.getAvatarUrl());
 
         String savedFileName = fileService.saveAvatar(file);
+        System.out.println("DEBUG: 4. Файл сохранен через FileService. Результат: " + savedFileName);
 
-        user.setAvatarFileName(savedFileName);
+        user.setAvatarUrl(savedFileName);
+        System.out.println("DEBUG: 5. Вызываем userDao.update(). Устанавливаем avatarUrl = " + user.getAvatarUrl());
+
         userDao.update(user);
+        System.out.println("DEBUG: 6. userDao.update() успешно выполнен");
 
         return user;
     }

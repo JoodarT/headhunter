@@ -45,7 +45,7 @@ public class UserDao {
     }
 
     public User save(User user) {
-        String sql = "INSERT INTO users (name, email, password, phone, account_type, avatar_file_name) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (name, email, password, phone, account_type, avatar_url) VALUES (?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -55,7 +55,7 @@ public class UserDao {
             ps.setString(3, user.getPassword());
             ps.setString(4, user.getPhone());
             ps.setString(5, user.getAccountType() != null ? user.getAccountType().name() : null);
-            ps.setString(6, user.getAvatarFileName());
+            ps.setString(6, user.getAvatarUrl());
             return ps;
         }, keyHolder);
 
@@ -65,7 +65,6 @@ public class UserDao {
 
         return user;
     }
-
     public List<User> findAll() {
         String sql = "SELECT * FROM users";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
@@ -81,17 +80,19 @@ public class UserDao {
     }
 
     public void update(User user) {
-        String sql = "UPDATE users SET name = ?, email = ?, password = ?, phone = ?, account_type = ?, avatar_file_name = ? WHERE id = ?";
-        jdbcTemplate.update(
+        System.out.println("DEBUG DAO: Выполняем UPDATE. avatar_url = " + user.getAvatarUrl() + " для ID = " + user.getId());
+        String sql = "UPDATE users SET name = ?, email = ?, password = ?, phone = ?, account_type = ?, avatar_url = ? WHERE id = ?";
+        int rowsUpdated = jdbcTemplate.update(
                 sql,
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getPhone(),
                 user.getAccountType() != null ? user.getAccountType().name() : null,
-                user.getAvatarFileName(),
+                user.getAvatarUrl(),
                 user.getId()
         );
+        System.out.println("Обновлено строк в БД: " + rowsUpdated + " для ID: " + user.getId());
     }
 
     public void deleteById(Long id) {

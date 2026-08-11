@@ -11,13 +11,13 @@
                     <#-- Блок отображения и загрузки аватарки -->
                     <div class="col-md-4 text-center border-end pe-md-4">
                         <div class="mb-3">
-                            <#if user.avatarFileName?? && user.avatarFileName?has_content>
-                            <img src="/images/avatars/${user.avatarFileName}"
+                            <#if user.avatarUrl?? && user.avatarUrl?has_content>
+                            <img src="/images/avatars/${user.avatarUrl}"
                                  alt="Аватар профиля"
                                  class="rounded-circle img-thumbnail shadow-sm"
                                  style="width: 150px; height: 150px; object-fit: cover;">
                             <#else>
-                            <img src="https://via.placeholder.com/150?text=No+Avatar"
+                            <img src="/static/images/default-avatar.png"
                                  alt="Дефолтный аватар"
                                  class="rounded-circle img-thumbnail shadow-sm"
                                  style="width: 150px; height: 150px; object-fit: cover;">
