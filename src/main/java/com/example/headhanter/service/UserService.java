@@ -1,12 +1,20 @@
 package com.example.headhanter.service;
 
+import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.User;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public interface UserService {
-    List<User> findAll();
-    User findById(Long id);
-    User findByEmail(String email);
-    User create(User user);
-    User update(Long id, User userDetails);
+    User createUser(UserDto userDto);
+    List<User> getAllUsers();
+    User getUserById(Long id);
+    User updateUser(Long id, UserDto userDto);
+    void deleteUser(Long id);
+    List<User> getUsersByName(String name);
+    List<User> getUsersByPhone(String phone);
+    User getUserByEmail(String email);
+    boolean checkUserExists(String email);
+    User uploadAvatar(Long userId, MultipartFile file);
 }

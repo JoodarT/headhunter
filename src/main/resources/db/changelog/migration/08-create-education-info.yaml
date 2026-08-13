@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2026-08-13-add-faculty-column
+      author: developer
+      changes:
+        - addColumn:
+            tableName: education_info
+            columns:
+              - column:
+                  name: faculty
+                  type: VARCHAR(255)

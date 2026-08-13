@@ -101,7 +101,7 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     @Transactional
     public Vacancy create(Vacancy vacancy, Long employerId, Long categoryId) {
-        User employer = userService.findById(employerId);
+        User employer = userService.getUserById(employerId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Категория с id " + categoryId + " не найдена"));
 

@@ -17,6 +17,15 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/07-insert-initial-data.yaml
 
+  - include:
+      file: db/changelog/migration/08-create-education-info.yaml
+
+
+  - include:
+      file: db/changelog/migration/db.changelog-add-email-to-resumes.yml
+
+  - include:
+      file: db/changelog/migration/db.changelog-update-schema.yml
 
 
 

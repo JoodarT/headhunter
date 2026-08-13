@@ -29,6 +29,7 @@ public class User {
    @Column(name = "avatar_url")
    private String avatarUrl;
 
-   @Column(name = "account_type", nullable = false)
-   private String accountType;
+   @Enumerated(EnumType.STRING)
+   @Column(name = "account_type")
+   private Role accountType;
 }

@@ -44,7 +44,9 @@ public class UserWebController {
         userDto.setEmail(currentUser.getEmail());
         userDto.setName(currentUser.getName());
         userDto.setPhone(currentUser.getPhone());
-        userDto.setAccountType(currentUser.getAccountType());
+        if (currentUser.getAccountType() != null) {
+            userDto.setAccountType(currentUser.getAccountType());
+        }
 
         model.addAttribute("userDto", userDto);
         model.addAttribute("userId", currentUser.getId());

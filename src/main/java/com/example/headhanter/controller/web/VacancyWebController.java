@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -95,7 +96,7 @@ public class VacancyWebController {
         dto.setEmployerId(vacancy.getEmployerId());
         dto.setTitle(vacancy.getTitle());
         dto.setDescription(vacancy.getDescription());
-        dto.setSalary(vacancy.getSalary() != null ? vacancy.getSalary().doubleValue() : null);
+        dto.setSalary(BigDecimal.valueOf(vacancy.getSalary() != null ? vacancy.getSalary().doubleValue() : null));
         dto.setCategoryId(vacancy.getCategoryId());
 
         model.addAttribute("vacancyDto", dto);
