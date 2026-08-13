@@ -25,30 +25,31 @@ public class FileServiceImpl implements FileService {
         }
 
         try {
-            Path uploadPath = Paths.get("uploads/avatars").toAbsolutePath().normalize();
+            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
             String originalFilename = file.getOriginalFilename();
-            String extension = "";
+            String extension = ".png";
 
             if (originalFilename != null && originalFilename.contains(".")) {
                 extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-            } else {
-                extension = ".png";
             }
 
-            String fileName = UUID.randomUUID().toString() + extension;
+            String fileName = UUID.randomUUID() + extension;
             Path filePath = uploadPath.resolve(fileName);
 
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
+            log.info("Файл успешно сохранен: {}", fileName);
             return fileName;
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при сохранении файла", e);
+            log.error("Ошибка при сохранении аватара", e);
+            throw new RuntimeException("Не удалось сохранить аватар", e);
         }
     }
 }

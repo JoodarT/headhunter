@@ -3,6 +3,8 @@ package com.example.headhanter.dto.request;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class VacancyCreateDto {
 
@@ -16,7 +18,7 @@ public class VacancyCreateDto {
 
     @NotNull(message = "Укажите уровень зарплаты")
     @Min(value = 0, message = "Зарплата не может быть отрицательной")
-    private Double salary;
+    private BigDecimal salary;
 
     @NotNull(message = "Категория должна быть указана")
     private Long categoryId;
