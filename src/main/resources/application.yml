@@ -21,18 +21,30 @@ spring:
     console:
       enabled: true
       path: /h2-console
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
-  sql:
-    init:
-      mode: never
-  output:
-    ansi:
-      enabled: ALWAYS
-  freemarker:
-    template-loader-path: classpath:/templates/
-    suffix: .ftlh
-    cache: false
+
+  # --- НАСТРОЙКИ JPA / HIBERNATE ---
+  jpa:
+    show-sql: true
+    open-in-view: false # Отключаем Open-Session-In-View
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: validate # Проверка соответствия JPA-сущностей схеме БД
+
+    liquibase:
+      change-log: classpath:db/changelog/db.changelog-master.yaml
+
+    sql:
+      init:
+        mode: never
+    output:
+      ansi:
+        enabled: ALWAYS
+    freemarker:
+      template-loader-path: classpath:/templates/
+      suffix: .ftlh
+      cache: false
 
 logging:
   level:

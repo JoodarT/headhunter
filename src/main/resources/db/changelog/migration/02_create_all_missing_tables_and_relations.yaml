@@ -1,9 +1,9 @@
 databaseChangeLog:
   - changeSet:
-      id: 2
+      id: 02-create-all-missing-tables-and-relations
       author: joodar
       changes:
-        # 1. Таблица категорий
+        # 1. Категории
         - createTable:
             tableName: categories
             columns:
@@ -19,8 +19,9 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
+                    unique: true
 
-        # 2. Таблица пользователей
+        # 2. Пользователи
         - createTable:
             tableName: users
             columns:
@@ -43,6 +44,8 @@ databaseChangeLog:
               - column:
                   name: password
                   type: varchar(255)
+                  constraints:
+                    nullable: false
               - column:
                   name: phone
                   type: varchar(255)
@@ -52,8 +55,10 @@ databaseChangeLog:
               - column:
                   name: account_type
                   type: varchar(50)
+                  constraints:
+                    nullable: false
 
-        # 3. Модификация таблицы vacancies
+        # 3. Модификация vacancies: меняем строковую категорию на category_id
         - dropColumn:
             tableName: vacancies
             columnName: category
@@ -64,13 +69,14 @@ databaseChangeLog:
                   name: category_id
                   type: bigint
 
-        # 4. Внешние ключи для таблицы vacancies
+        # 4. Внешние ключи для vacancies
         - addForeignKeyConstraint:
             baseTableName: vacancies
             baseColumnNames: employer_id
             referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_vacancies_users
+            onDelete: CASCADE
 
         - addForeignKeyConstraint:
             baseTableName: vacancies
@@ -78,8 +84,9 @@ databaseChangeLog:
             referencedTableName: categories
             referencedColumnNames: id
             constraintName: fk_vacancies_categories
+            onDelete: SET NULL
 
-        # 5. Таблица типов контактов
+        # 5. Типы контактов
         - createTable:
             tableName: contact_types
             columns:
@@ -96,7 +103,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
 
-        # 6. Таблица резюме
+        # 6. Резюме
         - createTable:
             tableName: resumes
             columns:
@@ -134,7 +141,7 @@ databaseChangeLog:
                   name: created_date
                   type: timestamp
 
-        # 7. Таблица контактной информации
+        # 7. Контактная информация
         - createTable:
             tableName: contact_info
             columns:
@@ -163,7 +170,7 @@ databaseChangeLog:
                   name: value
                   type: varchar(255)
 
-        # 8. Информация об образовании
+        # 8. Образование
         - createTable:
             tableName: education_info
             columns:
@@ -194,7 +201,7 @@ databaseChangeLog:
                   name: end_date
                   type: date
 
-        # 9. Информация об опыте работы
+        # 9. Опыт работы
         - createTable:
             tableName: work_experience_info
             columns:
@@ -228,7 +235,7 @@ databaseChangeLog:
                   name: end_date
                   type: date
 
-        # 10. Таблица откликов на вакансии
+        # 10. Отклики
         - createTable:
             tableName: responded_applicants
             columns:
@@ -257,7 +264,7 @@ databaseChangeLog:
                   name: confirmation
                   type: boolean
 
-        # 11. Таблица сообщений
+        # 11. Сообщения
         - createTable:
             tableName: messages
             columns:

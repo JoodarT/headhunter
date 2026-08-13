@@ -25,7 +25,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: description
-                  type: varchar(2000)
+                  type: text
               - column:
                   name: salary
                   type: double
@@ -36,3 +36,10 @@ databaseChangeLog:
                   name: views
                   type: int
                   defaultValueNumeric: 0
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+              - column:
+                  name: update_time
+                  type: timestamp
