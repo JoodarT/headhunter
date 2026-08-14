@@ -1,56 +1,23 @@
 package com.example.headhanter.service;
 
-import com.example.headhanter.dao.VacancyDao;
+import com.example.headhanter.dto.request.VacancyCreateDto;
+import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.models.Vacancy;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class VacancyService {
+public interface VacancyService {
+    List<Vacancy> findAllActive();
 
-    private final VacancyDao vacancyDao;
+    VacancyResponseDto create(VacancyCreateDto dto);
+    List<VacancyResponseDto> getAll();
+    VacancyResponseDto getById(Long id);
+    List<VacancyResponseDto> getRespondedVacanciesByUser(Long userId);
+    VacancyResponseDto update(Long id, VacancyCreateDto dto, Long currentUserId);
+    void delete(Long id, Long currentUserId);
 
-    public Vacancy createVacancy(Vacancy vacancy) {
-        return vacancyDao.save(vacancy);
-    }
-
-    public List<Vacancy> getAllVacancies() {
-        return vacancyDao.findAll();
-    }
-
-    public Vacancy getVacancyById(Long id) {
-        return vacancyDao.findById(id);
-    }
-
-    public Vacancy updateVacancy(Long id, Vacancy updatedVacancy) {
-        Vacancy existingVacancy = vacancyDao.findById(id);
-        if (existingVacancy != null) {
-            existingVacancy.setTitle(updatedVacancy.getTitle());
-            existingVacancy.setDescription(updatedVacancy.getDescription());
-            existingVacancy.setSalary(updatedVacancy.getSalary());
-            existingVacancy.setCategory(updatedVacancy.getCategory());
-
-            vacancyDao.update(existingVacancy);
-            return existingVacancy;
-        }
-        return null;
-    }
-
-    public List<Vacancy> getVacanciesByCategory(String category) {
-        if (category == null || category.trim().isEmpty()) {
-            return vacancyDao.findAll();
-        }
-        return vacancyDao.findByCategory(category);
-    }
-
-    public boolean deleteVacancy(Long id) {
-        if (vacancyDao.findById(id) != null) {
-            vacancyDao.deleteById(id);
-            return true;
-        }
-        return false;
-    }
+    Vacancy findById(Long id);
+    Vacancy create(Vacancy vacancy, Long employerId, Long categoryId);
+    Vacancy update(Long id, Vacancy updatedVacancy, Long categoryId);
+    void incrementViews(Long id);
 }

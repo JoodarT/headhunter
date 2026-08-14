@@ -1,16 +1,32 @@
 package com.example.headhanter.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+@Entity
+@Table(name = "work_experience_info")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class WorkExperienceInfo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer years;
+
+    @Column(name = "company_name")
     private String companyName;
+
     private String position;
+
+    private String period;
+
+    @Column(columnDefinition = "TEXT")
     private String responsibilities;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 }

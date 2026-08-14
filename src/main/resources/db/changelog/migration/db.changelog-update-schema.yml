@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2026-08-13-add-email-to-resumes
+      author: developer
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: resumes
+                columnName: email
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 2026-08-13-add-linkedin-to-resumes
+      author: developer
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: resumes
+                columnName: linkedin
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: linkedin
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 2026-08-13-add-phone-to-resumes
+      author: developer
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: resumes
+                columnName: phone
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: phone
+                  type: VARCHAR(50)
+
+  - changeSet:
+      id: 2026-08-13-add-telegram-to-resumes
+      author: developer
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: resumes
+                columnName: telegram
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: telegram
+                  type: VARCHAR(100)

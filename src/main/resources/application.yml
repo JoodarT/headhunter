@@ -1,5 +1,10 @@
 server:
-  port: 8080
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
+    include-exception: true
 
 springdoc:
   api-docs:
@@ -7,16 +12,50 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
-  spring:
-    datasource:
-      url: jdbc:h2:mem:headhanterdb;MODE=PostgreSQL
-      driver-class-name: org.h2.Driver
-      username: sa
-      password: ""
-    h2:
-      console:
-        enabled: true
-        path: /h2-console
-    sql:
-      init:
-        mode: always
+spring:
+  security:
+    user:
+      name: admin
+      password: adminpassword
+  datasource:
+    url: jdbc:h2:file:./data/headhanterdb;MODE=PostgreSQL;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # --- НАСТРОЙКИ JPA / HIBERNATE ---
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: none
+
+  # --- НАСТРОЙКИ LIQUIBASE ---
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  sql:
+    init:
+      mode: never
+  output:
+    ansi:
+      enabled: ALWAYS
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ftlh
+    cache: false
+
+logging:
+  level:
+    root: INFO
+    com.example.headhanter: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
