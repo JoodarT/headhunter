@@ -1,6 +1,7 @@
 package com.example.headhanter.controller.web;
 
 import com.example.headhanter.dto.request.ResumeCreateDto;
+import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
@@ -49,8 +50,9 @@ public class ResumeWebController {
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         resumeDto.setUserId(currentUser.getId());
 
-        resumeService.createResume(resumeDto);
-        return "redirect:/resumes";
+        ResumeResponseDto createdResume = resumeService.createResume(resumeDto);
+
+        return "redirect:/resumes/" + createdResume.getId();
     }
 
     @GetMapping("/{id}/edit")
@@ -86,10 +88,10 @@ public class ResumeWebController {
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         resumeDto.setUserId(currentUser.getId());
 
-        resumeService.updateResume(id, resumeDto, currentUser.getId());
-        return "redirect:/resumes";
-    }
+        ResumeResponseDto updatedResume = resumeService.updateResume(id, resumeDto, currentUser.getId());
 
+        return "redirect:/resumes/" + updatedResume.getId();
+    }
     @PostMapping("/{id}/delete")
     public String deleteResume(
             @PathVariable("id") Long id,
