@@ -33,5 +33,5 @@ public class MainController {
     public String registerUser(@ModelAttribute UserDto userDto) {
         userService.createUser(userDto);
         return "redirect:/login?registered";
-    }
+    } 
 }

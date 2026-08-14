@@ -1,7 +1,7 @@
 package com.example.headhanter.config;
 
 import com.example.headhanter.models.Role;
-import com.example.headhanter.service.CustomUserDetailsService;
+import com.example.headhanter.service.impl.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

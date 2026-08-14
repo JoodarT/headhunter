@@ -1,4 +1,4 @@
-package com.example.headhanter.service;
+package com.example.headhanter.service.impl;
 
 import com.example.headhanter.models.Role;
 import com.example.headhanter.models.User;

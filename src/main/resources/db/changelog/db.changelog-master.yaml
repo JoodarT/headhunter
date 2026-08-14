@@ -27,5 +27,8 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/db.changelog-update-schema.yml
 
+  - include:
+     file: db/changelog/migration/09_add_period_to_work_experience_info.yaml
+
 
 

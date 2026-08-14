@@ -28,7 +28,7 @@ databaseChangeLog:
                   type: text
               - column:
                   name: salary
-                  type: double
+                  type: NUMERIC(19, 2)
               - column:
                   name: category
                   type: varchar(255)

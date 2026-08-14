@@ -22,6 +22,8 @@ public class Vacancy {
     @Column(nullable = false)
     private String title;
 
+    @Lob
+    @Column(name = "description", columnDefinition = "CLOB")
     private String description;
 
     private BigDecimal salary;
