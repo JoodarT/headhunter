@@ -1,5 +1,10 @@
 server:
   port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
+    include-exception: true
 
 springdoc:
   api-docs:
@@ -52,3 +57,4 @@ logging:
     root: INFO
     com.example.headhanter: DEBUG
     org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
