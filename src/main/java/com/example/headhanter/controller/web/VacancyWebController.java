@@ -3,6 +3,7 @@ package com.example.headhanter.controller.web;
 import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.models.User;
+import com.example.headhanter.repository.CategoryRepository;
 import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -22,6 +22,7 @@ public class VacancyWebController {
 
     private final VacancyService vacancyService;
     private final UserService userService;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping
     public String getAllVacancies(Model model) {
@@ -36,6 +37,7 @@ public class VacancyWebController {
             return "redirect:/login";
         }
         model.addAttribute("vacancyDto", new VacancyCreateDto());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "vacancy-create";
     }
 
@@ -50,16 +52,19 @@ public class VacancyWebController {
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         vacancyDto.setEmployerId(currentUser.getId());
 
-        vacancyService.create(vacancyDto);
-        return "redirect:/vacancies";
+        VacancyResponseDto created = vacancyService.create(vacancyDto);
+        return "redirect:/vacancies/" + created.getId();
     }
 
-    @GetMapping("/{id}")
+    // Ограничение :\\d+ гарантирует, что сюда попадут только числовые ID
+    @GetMapping("/{id:\\d+}")
     public String showVacancyDetail(
             @PathVariable("id") Long id,
             @AuthenticationPrincipal UserDetails userDetails,
             Model model
     ) {
+        vacancyService.incrementViews(id);
+
         VacancyResponseDto vacancy = vacancyService.getById(id);
         model.addAttribute("vacancy", vacancy);
 
@@ -75,7 +80,7 @@ public class VacancyWebController {
         return "vacancy-detail";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/{id:\\d+}/edit")
     public String showEditVacancyPage(
             @PathVariable("id") Long id,
             @AuthenticationPrincipal UserDetails userDetails,
@@ -96,16 +101,17 @@ public class VacancyWebController {
         dto.setEmployerId(vacancy.getEmployerId());
         dto.setTitle(vacancy.getTitle());
         dto.setDescription(vacancy.getDescription());
-        dto.setSalary(BigDecimal.valueOf(vacancy.getSalary() != null ? vacancy.getSalary().doubleValue() : null));
+        dto.setSalary(vacancy.getSalary());
         dto.setCategoryId(vacancy.getCategoryId());
 
         model.addAttribute("vacancyDto", dto);
         model.addAttribute("vacancyId", id);
+        model.addAttribute("categories", categoryRepository.findAll());
 
         return "vacancy-edit";
     }
 
-    @PostMapping("/{id}/edit")
+    @PostMapping("/{id:\\d+}/edit")
     public String updateVacancy(
             @PathVariable("id") Long id,
             @ModelAttribute("vacancyDto") VacancyCreateDto vacancyDto,
@@ -122,7 +128,7 @@ public class VacancyWebController {
         return "redirect:/vacancies/" + id;
     }
 
-    @PostMapping("/{id}/delete")
+    @PostMapping("/{id:\\d+}/delete")
     public String deleteVacancy(
             @PathVariable("id") Long id,
             @AuthenticationPrincipal UserDetails userDetails

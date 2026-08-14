@@ -54,11 +54,16 @@ public class VacancyServiceImpl implements VacancyService {
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Категория с id " + dto.getCategoryId() + " не найдена"));
 
+        User employer = userService.getUserById(dto.getEmployerId());
+
         Vacancy vacancy = Vacancy.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
                 .salary(dto.getSalary())
                 .category(category)
+                .employer(employer)
+                .views(0)
+                .isActive(true)
                 .updateTime(LocalDateTime.now())
                 .build();
 
