@@ -2,8 +2,12 @@ package com.example.headhanter.controller.web;
 
 import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.service.UserService;
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +34,16 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute UserDto userDto) {
+    public String registerUser(
+            @Validated({Default.class, UserDto.OnCreate.class}) @ModelAttribute("userDto") UserDto userDto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
+            return "register";
+        }
         userService.createUser(userDto);
         return "redirect:/login?registered";
-    } 
+    }
 }

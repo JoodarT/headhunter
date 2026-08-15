@@ -3,6 +3,7 @@ package com.example.headhanter.controller.web;
 import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,13 +58,22 @@ public class UserWebController {
     @PostMapping("/edit")
     public String updateProfile(
             @AuthenticationPrincipal UserDetails userDetails,
-            @ModelAttribute("userDto") UserDto userDto
+            @Valid @ModelAttribute("userDto") UserDto userDto,
+            BindingResult bindingResult,
+            Model model
     ) {
         if (userDetails == null) {
             return "redirect:/login";
         }
 
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
+            return "profile-edit";
+        }
+
         userService.updateUser(currentUser.getId(), userDto);
 
         if (userDto.getEmail() != null && !currentUser.getEmail().equals(userDto.getEmail())) {

@@ -3,7 +3,13 @@
 <div class="container mt-4">
     <h2>Редактирование резюме</h2>
 
-    <form action="/resumes/${resume.id}/edit" method="post" id="resumeForm">
+    <#if error??>
+    <div class="alert alert-danger" role="alert">
+        ${error}
+    </div>
+</#if>
+
+<form action="/resumes/${resume.id}/edit" method="post" id="resumeForm">
         <#if _csrf??>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </#if>

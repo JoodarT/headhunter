@@ -5,7 +5,13 @@
         <div class="col-md-9">
             <h2 class="mb-4">Создание резюме</h2>
 
-            <form action="/resumes/create" method="post" id="resumeForm">
+            <#if error??>
+            <div class="alert alert-danger" role="alert">
+                ${error}
+            </div>
+        </#if>
+
+        <form action="/resumes/create" method="post" id="resumeForm">
                 <#if _csrf??>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </#if>

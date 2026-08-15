@@ -23,6 +23,6 @@ public class VacancyCreateDto {
     @NotNull(message = "Категория должна быть указана")
     private Long categoryId;
 
-    @NotNull(message = "Работодатель должен быть указан")
+    // выставляется сервером из аутентифицированного пользователя, не приходит от клиента
     private Long employerId;
 }

@@ -11,11 +11,14 @@ import lombok.Data;
 @Data
 public class UserDto {
 
+    // маркер группы валидации: на обновлении профиля пароль необязателен
+    public interface OnCreate {}
+
     @NotBlank(message = "Email не может быть пустым")
     @Email(message = "Некорректный формат email")
     private String email;
 
-    @NotBlank(message = "Пароль не может быть пустым")
+    @NotBlank(message = "Пароль не может быть пустым", groups = OnCreate.class)
     @Size(min = 6, message = "Пароль должен содержать минимум 6 символов")
     private String password;
 

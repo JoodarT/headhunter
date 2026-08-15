@@ -4,7 +4,13 @@
     <div class="col-md-8">
         <h2 class="mb-4">Редактирование вакансии</h2>
 
-        <form action="/vacancies/${vacancyId}/edit" method="post">
+        <#if error??>
+        <div class="alert alert-danger" role="alert">
+            ${error}
+        </div>
+    </#if>
+
+    <form action="/vacancies/${vacancyId}/edit" method="post">
             <#if _csrf??>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </#if>

@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class ResumeCreateDto {
 
-    @NotNull(message = "ID пользователя обязателен")
+    // выставляется сервером из аутентифицированного пользователя, не приходит от клиента
     private Long userId;
 
     private String applicantName;

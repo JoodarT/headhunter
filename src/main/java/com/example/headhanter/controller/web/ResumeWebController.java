@@ -5,11 +5,13 @@ import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -41,12 +43,20 @@ public class ResumeWebController {
 
     @PostMapping("/create")
     public String createResume(
-            @ModelAttribute("resumeDto") ResumeCreateDto resumeDto,
-            @AuthenticationPrincipal UserDetails userDetails
+            @Valid @ModelAttribute("resumeDto") ResumeCreateDto resumeDto,
+            BindingResult bindingResult,
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model
     ) {
         if (userDetails == null) {
             return "redirect:/login";
         }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
+            return "resume-create";
+        }
+
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         resumeDto.setUserId(currentUser.getId());
 
@@ -79,13 +89,22 @@ public class ResumeWebController {
     @PostMapping("/{id}/edit")
     public String updateResume(
             @PathVariable("id") Long id,
-            @ModelAttribute("resumeDto") ResumeCreateDto resumeDto,
-            @AuthenticationPrincipal UserDetails userDetails
+            @Valid @ModelAttribute("resumeDto") ResumeCreateDto resumeDto,
+            BindingResult bindingResult,
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model
     ) {
         if (userDetails == null) {
             return "redirect:/login";
         }
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("resume", resumeService.getResumeById(id));
+            model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
+            return "resume-edit";
+        }
+
         resumeDto.setUserId(currentUser.getId());
 
         ResumeResponseDto updatedResume = resumeService.updateResume(id, resumeDto, currentUser.getId());

@@ -4,9 +4,11 @@ import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +23,7 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<User> createUser(@Validated({Default.class, UserDto.OnCreate.class}) @RequestBody UserDto userDto) {
         User created = userService.createUser(userDto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }

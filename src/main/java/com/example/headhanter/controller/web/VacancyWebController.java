@@ -6,11 +6,13 @@ import com.example.headhanter.models.User;
 import com.example.headhanter.repository.CategoryRepository;
 import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,12 +45,21 @@ public class VacancyWebController {
 
     @PostMapping("/create")
     public String createVacancy(
-            @ModelAttribute("vacancyDto") VacancyCreateDto vacancyDto,
-            @AuthenticationPrincipal UserDetails userDetails
+            @Valid @ModelAttribute("vacancyDto") VacancyCreateDto vacancyDto,
+            BindingResult bindingResult,
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model
     ) {
         if (userDetails == null) {
             return "redirect:/login";
         }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
+            return "vacancy-create";
+        }
+
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         vacancyDto.setEmployerId(currentUser.getId());
 
@@ -114,14 +125,24 @@ public class VacancyWebController {
     @PostMapping("/{id:\\d+}/edit")
     public String updateVacancy(
             @PathVariable("id") Long id,
-            @ModelAttribute("vacancyDto") VacancyCreateDto vacancyDto,
-            @AuthenticationPrincipal UserDetails userDetails
+            @Valid @ModelAttribute("vacancyDto") VacancyCreateDto vacancyDto,
+            BindingResult bindingResult,
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model
     ) {
         if (userDetails == null) {
             return "redirect:/login";
         }
 
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("vacancyId", id);
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
+            return "vacancy-edit";
+        }
+
         vacancyDto.setEmployerId(currentUser.getId());
 
         vacancyService.update(id, vacancyDto, currentUser.getId());
