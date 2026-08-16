@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -145,17 +144,61 @@ public class ResumeServiceImpl implements ResumeService {
         }
 
         resume.setTitle(dto.getTitle());
+        resume.setApplicantName(dto.getApplicantName());
+        resume.setSkills(dto.getSkills());
 
-        if (dto.getCategory() != null && !dto.getCategory().isBlank()) {
-            try {
-                Long categoryId = Long.parseLong(dto.getCategory());
-                categoryRepository.findById(categoryId).ifPresent(resume::setCategory);
-            } catch (NumberFormatException ignored) {
-            }
+        if (dto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new NoSuchElementException("Категория с id " + dto.getCategoryId() + " не найдена"));
+            resume.setCategory(category);
         }
 
         if (dto.getExpectedSalary() != null) {
             resume.setSalary(BigDecimal.valueOf(dto.getExpectedSalary()));
+        }
+
+        if (dto.getContactInfo() != null) {
+            ContactsInfoDto c = dto.getContactInfo();
+            resume.setContactInfo(ContactsInfo.builder()
+                    .phone(c.getPhone())
+                    .email(c.getEmail())
+                    .telegram(c.getTelegram())
+                    .linkedin(c.getLinkedin())
+                    .build());
+        }
+
+        syncExperiences(resume, dto.getExperiences());
+        syncEducations(resume, dto.getEducations());
+    }
+
+    private void syncExperiences(Resume resume, List<WorkExperienceInfoDto> experiences) {
+        resume.getExperiences().clear();
+        if (experiences == null) {
+            return;
+        }
+        for (WorkExperienceInfoDto d : experiences) {
+            resume.getExperiences().add(WorkExperienceInfo.builder()
+                    .companyName(d.getCompanyName())
+                    .position(d.getPosition())
+                    .period(d.getPeriod())
+                    .responsibilities(d.getResponsibilities())
+                    .resume(resume)
+                    .build());
+        }
+    }
+
+    private void syncEducations(Resume resume, List<EducationInfoDto> educations) {
+        resume.getEducations().clear();
+        if (educations == null) {
+            return;
+        }
+        for (EducationInfoDto d : educations) {
+            resume.getEducations().add(EducationInfo.builder()
+                    .institution(d.getInstitution())
+                    .faculty(d.getFaculty())
+                    .graduationYear(d.getGraduationYear())
+                    .resume(resume)
+                    .build());
         }
     }
 
@@ -169,17 +212,45 @@ public class ResumeServiceImpl implements ResumeService {
 
         if (resume.getCategory() != null) {
             dto.setCategoryId(resume.getCategory().getId());
+            dto.setCategoryName(resume.getCategory().getName());
         }
 
         dto.setTitle(resume.getTitle());
+        dto.setApplicantName(resume.getApplicantName());
+        dto.setSkills(resume.getSkills());
 
         if (resume.getSalary() != null) {
             dto.setExpectedSalary(resume.getSalary().doubleValue());
         }
 
         dto.setCreatedDate(resume.getCreatedDate());
-        dto.setExperiences(Collections.emptyList());
-        dto.setEducations(Collections.emptyList());
+
+        if (resume.getContactInfo() != null) {
+            ContactsInfo c = resume.getContactInfo();
+            ContactsInfoDto contactDto = new ContactsInfoDto();
+            contactDto.setPhone(c.getPhone());
+            contactDto.setEmail(c.getEmail());
+            contactDto.setTelegram(c.getTelegram());
+            contactDto.setLinkedin(c.getLinkedin());
+            dto.setContactInfo(contactDto);
+        }
+
+        dto.setExperiences(resume.getExperiences().stream().map(e -> {
+            WorkExperienceInfoDto d = new WorkExperienceInfoDto();
+            d.setCompanyName(e.getCompanyName());
+            d.setPosition(e.getPosition());
+            d.setPeriod(e.getPeriod());
+            d.setResponsibilities(e.getResponsibilities());
+            return d;
+        }).toList());
+
+        dto.setEducations(resume.getEducations().stream().map(e -> {
+            EducationInfoDto d = new EducationInfoDto();
+            d.setInstitution(e.getInstitution());
+            d.setFaculty(e.getFaculty());
+            d.setGraduationYear(e.getGraduationYear());
+            return d;
+        }).toList());
 
         return dto;
     }

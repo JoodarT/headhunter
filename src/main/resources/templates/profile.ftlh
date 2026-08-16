@@ -42,7 +42,7 @@
                     <p class="card-text mb-2"><strong>Email:</strong> ${user.email!""}</p>
                     <p class="card-text mb-2"><strong>Телефон:</strong> ${user.phone!"Не указан"}</p>
                     <p class="card-text mb-3"><strong>Тип аккаунта:</strong>
-                        <span class="badge bg-info text-dark">${user.accountType!user.role!""}</span>
+                        <span class="badge bg-info text-dark">${(user.role.role)!""}</span>
                     </p>
                     <a href="/profile/edit" class="btn btn-warning">Редактировать профиль</a>
                 </div>

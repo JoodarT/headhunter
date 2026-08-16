@@ -44,7 +44,7 @@
 <!-- Категория -->
 <div class="mb-4">
     <h5 class="text-muted text-uppercase fs-6">Специализация / Категория</h5>
-    <p class="lead fw-normal">${resume.category!"Не указана"}</p>
+    <p class="lead fw-normal">${resume.categoryName!"Не указана"}</p>
 </div>
 
 <!-- Навыки -->

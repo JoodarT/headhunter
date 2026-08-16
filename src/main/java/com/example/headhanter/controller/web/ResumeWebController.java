@@ -3,6 +3,7 @@ package com.example.headhanter.controller.web;
 import com.example.headhanter.dto.request.ResumeCreateDto;
 import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.models.User;
+import com.example.headhanter.repository.CategoryRepository;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
 import jakarta.validation.Valid;
@@ -21,14 +22,24 @@ public class ResumeWebController {
 
     private final ResumeService resumeService;
     private final UserService userService;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping
-    public String getAllResumes(@RequestParam(value = "search", required = false) String search, Model model) {
+    public String getAllResumes(
+            @RequestParam(value = "search", required = false) String search,
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model
+    ) {
         if (search != null && !search.trim().isEmpty()) {
             model.addAttribute("resumes", resumeService.searchResumes(search));
         } else {
             model.addAttribute("resumes", resumeService.getAllResumes());
         }
+
+        if (userDetails != null) {
+            model.addAttribute("currentUser", userService.getUserByEmail(userDetails.getUsername()));
+        }
+
         return "resumes";
     }
 
@@ -38,6 +49,7 @@ public class ResumeWebController {
             return "redirect:/login";
         }
         model.addAttribute("resumeDto", new ResumeCreateDto());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "resume-create";
     }
 
@@ -53,6 +65,7 @@ public class ResumeWebController {
         }
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
             return "resume-create";
         }
@@ -83,6 +96,7 @@ public class ResumeWebController {
         }
 
         model.addAttribute("resume", resume);
+        model.addAttribute("categories", categoryRepository.findAll());
         return "resume-edit";
     }
 
@@ -101,6 +115,7 @@ public class ResumeWebController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("resume", resumeService.getResumeById(id));
+            model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
             return "resume-edit";
         }

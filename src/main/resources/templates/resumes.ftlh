@@ -26,7 +26,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">${(resume.applicantName)!"Аноним"}</h6>
 
                     <p class="card-text mb-1">
-                        <strong>Категория:</strong> ${(resume.category)!""}
+                        <strong>Категория:</strong> ${(resume.categoryName)!"Не указана"}
                     </p>
 
                     <p class="card-text mb-1">

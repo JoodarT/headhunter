@@ -161,6 +161,8 @@ public class VacancyServiceImpl implements VacancyService {
         dto.setDescription(vacancy.getDescription());
         dto.setSalary(vacancy.getSalary());
         dto.setViews(vacancy.getViews());
+        dto.setIsActive(vacancy.getIsActive());
+        dto.setUpdateTime(vacancy.getUpdateTime());
         if (vacancy.getCategory() != null) {
             dto.setCategoryId(vacancy.getCategory().getId());
             dto.setCategoryName(vacancy.getCategory().getName());

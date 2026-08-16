@@ -20,8 +20,8 @@ public class ResumeCreateDto {
     @NotBlank(message = "Название резюме обязательно")
     private String title;
 
-    @NotBlank(message = "Укажите категорию")
-    private String category;
+    @NotNull(message = "Укажите категорию")
+    private Long categoryId;
 
     private String skills;
 

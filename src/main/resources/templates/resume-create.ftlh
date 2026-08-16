@@ -26,17 +26,15 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="category" class="form-label">Категория / Сфера деятельности*</label>
-                        <#if categories??>
-                        <select class="form-select" id="category" name="category" required>
+                        <label for="categoryId" class="form-label">Категория / Сфера деятельности*</label>
+                        <select class="form-select" id="categoryId" name="categoryId" required>
                             <option value="" disabled selected>Выберите категорию...</option>
+                            <#if categories??>
                             <#list categories as cat>
                             <option value="${cat.id}">${cat.name}</option>
                         </#list>
-                        </select>
-                        <#else>
-                        <input type="text" class="form-control" id="category" name="category" required placeholder="1">
                     </#if>
+                    </select>
                 </div>
 
                 <div class="mb-3">

@@ -1,7 +1,9 @@
 package com.example.headhanter.service.impl;
 
 import com.example.headhanter.models.Role;
+import com.example.headhanter.models.RoleEntity;
 import com.example.headhanter.models.User;
+import com.example.headhanter.repository.RoleRepository;
 import com.example.headhanter.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +20,7 @@ import java.util.Collections;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -25,9 +28,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь с email " + email + " не найден"));
 
-        Role accountType = user.getAccountType();
-        String roleName = (accountType != null) ? accountType.name() : "APPLICANT";
-        String authority = roleName.startsWith("ROLE_") ? roleName : "ROLE_" + roleName;
+        RoleEntity role = user.getRole();
+        if (role == null) {
+            role = roleRepository.findByRole(Role.APPLICANT.name())
+                    .orElseThrow(() -> new IllegalStateException("Роль APPLICANT не настроена в таблице roles"));
+        }
+
+        String authority = role.getAuthority().getAuthority();
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())

@@ -1,7 +1,10 @@
 package com.example.headhanter.service.impl;
 
 import com.example.headhanter.dto.request.UserDto;
+import com.example.headhanter.models.Role;
+import com.example.headhanter.models.RoleEntity;
 import com.example.headhanter.models.User;
+import com.example.headhanter.repository.RoleRepository;
 import com.example.headhanter.repository.UserRepository;
 import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -33,10 +37,16 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .name(userDto.getName())
                 .phone(userDto.getPhone())
-                .accountType(userDto.getAccountType())
+                .role(resolveRole(userDto.getAccountType()))
                 .build();
 
         return userRepository.save(user);
+    }
+
+    private RoleEntity resolveRole(Role accountType) {
+        String roleName = (accountType != null) ? accountType.name() : Role.APPLICANT.name();
+        return roleRepository.findByRole(roleName)
+                .orElseThrow(() -> new NoSuchElementException("Роль " + roleName + " не настроена в таблице roles"));
     }
 
     @Override
@@ -56,7 +66,7 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(id);
         user.setName(userDto.getName());
         user.setPhone(userDto.getPhone());
-        user.setAccountType(userDto.getAccountType());
+        user.setRole(resolveRole(userDto.getAccountType()));
 
         if (userDto.getPassword() != null && !userDto.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));

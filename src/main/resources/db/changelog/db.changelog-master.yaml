@@ -33,5 +33,11 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/10_insert_categories.yaml
 
+  - include:
+      file: db/changelog/migration/11_resume_enhancements.yaml
+
+  - include:
+      file: db/changelog/migration/12_migrate_roles_to_roles_table.yaml
+
 
 

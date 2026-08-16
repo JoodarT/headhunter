@@ -1,10 +1,21 @@
-HELP.md
+# Сборщик Maven
 target/
 .mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### STS ###
+# Локальная база данных и загрузки (ИСПРАВЛЕНО)
+data/
+uploads/
+
+# Среда разработки IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Полезный лог Spring Boot
+HELP.md
+
+# Игнорирование для других IDE
 .apt_generated
 .classpath
 .factorypath
@@ -12,24 +23,10 @@ target/
 .settings
 .springBeans
 .sts4-cache
-.data/
-
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+.vscode/
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/

@@ -32,6 +32,12 @@ public class Resume {
     @Column(nullable = false)
     private String title;
 
+    @Column(name = "applicant_name")
+    private String applicantName;
+
+    @Column(name = "skills", length = 2000)
+    private String skills;
+
     private BigDecimal salary;
 
     @Column(name = "is_active")

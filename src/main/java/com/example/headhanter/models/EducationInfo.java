@@ -19,6 +19,9 @@ public class EducationInfo {
     private String institution;
     private String faculty;
 
+    @Column(name = "graduation_year")
+    private Integer graduationYear;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;

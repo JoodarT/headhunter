@@ -24,9 +24,16 @@
             </div>
 
             <div class="mb-3">
-                <label for="category" class="form-label">Категория / Сфера деятельности*</label>
-                <input type="text" class="form-control" id="category" name="category" value="${(resume.category)!''}" required>
-            </div>
+                <label for="categoryId" class="form-label">Категория / Сфера деятельности*</label>
+                <select class="form-select" id="categoryId" name="categoryId" required>
+                    <option value="" disabled <#if !resume.categoryId??>selected</#if>>Выберите категорию...</option>
+                    <#if categories??>
+                    <#list categories as cat>
+                    <option value="${cat.id}" <#if resume.categoryId?? && resume.categoryId == cat.id>selected</#if>>${cat.name}</option>
+                </#list>
+            </#if>
+            </select>
+        </div>
 
             <div class="mb-3">
                 <label for="applicantName" class="form-label">Имя и Фамилия соискателя</label>

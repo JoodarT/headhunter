@@ -29,7 +29,7 @@ public class User {
    @Column(name = "avatar_url")
    private String avatarUrl;
 
-   @Enumerated(EnumType.STRING)
-   @Column(name = "account_type")
-   private Role accountType;
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "role_id")
+   private RoleEntity role;
 }

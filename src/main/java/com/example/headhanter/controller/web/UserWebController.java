@@ -1,6 +1,7 @@
 package com.example.headhanter.controller.web;
 
 import com.example.headhanter.dto.request.UserDto;
+import com.example.headhanter.models.Role;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.UserService;
 import jakarta.validation.Valid;
@@ -46,8 +47,8 @@ public class UserWebController {
         userDto.setEmail(currentUser.getEmail());
         userDto.setName(currentUser.getName());
         userDto.setPhone(currentUser.getPhone());
-        if (currentUser.getAccountType() != null) {
-            userDto.setAccountType(currentUser.getAccountType());
+        if (currentUser.getRole() != null) {
+            userDto.setAccountType(Role.valueOf(currentUser.getRole().getRole()));
         }
 
         model.addAttribute("userDto", userDto);
