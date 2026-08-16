@@ -30,11 +30,6 @@ public class VacancyServiceImpl implements VacancyService {
     private final UserService userService;
 
     @Override
-    public List<Vacancy> findAllActive() {
-        return vacancyRepository.findByIsActiveTrue();
-    }
-
-    @Override
     public List<VacancyResponseDto> getAll() {
         return vacancyRepository.findByIsActiveTrue().stream()
                 .map(this::mapToResponseDto)
@@ -124,33 +119,6 @@ public class VacancyServiceImpl implements VacancyService {
         if (vacancy.getEmployer() == null || !vacancy.getEmployer().getId().equals(currentUserId)) {
             throw new AccessDeniedException("Вы можете редактировать только свои вакансии");
         }
-    }
-
-    @Override
-    @Transactional
-    public Vacancy create(Vacancy vacancy, Long employerId, Long categoryId) {
-        vacancy.setEmployer(userService.getUserById(employerId));
-        vacancy.setCategory(categoryService.getById(categoryId));
-        vacancy.setUpdateTime(LocalDateTime.now());
-
-        return vacancyRepository.save(vacancy);
-    }
-
-    @Override
-    @Transactional
-    public Vacancy update(Long id, Vacancy updatedVacancy, Long categoryId) {
-        Vacancy vacancy = findById(id);
-
-        if (categoryId != null) {
-            vacancy.setCategory(categoryService.getById(categoryId));
-        }
-
-        vacancy.setTitle(updatedVacancy.getTitle());
-        vacancy.setDescription(updatedVacancy.getDescription());
-        vacancy.setSalary(updatedVacancy.getSalary());
-        vacancy.setUpdateTime(LocalDateTime.now());
-
-        return vacancyRepository.save(vacancy);
     }
 
     @Override

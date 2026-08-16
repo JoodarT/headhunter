@@ -13,10 +13,7 @@ public interface ResumeService {
     List<ResumeResponseDto> getResumesByUserId(Long userId);
     ResumeResponseDto updateResume(Long id, ResumeCreateDto dto, Long currentUserId);
     List<ResumeResponseDto> searchResumes(String keyword);
-    List<ResumeResponseDto> getResumesByCategory(Long categoryId);
     boolean deleteResume(Long id, Long currentUserId);
 
     Resume findById(Long id);
-    List<Resume> findByUserId(Long userId);
-    Resume create(Resume resume, Long userId, Long categoryId);
 }

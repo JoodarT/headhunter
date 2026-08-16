@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface VacancyService {
-    List<Vacancy> findAllActive();
-
     VacancyResponseDto create(VacancyCreateDto dto);
     List<VacancyResponseDto> getAll();
     Page<VacancyResponseDto> getAllPaged(int page, int size, boolean sortByResponses, boolean ascending);
@@ -19,7 +17,5 @@ public interface VacancyService {
     void delete(Long id, Long currentUserId);
 
     Vacancy findById(Long id);
-    Vacancy create(Vacancy vacancy, Long employerId, Long categoryId);
-    Vacancy update(Long id, Vacancy updatedVacancy, Long categoryId);
     void incrementViews(Long id);
 }

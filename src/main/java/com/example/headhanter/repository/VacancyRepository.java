@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     List<Vacancy> findByIsActiveTrue();
-    List<Vacancy> findByEmployerId(Long employerId);
     Page<Vacancy> findByIsActiveTrue(Pageable pageable);
 
     @Query(value = "SELECT v FROM Vacancy v LEFT JOIN RespondedApplicant ra ON ra.vacancy = v " +

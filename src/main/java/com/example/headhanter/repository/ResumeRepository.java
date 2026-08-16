@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
     List<Resume> findByUserId(Long userId);
-    List<Resume> findByCategoryId(Long categoryId);
 
     @Query("SELECT r FROM Resume r LEFT JOIN r.category c WHERE " +
             "LOWER(r.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +

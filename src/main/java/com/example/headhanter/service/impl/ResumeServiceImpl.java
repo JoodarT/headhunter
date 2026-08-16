@@ -85,17 +85,6 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<ResumeResponseDto> getResumesByCategory(Long categoryId) {
-        List<Resume> resumes;
-        if (categoryId == null) {
-            resumes = resumeRepository.findAll();
-        } else {
-            resumes = resumeRepository.findByCategoryId(categoryId);
-        }
-        return resumes.stream().map(this::mapToDto).toList();
-    }
-
-    @Override
     @Transactional
     public boolean deleteResume(Long id, Long currentUserId) {
         Resume existingResume = findById(id);
@@ -112,20 +101,6 @@ public class ResumeServiceImpl implements ResumeService {
     public Resume findById(Long id) {
         return resumeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Резюме с ID " + id + " не найдено"));
-    }
-
-    @Override
-    public List<Resume> findByUserId(Long userId) {
-        return resumeRepository.findByUserId(userId);
-    }
-
-    @Override
-    @Transactional
-    public Resume create(Resume resume, Long userId, Long categoryId) {
-        resume.setUser(userService.getUserById(userId));
-        resume.setCategory(categoryService.getById(categoryId));
-        resume.setCreatedDate(LocalDateTime.now());
-        return resumeRepository.save(resume);
     }
 
     private void mapDtoToEntity(ResumeCreateDto dto, Resume resume) {
