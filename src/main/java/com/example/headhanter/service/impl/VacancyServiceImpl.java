@@ -2,11 +2,10 @@ package com.example.headhanter.service.impl;
 
 import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
-import com.example.headhanter.models.Category;
 import com.example.headhanter.models.User;
 import com.example.headhanter.models.Vacancy;
-import com.example.headhanter.repository.CategoryRepository;
 import com.example.headhanter.repository.VacancyRepository;
+import com.example.headhanter.service.CategoryService;
 import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ import java.util.NoSuchElementException;
 public class VacancyServiceImpl implements VacancyService {
 
     private final VacancyRepository vacancyRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final UserService userService;
 
     @Override
@@ -53,16 +52,13 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     @Transactional
     public VacancyResponseDto create(VacancyCreateDto dto) {
-        Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new NoSuchElementException("Категория с id " + dto.getCategoryId() + " не найдена"));
-
         User employer = userService.getUserById(dto.getEmployerId());
 
         Vacancy vacancy = Vacancy.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
                 .salary(dto.getSalary())
-                .category(category)
+                .category(categoryService.getById(dto.getCategoryId()))
                 .employer(employer)
                 .views(0)
                 .isActive(true)
@@ -79,9 +75,7 @@ public class VacancyServiceImpl implements VacancyService {
         assertOwner(vacancy, currentUserId);
 
         if (dto.getCategoryId() != null) {
-            Category category = categoryRepository.findById(dto.getCategoryId())
-                    .orElseThrow(() -> new NoSuchElementException("Категория с id " + dto.getCategoryId() + " не найдена"));
-            vacancy.setCategory(category);
+            vacancy.setCategory(categoryService.getById(dto.getCategoryId()));
         }
 
         vacancy.setTitle(dto.getTitle());
@@ -116,12 +110,8 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     @Transactional
     public Vacancy create(Vacancy vacancy, Long employerId, Long categoryId) {
-        User employer = userService.getUserById(employerId);
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Категория с id " + categoryId + " не найдена"));
-
-        vacancy.setEmployer(employer);
-        vacancy.setCategory(category);
+        vacancy.setEmployer(userService.getUserById(employerId));
+        vacancy.setCategory(categoryService.getById(categoryId));
         vacancy.setUpdateTime(LocalDateTime.now());
 
         return vacancyRepository.save(vacancy);
@@ -133,9 +123,7 @@ public class VacancyServiceImpl implements VacancyService {
         Vacancy vacancy = findById(id);
 
         if (categoryId != null) {
-            Category category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new RuntimeException("Категория не найдена"));
-            vacancy.setCategory(category);
+            vacancy.setCategory(categoryService.getById(categoryId));
         }
 
         vacancy.setTitle(updatedVacancy.getTitle());

@@ -3,7 +3,7 @@ package com.example.headhanter.controller.web;
 import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.models.User;
-import com.example.headhanter.repository.CategoryRepository;
+import com.example.headhanter.service.CategoryService;
 import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ public class VacancyWebController {
 
     private final VacancyService vacancyService;
     private final UserService userService;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @GetMapping
     public String getAllVacancies(Model model) {
@@ -39,7 +39,7 @@ public class VacancyWebController {
             return "redirect:/login";
         }
         model.addAttribute("vacancyDto", new VacancyCreateDto());
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.getAll());
         return "vacancy-create";
     }
 
@@ -55,7 +55,7 @@ public class VacancyWebController {
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("categories", categoryService.getAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
             return "vacancy-create";
         }
@@ -117,7 +117,7 @@ public class VacancyWebController {
 
         model.addAttribute("vacancyDto", dto);
         model.addAttribute("vacancyId", id);
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.getAll());
 
         return "vacancy-edit";
     }
@@ -138,7 +138,7 @@ public class VacancyWebController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("vacancyId", id);
-            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("categories", categoryService.getAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
             return "vacancy-edit";
         }

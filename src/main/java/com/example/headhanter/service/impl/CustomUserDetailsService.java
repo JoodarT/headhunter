@@ -3,8 +3,8 @@ package com.example.headhanter.service.impl;
 import com.example.headhanter.models.Role;
 import com.example.headhanter.models.RoleEntity;
 import com.example.headhanter.models.User;
-import com.example.headhanter.repository.RoleRepository;
-import com.example.headhanter.repository.UserRepository;
+import com.example.headhanter.service.RoleService;
+import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,26 +14,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь с email " + email + " не найден"));
-
-        RoleEntity role = user.getRole();
-        if (role == null) {
-            role = roleRepository.findByRole(Role.APPLICANT.name())
-                    .orElseThrow(() -> new IllegalStateException("Роль APPLICANT не настроена в таблице roles"));
+        User user;
+        try {
+            user = userService.getUserByEmail(email);
+        } catch (NoSuchElementException e) {
+            throw new UsernameNotFoundException("Пользователь с email " + email + " не найден");
         }
 
+        RoleEntity role = user.getRole() != null ? user.getRole() : roleService.getByName(Role.APPLICANT.name());
         String authority = role.getAuthority().getAuthority();
 
         return org.springframework.security.core.userdetails.User.builder()

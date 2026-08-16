@@ -6,10 +6,10 @@ import com.example.headhanter.dto.request.ResumeCreateDto;
 import com.example.headhanter.dto.request.WorkExperienceInfoDto;
 import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.models.*;
-import com.example.headhanter.repository.CategoryRepository;
 import com.example.headhanter.repository.ResumeRepository;
-import com.example.headhanter.repository.UserRepository;
+import com.example.headhanter.service.CategoryService;
 import com.example.headhanter.service.ResumeService;
+import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -26,8 +26,8 @@ import java.util.NoSuchElementException;
 public class ResumeServiceImpl implements ResumeService {
 
     private final ResumeRepository resumeRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+    private final UserService userService;
+    private final CategoryService categoryService;
 
     @Override
     @Transactional
@@ -125,22 +125,15 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     @Transactional
     public Resume create(Resume resume, Long userId, Long categoryId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("Пользователь не найден"));
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("Категория не найдена"));
-
-        resume.setUser(user);
-        resume.setCategory(category);
+        resume.setUser(userService.getUserById(userId));
+        resume.setCategory(categoryService.getById(categoryId));
         resume.setCreatedDate(LocalDateTime.now());
         return resumeRepository.save(resume);
     }
 
     private void mapDtoToEntity(ResumeCreateDto dto, Resume resume) {
         if (dto.getUserId() != null) {
-            User user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new NoSuchElementException("Пользователь не найден"));
-            resume.setUser(user);
+            resume.setUser(userService.getUserById(dto.getUserId()));
         }
 
         resume.setTitle(dto.getTitle());
@@ -148,9 +141,7 @@ public class ResumeServiceImpl implements ResumeService {
         resume.setSkills(dto.getSkills());
 
         if (dto.getCategoryId() != null) {
-            Category category = categoryRepository.findById(dto.getCategoryId())
-                    .orElseThrow(() -> new NoSuchElementException("Категория с id " + dto.getCategoryId() + " не найдена"));
-            resume.setCategory(category);
+            resume.setCategory(categoryService.getById(dto.getCategoryId()));
         }
 
         if (dto.getExpectedSalary() != null) {

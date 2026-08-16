@@ -4,9 +4,9 @@ import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.Role;
 import com.example.headhanter.models.RoleEntity;
 import com.example.headhanter.models.User;
-import com.example.headhanter.repository.RoleRepository;
 import com.example.headhanter.repository.UserRepository;
 import com.example.headhanter.service.FileService;
+import com.example.headhanter.service.RoleService;
 import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final FileService fileService;
 
     @Override
@@ -47,8 +47,7 @@ public class UserServiceImpl implements UserService {
 
     private RoleEntity resolveRole(Role accountType) {
         String roleName = (accountType != null) ? accountType.name() : Role.APPLICANT.name();
-        return roleRepository.findByRole(roleName)
-                .orElseThrow(() -> new NoSuchElementException("Роль " + roleName + " не настроена в таблице roles"));
+        return roleService.getByName(roleName);
     }
 
     @Override
