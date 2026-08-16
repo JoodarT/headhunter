@@ -24,8 +24,8 @@
     </div>
 
     <#if !(navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER")>
-    <div class="alert alert-warning" role="alert">
-    </div>
+<!--    <div class="alert alert-warning" role="alert">-->
+<!--    </div>-->
 </#if>
 
 <div class="row">

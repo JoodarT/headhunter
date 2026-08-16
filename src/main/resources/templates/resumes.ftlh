@@ -11,8 +11,7 @@
     </div>
 
     <#if !(navUser?? && navUser.role?? && navUser.role.role == "APPLICANT")>
-    <div class="alert alert-warning" role="alert">
-    </div>
+
 </#if>
 
 <#-- Форма поиска -->
