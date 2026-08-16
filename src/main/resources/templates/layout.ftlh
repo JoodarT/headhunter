@@ -25,7 +25,6 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <#-- Резюме доступны работодателям, вакансии - соискателям -->
                     <#if navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER">
                     <li class="nav-item">
                         <a class="nav-link" href="/resumes">Резюме</a>
@@ -45,7 +44,6 @@
                 </ul>
 
                 <ul class="navbar-nav ms-auto">
-                    <#-- Если пользователь вошел в систему (пример управления сессией) -->
                     <#if user??>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile"><i class="bi bi-person-circle"></i> ${user.name!"Профиль"}</a>

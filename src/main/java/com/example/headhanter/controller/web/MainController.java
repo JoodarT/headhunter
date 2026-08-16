@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,7 +41,25 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(
+            @RequestParam(required = false) String error,
+            @RequestParam(required = false) String registered,
+            @RequestParam(required = false) String logout,
+            @RequestParam(required = false) String roleMismatch,
+            Model model
+    ) {
+        if (error != null) {
+            model.addAttribute("error", true);
+        }
+        if (registered != null) {
+            model.addAttribute("registered", true);
+        }
+        if (logout != null) {
+            model.addAttribute("logout", true);
+        }
+        if (roleMismatch != null) {
+            model.addAttribute("roleMismatch", true);
+        }
         return "login";
     }
 

@@ -20,10 +20,16 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final RoleAwareAuthenticationSuccessHandler roleAwareAuthenticationSuccessHandler;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(
+            CustomUserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder,
+            RoleAwareAuthenticationSuccessHandler roleAwareAuthenticationSuccessHandler
+    ) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.roleAwareAuthenticationSuccessHandler = roleAwareAuthenticationSuccessHandler;
     }
 
     @Bean
@@ -77,7 +83,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/profile", true)
+                        .successHandler(roleAwareAuthenticationSuccessHandler)
                         .failureUrl("/login?error")
                         .permitAll()
                 )
