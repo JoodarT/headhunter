@@ -3,10 +3,20 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Список резюме</h2>
+        <#if navUser?? && navUser.role?? && navUser.role.role == "APPLICANT">
         <a href="/resumes/create" class="btn btn-success">+ Создать резюме</a>
+        <#else>
+        <a href="#" class="btn btn-success disabled" aria-disabled="true" tabindex="-1">+ Создать резюме</a>
+    </#if>
     </div>
 
-    <#-- Форма поиска -->
+    <#if !(navUser?? && navUser.role?? && navUser.role.role == "APPLICANT")>
+    <div class="alert alert-warning" role="alert">
+        Создание резюме доступно только соискателям. Вы вошли как работодатель — эта функция вам недоступна.
+    </div>
+</#if>
+
+<#-- Форма поиска -->
     <form action="/resumes" method="get" class="mb-4">
         <div class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Поиск по должности, категории или навыкам..." value="${(search)!''}">

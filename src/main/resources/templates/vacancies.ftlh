@@ -15,11 +15,21 @@
                 Сортировать по откликам
             </a>
         </#if>
+        <#if navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER">
         <a href="/vacancies/create" class="btn btn-success">+ Создать вакансию</a>
+        <#else>
+        <a href="#" class="btn btn-success disabled" aria-disabled="true" tabindex="-1">+ Создать вакансию</a>
+    </#if>
     </div>
     </div>
 
-    <div class="row">
+    <#if !(navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER")>
+    <div class="alert alert-warning" role="alert">
+        Создание вакансий доступно только работодателям. Вы вошли как соискатель — эта функция вам недоступна.
+    </div>
+</#if>
+
+<div class="row">
         <#if vacancies?? && (vacancies?size > 0)>
         <#list vacancies as vacancy>
         <div class="col-12 mb-3">
