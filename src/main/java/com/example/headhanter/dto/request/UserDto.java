@@ -11,7 +11,6 @@ import lombok.Data;
 @Data
 public class UserDto {
 
-    // маркер группы валидации: на обновлении профиля пароль необязателен
     public interface OnCreate {}
 
     @NotBlank(message = "Email не может быть пустым")

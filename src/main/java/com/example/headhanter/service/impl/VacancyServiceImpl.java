@@ -9,6 +9,9 @@ import com.example.headhanter.service.CategoryService;
 import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +39,22 @@ public class VacancyServiceImpl implements VacancyService {
         return vacancyRepository.findByIsActiveTrue().stream()
                 .map(this::mapToResponseDto)
                 .toList();
+    }
+
+    @Override
+    public Page<VacancyResponseDto> getAllPaged(int page, int size, boolean sortByResponses, boolean ascending) {
+        Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
+
+        Page<Vacancy> vacancies;
+        if (sortByResponses) {
+            vacancies = ascending
+                    ? vacancyRepository.findAllActiveOrderByResponsesAsc(pageable)
+                    : vacancyRepository.findAllActiveOrderByResponsesDesc(pageable);
+        } else {
+            vacancies = vacancyRepository.findByIsActiveTrue(pageable);
+        }
+
+        return vacancies.map(this::mapToResponseDto);
     }
 
     @Override
@@ -158,6 +177,7 @@ public class VacancyServiceImpl implements VacancyService {
         if (vacancy.getEmployer() != null) {
             dto.setEmployerId(vacancy.getEmployer().getId());
         }
+        dto.setResponsesCount(vacancyRepository.countResponsesByVacancyId(vacancy.getId()));
         return dto;
     }
 }

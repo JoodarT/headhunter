@@ -8,10 +8,12 @@ import com.example.headhanter.service.ResponseService;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +39,17 @@ public class ResponseServiceImpl implements ResponseService {
 
     @Override
     @Transactional
-    public RespondedApplicant respondToVacancy(Long resumeId, Long vacancyId) {
+    public RespondedApplicant respondToVacancy(Long resumeId, Long vacancyId, Long currentUserId) {
         Vacancy vacancy = vacancyService.findById(vacancyId);
         Resume resume = resumeService.findById(resumeId);
+
+        if (resume.getUser() == null || !resume.getUser().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("Вы можете откликаться только своим резюме");
+        }
+
+        if (respondedApplicantRepository.existsByVacancyIdAndResumeId(vacancyId, resumeId)) {
+            throw new IllegalArgumentException("Вы уже откликнулись на эту вакансию этим резюме");
+        }
 
         RespondedApplicant response = RespondedApplicant.builder()
                 .vacancy(vacancy)
@@ -51,6 +61,11 @@ public class ResponseServiceImpl implements ResponseService {
     }
 
     @Override
+    public boolean hasResponded(Long vacancyId, Long resumeId) {
+        return respondedApplicantRepository.existsByVacancyIdAndResumeId(vacancyId, resumeId);
+    }
+
+    @Override
     public List<RespondedApplicant> getAllResponses() {
         return respondedApplicantRepository.findAll();
     }
@@ -59,7 +74,7 @@ public class ResponseServiceImpl implements ResponseService {
     @Transactional
     public void updateConfirmationStatus(Long id, boolean status) {
         RespondedApplicant response = respondedApplicantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Отклик с id " + id + " не найден"));
+                .orElseThrow(() -> new NoSuchElementException("Отклик с id " + id + " не найден"));
 
         response.setConfirmation(status);
         respondedApplicantRepository.save(response);

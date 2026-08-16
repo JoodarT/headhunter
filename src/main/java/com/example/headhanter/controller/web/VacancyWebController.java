@@ -1,13 +1,17 @@
 package com.example.headhanter.controller.web;
 
 import com.example.headhanter.dto.request.VacancyCreateDto;
+import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.CategoryService;
+import com.example.headhanter.service.ResponseService;
+import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -22,14 +26,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VacancyWebController {
 
+    private static final int PAGE_SIZE = 6;
+
     private final VacancyService vacancyService;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final ResumeService resumeService;
+    private final ResponseService responseService;
 
     @GetMapping
-    public String getAllVacancies(Model model) {
-        List<VacancyResponseDto> vacancies = vacancyService.getAll();
-        model.addAttribute("vacancies", vacancies);
+    public String getAllVacancies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String sort,
+            @RequestParam(defaultValue = "desc") String direction,
+            Model model
+    ) {
+        boolean sortByResponses = "responses".equals(sort);
+        boolean ascending = "asc".equalsIgnoreCase(direction);
+
+        Page<VacancyResponseDto> vacancyPage = vacancyService.getAllPaged(page, PAGE_SIZE, sortByResponses, ascending);
+
+        model.addAttribute("vacancies", vacancyPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", vacancyPage.getTotalPages());
+        model.addAttribute("sort", sort);
+        model.addAttribute("direction", direction);
         return "vacancies";
     }
 
@@ -67,7 +88,6 @@ public class VacancyWebController {
         return "redirect:/vacancies/" + created.getId();
     }
 
-    // Ограничение :\\d+ гарантирует, что сюда попадут только числовые ID
     @GetMapping("/{id:\\d+}")
     public String showVacancyDetail(
             @PathVariable("id") Long id,
@@ -85,10 +105,38 @@ public class VacancyWebController {
             if (vacancy.getEmployerId() != null && vacancy.getEmployerId().equals(currentUser.getId())) {
                 isOwner = true;
             }
+
+            boolean isApplicant = currentUser.getRole() != null && "APPLICANT".equals(currentUser.getRole().getRole());
+            if (isApplicant) {
+                List<ResumeResponseDto> myResumes = resumeService.getResumesByUserId(currentUser.getId());
+                List<ResumeResponseDto> availableResumes = myResumes.stream()
+                        .filter(resume -> !responseService.hasResponded(id, resume.getId()))
+                        .toList();
+
+                model.addAttribute("isApplicant", true);
+                model.addAttribute("myResumes", myResumes);
+                model.addAttribute("availableResumes", availableResumes);
+            }
         }
         model.addAttribute("isOwner", isOwner);
 
         return "vacancy-detail";
+    }
+
+    @PostMapping("/{id:\\d+}/respond")
+    public String respondToVacancy(
+            @PathVariable("id") Long id,
+            @RequestParam Long resumeId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        responseService.respondToVacancy(resumeId, id, currentUser.getId());
+
+        return "redirect:/vacancies/" + id;
     }
 
     @GetMapping("/{id:\\d+}/edit")

@@ -38,9 +38,38 @@
         </#if>
     </div>
 
-    <!-- Категория -->
+    <!-- Отклик на вакансию (только для соискателей) -->
+    <#if isApplicant?? && isApplicant>
     <div class="mb-4">
-        <h5 class="text-muted text-uppercase fs-6">Категория / Сфера</h5>
+        <#if availableResumes?? && (availableResumes?size > 0)>
+        <form action="/vacancies/${vacancy.id}/respond" method="post" class="d-flex flex-wrap gap-2 align-items-center">
+            <#if _csrf??>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </#if>
+        <#if (availableResumes?size > 1)>
+        <select name="resumeId" class="form-select" style="max-width: 300px;" required>
+            <#list availableResumes as resume>
+            <option value="${resume.id}">${resume.title!"Резюме №"+resume.id}</option>
+        </#list>
+        </select>
+        <#else>
+        <input type="hidden" name="resumeId" value="${availableResumes[0].id}"/>
+    </#if>
+    <button type="submit" class="btn btn-success">Откликнуться</button>
+    </form>
+    <#elseif myResumes?? && (myResumes?size > 0)>
+    <div class="alert alert-info mb-0">Вы уже откликнулись на эту вакансию всеми своими резюме.</div>
+    <#else>
+    <div class="alert alert-warning mb-0">
+        Чтобы откликнуться, сначала <a href="/resumes/create">создайте резюме</a>.
+    </div>
+</#if>
+</div>
+</#if>
+
+<!-- Категория -->
+<div class="mb-4">
+    <h5 class="text-muted text-uppercase fs-6">Категория / Сфера</h5>
         <p class="lead fw-normal">
             <#if vacancy.categoryName??>
             ${vacancy.categoryName}

@@ -41,6 +41,44 @@
     </button>
 </div>
 
+<#if vacancies?? && (vacancies?size > 0)>
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Свежие вакансии</h3>
+        <a href="/register" class="btn btn-outline-primary btn-sm">Смотреть все вакансии</a>
+    </div>
+    <div class="row g-3">
+        <#list vacancies as vacancy>
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-primary mb-1">
+                        <a href="/vacancies/${vacancy.id}" class="text-decoration-none">${vacancy.title!""}</a>
+                    </h5>
+                    <p class="card-text text-muted mb-2">
+                        <small>
+                            <#if vacancy.categoryName??>
+                            ${vacancy.categoryName}
+                            <#else>
+                            Категория не указана
+                        </#if>
+                        </small>
+                    </p>
+                    <p class="card-text text-success fw-bold mb-0">
+                        <#if vacancy.salary??>
+                            ${vacancy.salary} KGS
+                        <#else>
+                            Договорная
+                        </#if>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </#list>
+    </div>
+</div>
+</#if>
+
 <div class="row justify-content-center text-center g-4 mb-5">
     <div class="col-md-5">
         <div class="p-4 bg-white rounded shadow-sm h-100">

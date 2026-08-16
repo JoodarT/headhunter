@@ -1,9 +1,22 @@
 <#import "layout.ftlh" as layout>
 <@layout.mainLayout title="Список вакансий" fluid=true>
 <div class="mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <h2>Список вакансий</h2>
+        <div class="d-flex gap-2 align-items-center">
+            <#if sort?? && sort == "responses">
+            <a href="/vacancies?sort=responses&amp;direction=<#if direction?? && direction == "asc">desc<#else>asc</#if>"
+               class="btn btn-outline-secondary btn-sm">
+                По откликам <#if direction?? && direction == "asc">▲<#else>▼</#if>
+            </a>
+            <a href="/vacancies" class="btn btn-outline-secondary btn-sm">Сбросить сортировку</a>
+            <#else>
+            <a href="/vacancies?sort=responses&amp;direction=desc" class="btn btn-outline-secondary btn-sm">
+                Сортировать по откликам
+            </a>
+        </#if>
         <a href="/vacancies/create" class="btn btn-success">+ Создать вакансию</a>
+    </div>
     </div>
 
     <div class="row">
@@ -25,6 +38,7 @@
                                 <#else>
                                 Категория: Не указана
                             </#if>
+                                &middot; Откликов: ${vacancy.responsesCount!0}
                             </small>
                         </p>
                         <p class="card-text text-secondary mb-0" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
@@ -54,5 +68,24 @@
     </div>
 </#if>
 </div>
+
+<#if totalPages?? && totalPages gt 1>
+<nav class="mt-4" aria-label="Страницы">
+    <ul class="pagination justify-content-center">
+        <li class="page-item <#if currentPage lte 0>disabled</#if>">
+            <a class="page-link" href="/vacancies?page=${currentPage - 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if>">Назад</a>
+        </li>
+        <#list 0..(totalPages - 1) as p>
+        <li class="page-item <#if p == currentPage>active</#if>">
+            <a class="page-link" href="/vacancies?page=${p}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if>">${p + 1}</a>
+        </li>
+    </#list>
+    <li class="page-item <#if currentPage gte (totalPages - 1)>disabled</#if>">
+        <a class="page-link" href="/vacancies?page=${currentPage + 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if>">Вперёд</a>
+    </li>
+    </ul>
+</nav>
+</#if>
+
 </div>
 </@layout.mainLayout>

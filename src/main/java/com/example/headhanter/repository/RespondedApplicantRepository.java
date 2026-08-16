@@ -10,4 +10,5 @@ public interface RespondedApplicantRepository extends JpaRepository<RespondedApp
     List<RespondedApplicant> findByResumeId(Long resumeId);
     List<RespondedApplicant> findByVacancyEmployerId(Long employerId);
     List<RespondedApplicant> findByResumeUserId(Long userId);
+    boolean existsByVacancyIdAndResumeId(Long vacancyId, Long resumeId);
 }

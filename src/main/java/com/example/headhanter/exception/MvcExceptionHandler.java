@@ -16,8 +16,6 @@ import java.util.NoSuchElementException;
 @ControllerAdvice(basePackages = "com.example.headhanter.controller")
 public class MvcExceptionHandler {
 
-    // "Пользователь ввёл неправильные данные" (несуществующий id, дубликат email и т.п.) —
-    // не показываем отдельную страницу ошибки, а возвращаем на главную с сообщением
     @ExceptionHandler(NoSuchElementException.class)
     public String handleNotFound(NoSuchElementException ex, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", ex.getMessage());

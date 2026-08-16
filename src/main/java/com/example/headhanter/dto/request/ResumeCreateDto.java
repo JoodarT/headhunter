@@ -12,7 +12,6 @@ import java.util.List;
 @Data
 public class ResumeCreateDto {
 
-    // выставляется сервером из аутентифицированного пользователя, не приходит от клиента
     private Long userId;
 
     private String applicantName;

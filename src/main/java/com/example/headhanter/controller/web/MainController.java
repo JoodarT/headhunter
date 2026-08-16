@@ -3,6 +3,7 @@ package com.example.headhanter.controller.web;
 import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.UserService;
+import com.example.headhanter.service.VacancyService;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,12 +22,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainController {
 
     private final UserService userService;
+    private final VacancyService vacancyService;
+
+    private static final int PREVIEW_VACANCIES_COUNT = 6;
 
     @GetMapping("/")
     public String index(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        // если только что произошёл редирект с ошибкой (см. MvcExceptionHandler),
-        // показываем главную с сообщением вместо автоматического перехода дальше
-        if (userDetails == null || model.containsAttribute("error")) {
+        if (userDetails == null) {
+            model.addAttribute("vacancies", vacancyService.getAllPaged(0, PREVIEW_VACANCIES_COUNT, false, false).getContent());
+            return "main";
+        }
+
+        if (model.containsAttribute("error")) {
             return "main";
         }
 

@@ -78,8 +78,6 @@ public class UserWebController {
         User updatedUser = userService.updateUser(currentUser.getId(), userDto);
 
         if (userDto.getEmail() != null && !currentUser.getEmail().equals(updatedUser.getEmail())) {
-            // userDetails.getPassword() обычно null здесь: Spring Security стирает
-            // credentials из контекста после аутентификации, поэтому берём хеш из БД
             UserDetails updatedUserDetails = org.springframework.security.core.userdetails.User
                     .withUsername(updatedUser.getEmail())
                     .password(updatedUser.getPassword())

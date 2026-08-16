@@ -14,6 +14,7 @@ public class VacancyResponseDto {
     private Long categoryId;
     private String categoryName;
     private Integer views;
+    private Long responsesCount;
     private Boolean isActive;
     private LocalDateTime updateTime;
 }
