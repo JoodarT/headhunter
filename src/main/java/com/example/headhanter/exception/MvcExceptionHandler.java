@@ -2,6 +2,7 @@ package com.example.headhanter.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +19,13 @@ public class MvcExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFound(NoSuchElementException ex, HttpServletRequest request, Model model) {
         populateModel(model, 404, "Страница или ресурс не найдены", ex.getMessage(), request);
+        return "error";
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleAccessDenied(AccessDeniedException ex, HttpServletRequest request, Model model) {
+        populateModel(model, 403, "Отказ в доступе", ex.getMessage(), request);
         return "error";
     }
 

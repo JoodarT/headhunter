@@ -10,11 +10,13 @@ import com.example.headhanter.repository.VacancyRepository;
 import com.example.headhanter.service.UserService;
 import com.example.headhanter.service.VacancyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +54,7 @@ public class VacancyServiceImpl implements VacancyService {
     @Transactional
     public VacancyResponseDto create(VacancyCreateDto dto) {
         Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Категория с id " + dto.getCategoryId() + " не найдена"));
+                .orElseThrow(() -> new NoSuchElementException("Категория с id " + dto.getCategoryId() + " не найдена"));
 
         User employer = userService.getUserById(dto.getEmployerId());
 
@@ -74,10 +76,11 @@ public class VacancyServiceImpl implements VacancyService {
     @Transactional
     public VacancyResponseDto update(Long id, VacancyCreateDto dto, Long currentUserId) {
         Vacancy vacancy = findById(id);
+        assertOwner(vacancy, currentUserId);
 
         if (dto.getCategoryId() != null) {
             Category category = categoryRepository.findById(dto.getCategoryId())
-                    .orElseThrow(() -> new RuntimeException("Категория не найдена"));
+                    .orElseThrow(() -> new NoSuchElementException("Категория с id " + dto.getCategoryId() + " не найдена"));
             vacancy.setCategory(category);
         }
 
@@ -93,6 +96,7 @@ public class VacancyServiceImpl implements VacancyService {
     @Transactional
     public void delete(Long id, Long currentUserId) {
         Vacancy vacancy = findById(id);
+        assertOwner(vacancy, currentUserId);
         vacancy.setIsActive(false);
         vacancyRepository.save(vacancy);
     }
@@ -100,7 +104,13 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     public Vacancy findById(Long id) {
         return vacancyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Вакансия с id " + id + " не найдена"));
+                .orElseThrow(() -> new NoSuchElementException("Вакансия с id " + id + " не найдена"));
+    }
+
+    private void assertOwner(Vacancy vacancy, Long currentUserId) {
+        if (vacancy.getEmployer() == null || !vacancy.getEmployer().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("Вы можете редактировать только свои вакансии");
+        }
     }
 
     @Override
@@ -153,6 +163,7 @@ public class VacancyServiceImpl implements VacancyService {
         dto.setViews(vacancy.getViews());
         if (vacancy.getCategory() != null) {
             dto.setCategoryId(vacancy.getCategory().getId());
+            dto.setCategoryName(vacancy.getCategory().getName());
         }
         if (vacancy.getEmployer() != null) {
             dto.setEmployerId(vacancy.getEmployer().getId());

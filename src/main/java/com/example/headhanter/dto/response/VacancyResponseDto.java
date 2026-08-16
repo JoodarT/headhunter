@@ -12,6 +12,7 @@ public class VacancyResponseDto {
     private String description;
     private BigDecimal salary;
     private Long categoryId;
+    private String categoryName;
     private Integer views;
     private Boolean isActive;
     private LocalDateTime updateTime;
