@@ -75,19 +75,21 @@ public class UserWebController {
             return "profile-edit";
         }
 
-        userService.updateUser(currentUser.getId(), userDto);
+        User updatedUser = userService.updateUser(currentUser.getId(), userDto);
 
-        if (userDto.getEmail() != null && !currentUser.getEmail().equals(userDto.getEmail())) {
+        if (userDto.getEmail() != null && !currentUser.getEmail().equals(updatedUser.getEmail())) {
+            // userDetails.getPassword() обычно null здесь: Spring Security стирает
+            // credentials из контекста после аутентификации, поэтому берём хеш из БД
             UserDetails updatedUserDetails = org.springframework.security.core.userdetails.User
-                    .withUsername(userDto.getEmail())
-                    .password(userDetails.getPassword())
+                    .withUsername(updatedUser.getEmail())
+                    .password(updatedUser.getPassword())
                     .authorities(userDetails.getAuthorities())
                     .build();
 
             SecurityContextHolder.getContext().setAuthentication(
                     new UsernamePasswordAuthenticationToken(
                             updatedUserDetails,
-                            userDetails.getPassword(),
+                            updatedUser.getPassword(),
                             userDetails.getAuthorities()
                     )
             );

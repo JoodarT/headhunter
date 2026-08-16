@@ -6,6 +6,7 @@ import com.example.headhanter.models.RoleEntity;
 import com.example.headhanter.models.User;
 import com.example.headhanter.repository.RoleRepository;
 import com.example.headhanter.repository.UserRepository;
+import com.example.headhanter.service.FileService;
 import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final FileService fileService;
 
     @Override
     @Transactional
@@ -64,7 +66,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User updateUser(Long id, UserDto userDto) {
         User user = getUserById(id);
+
+        if (userDto.getEmail() != null && !userDto.getEmail().equalsIgnoreCase(user.getEmail())
+                && userRepository.existsByEmail(userDto.getEmail())) {
+            throw new IllegalArgumentException("Пользователь с email " + userDto.getEmail() + " уже существует");
+        }
+
         user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
         user.setRole(resolveRole(userDto.getAccountType()));
 
@@ -103,7 +112,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User uploadAvatar(Long userId, MultipartFile file) {
-        return null;
+        User user = getUserById(userId);
+
+        String oldAvatarUrl = user.getAvatarUrl();
+        String newFileName = fileService.saveAvatar(file);
+
+        user.setAvatarUrl(newFileName);
+        User savedUser = userRepository.save(user);
+
+        if (oldAvatarUrl != null && !oldAvatarUrl.equals(newFileName)) {
+            fileService.deleteAvatar(oldAvatarUrl);
+        }
+
+        return savedUser;
     }
 }
