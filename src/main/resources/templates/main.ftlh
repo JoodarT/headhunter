@@ -82,14 +82,14 @@
 <div class="row justify-content-center text-center g-4 mb-5">
     <div class="col-md-5">
         <div class="p-4 bg-white rounded shadow-sm h-100">
-            <h3 class="mb-3">Я ищу работу</h3>
+            <h3 class="mb-3">Ищу работу</h3>
             <p class="text-muted">Создайте резюме и откликайтесь на вакансии</p>
             <a href="/register" class="btn btn-primary">Начать поиск</a>
         </div>
     </div>
     <div class="col-md-5">
         <div class="p-4 bg-white rounded shadow-sm h-100">
-            <h3 class="mb-3">Я ищу сотрудников</h3>
+            <h3 class="mb-3">Ищу сотрудников</h3>
             <p class="text-muted">Разместите вакансию и найдите кандидатов</p>
             <a href="/register" class="btn btn-success">Разместить вакансию</a>
         </div>
