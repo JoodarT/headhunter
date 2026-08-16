@@ -23,9 +23,11 @@ public class MainController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String index(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) {
-            return "redirect:/login";
+    public String index(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        // если только что произошёл редирект с ошибкой (см. MvcExceptionHandler),
+        // показываем главную с сообщением вместо автоматического перехода дальше
+        if (userDetails == null || model.containsAttribute("error")) {
+            return "main";
         }
 
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
@@ -37,7 +39,7 @@ public class MainController {
         if ("APPLICANT".equals(role)) {
             return "redirect:/vacancies";
         }
-        return "redirect:/login";
+        return "main";
     }
 
     @GetMapping("/login")

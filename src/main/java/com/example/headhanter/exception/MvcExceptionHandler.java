@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,24 +16,24 @@ import java.util.NoSuchElementException;
 @ControllerAdvice(basePackages = "com.example.headhanter.controller")
 public class MvcExceptionHandler {
 
+    // "Пользователь ввёл неправильные данные" (несуществующий id, дубликат email и т.п.) —
+    // не показываем отдельную страницу ошибки, а возвращаем на главную с сообщением
     @ExceptionHandler(NoSuchElementException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFound(NoSuchElementException ex, HttpServletRequest request, Model model) {
-        populateModel(model, 404, "Страница или ресурс не найдены", ex.getMessage(), request);
-        return "error";
+    public String handleNotFound(NoSuchElementException ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleBadRequest(IllegalArgumentException ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/";
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String handleAccessDenied(AccessDeniedException ex, HttpServletRequest request, Model model) {
         populateModel(model, 403, "Отказ в доступе", ex.getMessage(), request);
-        return "error";
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleBadRequest(IllegalArgumentException ex, HttpServletRequest request, Model model) {
-        populateModel(model, 400, "Некорректный запрос", ex.getMessage(), request);
         return "error";
     }
 
