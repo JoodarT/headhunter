@@ -59,6 +59,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/resumes").hasRole(Role.EMPLOYER.name())
                         .requestMatchers(HttpMethod.GET, "/vacancies").hasRole(Role.APPLICANT.name())
 
+                        .requestMatchers(HttpMethod.GET, "/resumes/create", "/resumes/*/edit").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.POST, "/resumes/create", "/resumes/*/edit", "/resumes/*/delete").hasRole(Role.APPLICANT.name())
+
+                        .requestMatchers(HttpMethod.GET, "/vacancies/create", "/vacancies/*/edit").hasRole(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.POST, "/vacancies/create", "/vacancies/*/edit", "/vacancies/*/delete").hasRole(Role.EMPLOYER.name())
+
                         .requestMatchers("/", "/register", "/login", "/resumes/**", "/vacancies/**").permitAll()
                         .requestMatchers("/profile/**").authenticated()
 

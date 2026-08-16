@@ -1,9 +1,9 @@
 <#import "layout.ftlh" as layout>
 
-<@layout.mainLayout title="Вход в систему">
+<@layout.mainLayout title="Войти">
 <div class="row justify-content-center">
     <div class="col-md-5 bg-white p-4 rounded shadow-sm">
-        <h2 class="mb-4 text-center">Вход в систему</h2>
+        <h2 class="mb-4 text-center">Войти</h2>
 
         <#if registered??>
         <div class="alert alert-success" role="alert">
