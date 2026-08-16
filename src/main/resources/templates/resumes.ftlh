@@ -12,7 +12,6 @@
 
     <#if !(navUser?? && navUser.role?? && navUser.role.role == "APPLICANT")>
     <div class="alert alert-warning" role="alert">
-        Создание резюме доступно только соискателям. Вы вошли как работодатель — эта функция вам недоступна.
     </div>
 </#if>
 

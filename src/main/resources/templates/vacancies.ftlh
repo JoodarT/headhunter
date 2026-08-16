@@ -25,7 +25,6 @@
 
     <#if !(navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER")>
     <div class="alert alert-warning" role="alert">
-        Создание вакансий доступно только работодателям. Вы вошли как соискатель — эта функция вам недоступна.
     </div>
 </#if>
 
