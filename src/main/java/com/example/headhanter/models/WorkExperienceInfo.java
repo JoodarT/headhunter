@@ -23,7 +23,8 @@ public class WorkExperienceInfo {
 
     private String period;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
+    @Column(name = "responsibilities")
     private String responsibilities;
 
     @ManyToOne(fetch = FetchType.LAZY)

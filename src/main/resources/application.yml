@@ -35,7 +35,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
 
   # --- НАСТРОЙКИ LIQUIBASE ---
   liquibase:
