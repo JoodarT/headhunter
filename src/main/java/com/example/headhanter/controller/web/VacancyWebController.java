@@ -161,6 +161,6 @@ public class VacancyWebController {
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
         vacancyService.delete(id, currentUser.getId());
 
-        return "redirect:/vacancies";
+        return "redirect:/resumes";
     }
 }

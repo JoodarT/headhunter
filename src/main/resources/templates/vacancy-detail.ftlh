@@ -62,7 +62,7 @@
 
     <!-- Кнопка назад -->
     <div class="mt-4 pt-3 border-top">
-        <a href="/vacancies" class="btn btn-outline-secondary">← Назад к списку вакансий</a>
+        <a href="/resumes" class="btn btn-outline-secondary">← Назад</a>
     </div>
 
 </div>

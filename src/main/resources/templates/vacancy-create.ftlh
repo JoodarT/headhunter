@@ -48,7 +48,7 @@
 
     <div class="d-flex gap-2">
         <button type="submit" class="btn btn-success">Опубликовать</button>
-        <a href="/vacancies" class="btn btn-outline-secondary">Отмена</a>
+        <a href="/resumes" class="btn btn-outline-secondary">Отмена</a>
     </div>
     </form>
 </div>

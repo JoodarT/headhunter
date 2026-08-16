@@ -139,7 +139,7 @@ public class ResumeWebController {
 
         resumeService.deleteResume(id, currentUser.getId());
 
-        return "redirect:/resumes";
+        return "redirect:/vacancies";
     }
 
     @GetMapping("/{id}")

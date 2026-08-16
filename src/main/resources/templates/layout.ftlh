@@ -13,7 +13,11 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow-sm">
         <div class="container">
+            <#if navUser?? && navUser.role?? && navUser.role.role == "APPLICANT">
+            <a class="navbar-brand fw-bold fs-4" href="/vacancies">HeadHunter</a>
+            <#else>
             <a class="navbar-brand fw-bold fs-4" href="/resumes">HeadHunter</a>
+        </#if>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -21,12 +25,23 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <#-- Резюме доступны работодателям, вакансии - соискателям -->
+                    <#if navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/resumes">Резюме</a>
+                    </li>
+                    <#elseif navUser?? && navUser.role?? && navUser.role.role == "APPLICANT">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/vacancies">Вакансии</a>
+                    </li>
+                    <#else>
                     <li class="nav-item">
                         <a class="nav-link" href="/resumes">Резюме</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/vacancies">Вакансии</a>
                     </li>
+                    </#if>
                 </ul>
 
                 <ul class="navbar-nav ms-auto">

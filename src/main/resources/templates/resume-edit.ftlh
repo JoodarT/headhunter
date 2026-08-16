@@ -145,7 +145,7 @@
 
 <div class="d-flex gap-2 mb-5">
     <button type="submit" class="btn btn-primary btn-lg">Сохранить изменения</button>
-    <a href="/resumes" class="btn btn-outline-secondary btn-lg">Отмена</a>
+    <a href="/vacancies" class="btn btn-outline-secondary btn-lg">Отмена</a>
 </div>
 </form>
 </div>

@@ -133,7 +133,7 @@
 
         <div class="d-flex gap-3 mb-5">
             <button type="submit" class="btn btn-primary btn-lg">Сохранить и опубликовать</button>
-            <a href="/resumes" class="btn btn-outline-secondary btn-lg">Отмена</a>
+            <a href="/vacancies" class="btn btn-outline-secondary btn-lg">Отмена</a>
         </div>
         </form>
     </div>

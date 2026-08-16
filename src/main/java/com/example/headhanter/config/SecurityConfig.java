@@ -54,6 +54,9 @@ public class SecurityConfig {
 
 
 
+                        .requestMatchers(HttpMethod.GET, "/resumes").hasRole(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.GET, "/vacancies").hasRole(Role.APPLICANT.name())
+
                         .requestMatchers("/", "/register", "/login", "/resumes/**", "/vacancies/**").permitAll()
                         .requestMatchers("/profile/**").authenticated()
 
