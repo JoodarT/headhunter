@@ -78,12 +78,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public List<ResumeResponseDto> searchResumes(String keyword) {
-        List<Resume> resumes;
-        if (keyword == null || keyword.trim().isEmpty()) {
-            resumes = resumeRepository.findAll();
-        } else {
-            resumes = resumeRepository.findAll();
-        }
+        List<Resume> resumes = (keyword == null || keyword.trim().isEmpty())
+                ? resumeRepository.findAll()
+                : resumeRepository.searchByKeyword(keyword.trim());
         return resumes.stream().map(this::mapToDto).toList();
     }
 
