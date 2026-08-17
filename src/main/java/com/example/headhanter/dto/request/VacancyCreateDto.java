@@ -8,6 +8,10 @@ import java.math.BigDecimal;
 @Data
 public class VacancyCreateDto {
 
+    @NotBlank (message =  "Название компании обязательно")
+    @Size(min = 4, max = 100, message = "Название вакансии должно быть от 3 до 100 символов")
+    private String company;
+
     @NotBlank(message = "Название вакансии не может быть пустым")
     @Size(min = 3, max = 150, message = "Название вакансии должно быть от 3 до 150 символов")
     private String title;
@@ -24,4 +28,6 @@ public class VacancyCreateDto {
     private Long categoryId;
 
     private Long employerId;
+
+
 }
