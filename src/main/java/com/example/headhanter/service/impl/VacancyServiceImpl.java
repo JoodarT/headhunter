@@ -148,4 +148,13 @@ public class VacancyServiceImpl implements VacancyService {
         dto.setResponsesCount(vacancyRepository.countResponsesByVacancyId(vacancy.getId()));
         return dto;
     }
+
+    @Override
+    public List<VacancyResponseDto> searchVacancy(String keyword){
+        List<Vacancy> vacancies = (keyword == null || keyword.trim().isEmpty())
+            ? vacancyRepository.findAll()
+            : vacancyRepository.searchByKeyword(keyword.trim());
+
+        return vacancies.stream().map(this::mapToResponseDto).toList();
+    }
 }

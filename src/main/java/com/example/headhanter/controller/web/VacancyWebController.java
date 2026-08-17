@@ -4,6 +4,7 @@ import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.models.User;
+import com.example.headhanter.repository.VacancyRepository;
 import com.example.headhanter.service.CategoryService;
 import com.example.headhanter.service.ResponseService;
 import com.example.headhanter.service.ResumeService;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @Controller
 @RequestMapping("/vacancies")
@@ -39,6 +41,7 @@ public class VacancyWebController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String sort,
             @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(value = "search", required = false) String search,
             Model model
     ) {
         boolean sortByResponses = "responses".equals(sort);
@@ -51,6 +54,12 @@ public class VacancyWebController {
         model.addAttribute("totalPages", vacancyPage.getTotalPages());
         model.addAttribute("sort", sort);
         model.addAttribute("direction", direction);
+//        model.addAttribute("vacancies", vacancyService);
+
+        if (search != null && !search.trim().isEmpty()){
+
+            model.addAttribute("vacancies", vacancyService.searchVacancy(search));
+        }
         return "vacancies";
     }
 

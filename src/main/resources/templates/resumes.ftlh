@@ -14,7 +14,7 @@
 
 </#if>
 
-<#-- Форма поиска -->
+<#-- поиск -->
     <form action="/resumes" method="get" class="mb-4">
         <div class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Поиск по должности, категории или навыкам..." value="${(search)!''}">

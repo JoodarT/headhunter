@@ -20,8 +20,16 @@
         <#else>
         <a href="#" class="btn btn-success disabled" aria-disabled="true" tabindex="-1">+ Создать вакансию</a>
     </#if>
-    </div>
-    </div>
+
+        <#-- poisk -->
+        </div>
+        <form action="/vacancies" method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Поиск по вакансий" value="${(search)!''}">
+                <button class="btn btn-primary" type="submit">Найти</button>
+            </div>
+        </form>
+            </div>
 
     <#if !(navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER")>
 <!--    <div class="alert alert-warning" role="alert">-->

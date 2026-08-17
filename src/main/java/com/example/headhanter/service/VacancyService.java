@@ -13,6 +13,7 @@ public interface VacancyService {
     Page<VacancyResponseDto> getAllPaged(int page, int size, boolean sortByResponses, boolean ascending);
     VacancyResponseDto getById(Long id);
     List<VacancyResponseDto> getRespondedVacanciesByUser(Long userId);
+    List<VacancyResponseDto> searchVacancy(String keywords);
     VacancyResponseDto update(Long id, VacancyCreateDto dto, Long currentUserId);
     void delete(Long id, Long currentUserId);
 
