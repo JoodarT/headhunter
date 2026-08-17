@@ -75,6 +75,14 @@
     <div class="container text-center text-muted fs-7">
         &copy; ${.now?string('yyyy')} HeadHunter App. Все права защищены.
     </div>
+    <li class="nav-item mt-auto text-muted">
+        <a class="nav-link ps-5" href="/resumes">Резюме</a>
+    </li>
+
+    <li class="nav-item mt-auto text-muted">
+        <a class="nav-link ps-5" href="/vacancies">Вакансии</a>
+    </li>
+
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
