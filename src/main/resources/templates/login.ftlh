@@ -25,7 +25,7 @@
 
 <#if logout??>
 <div class="alert alert-info" role="alert">
-    Вы успешно вышли из системы.
+    Вы успешно вышли.
 </div>
 </#if>
 
