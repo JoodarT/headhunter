@@ -134,6 +134,10 @@
                 <input type="text" class="form-control" name="educations[${edu_index}].faculty" value="${(edu.faculty)!''}">
             </div>
             <div class="mb-2">
+                <label class="form-label">Год поступления</label>
+                <input type="number" class="form-control" name="educations[${edu_index}].enrollmentYear" value="${(edu.enrollmentYear?c)!''}">
+            </div>
+            <div class="mb-2">
                 <label class="form-label">Год окончания</label>
                 <input type="number" class="form-control" name="educations[${edu_index}].graduationYear" value="${(edu.graduationYear?c)!''}">
             </div>
@@ -195,6 +199,10 @@
                 <div class="mb-2">
                     <label class="form-label">Специальность / Факультет</label>
                     <input type="text" class="form-control" name="educations[` + eduCount + `].faculty">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Год поступления</label>
+                    <input type="number" class="form-control" name="educations[` + eduCount + `].enrollmentYear">
                 </div>
                 <div class="mb-2">
                     <label class="form-label">Год окончания</label>

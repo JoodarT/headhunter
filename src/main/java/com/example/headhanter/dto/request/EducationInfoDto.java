@@ -14,6 +14,12 @@ public class EducationInfoDto {
     @NotBlank(message = "Специальность обязательна")
     private String faculty;
 
+    @NotNull(message =  "Укажите год поступления")
+    private Integer enrollmentYear;
+
     @NotNull(message = "Укажите год окончания")
     private Integer graduationYear;
+
+
+
 }

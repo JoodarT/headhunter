@@ -19,6 +19,9 @@ public class EducationInfo {
     private String institution;
     private String faculty;
 
+    @Column(name = "enrollment_year")
+    private Integer enrollmentYear;
+
     @Column(name = "graduation_year")
     private Integer graduationYear;
 

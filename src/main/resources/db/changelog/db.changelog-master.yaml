@@ -42,5 +42,7 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/13_add_company_to_vacancies.yaml
 
+  - include:
+      file: db/changelog/migration/14_add-enrollment-year-to-education-info.yaml
 
 

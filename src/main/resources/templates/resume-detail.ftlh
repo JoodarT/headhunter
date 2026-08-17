@@ -89,8 +89,10 @@
         <h5 class="mb-1">${edu.institution!}</h5>
         <p class="mb-0 text-secondary">
             ${edu.faculty!}
-            <#if edu.graduationYear??>
-            <strong class="ms-1">(${edu.graduationYear} г.)</strong>
+            <#if edu.enrollmentYear?? && edu.graduationYear??>
+            <strong class="ms-1">(${edu.enrollmentYear?c} - ${edu.graduationYear?c} г.)</strong>
+            <#elseif edu.graduationYear??>
+            <strong class="ms-1">(${edu.graduationYear?c} г.)</strong>
         </#if>
         </p>
     </div>

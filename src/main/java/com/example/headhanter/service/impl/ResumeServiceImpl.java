@@ -157,11 +157,13 @@ public class ResumeServiceImpl implements ResumeService {
         }
         for (EducationInfoDto d : educations) {
             resume.getEducations().add(EducationInfo.builder()
+                    .enrollmentYear(d.getEnrollmentYear())
                     .institution(d.getInstitution())
                     .faculty(d.getFaculty())
                     .graduationYear(d.getGraduationYear())
                     .resume(resume)
                     .build());
+
         }
     }
 
@@ -211,7 +213,9 @@ public class ResumeServiceImpl implements ResumeService {
             EducationInfoDto d = new EducationInfoDto();
             d.setInstitution(e.getInstitution());
             d.setFaculty(e.getFaculty());
+            d.setEnrollmentYear(e.getEnrollmentYear());
             d.setGraduationYear(e.getGraduationYear());
+
             return d;
         }).toList());
 

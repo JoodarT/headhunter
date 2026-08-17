@@ -120,6 +120,14 @@
                         <label class="form-label">Специальность / Факультет</label>
                         <input type="text" class="form-control" name="educations[0].faculty" placeholder="Программная инженерия">
                     </div>
+                    <div class="mb-2">
+                        <label class="form-label">Год поступления</label>
+                        <input type="number" class="form-control" name="educations[0].enrollmentYear" placeholder="2019">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Год окончания</label>
+                        <input type="number" class="form-control" name="educations[0].graduationYear" placeholder="2023">
+                    </div>
 
                 </div>
             </div>
@@ -175,6 +183,10 @@
                 <div class="mb-2">
                     <label class="form-label">Специальность / Факультет</label>
                     <input type="text" class="form-control" name="educations[` + eduCount + `].faculty" placeholder="Программная инженерия">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Год поступления</label>
+                    <input type="number" class="form-control" name="educations[` + eduCount + `].enrollmentYear" placeholder="2019">
                 </div>
                 <div class="mb-2">
                     <label class="form-label">Год окончания</label>

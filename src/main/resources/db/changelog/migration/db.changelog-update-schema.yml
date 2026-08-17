@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 2026-08-13-add-email-to-resumes
+      id: add-email-to-resumes
       author: Joodar
       preConditions:
         - onFail: MARK_RAN
