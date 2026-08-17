@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 2026-08-13-add-email-to-resumes
-      author: developer
+      author: Joodar
       preConditions:
         - onFail: MARK_RAN
         - not:
@@ -18,7 +18,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 2026-08-13-add-linkedin-to-resumes
-      author: developer
+      author: Joodar
       preConditions:
         - onFail: MARK_RAN
         - not:
@@ -35,7 +35,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 2026-08-13-add-phone-to-resumes
-      author: developer
+      author: Joodar
       preConditions:
         - onFail: MARK_RAN
         - not:
@@ -52,7 +52,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 2026-08-13-add-telegram-to-resumes
-      author: developer
+      author: Joodar
       preConditions:
         - onFail: MARK_RAN
         - not:

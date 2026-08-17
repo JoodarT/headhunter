@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 2026-08-13-add-email-to-resumes
-      author: developer
+      author: Joodar
       changes:
         - addColumn:
             tableName: resumes
