@@ -7,7 +7,10 @@
         <div class="d-flex justify-content-between align-items-start mb-4 border-bottom pb-3">
             <div>
                 <h2 class="mb-1 text-primary">${vacancy.title!"Заголовок не указан"}</h2>
-                <div class="d-flex align-items-center gap-3 mt-2">
+                <#if vacancy.company?? && vacancy.company?has_content>
+                <h5 class="text-secondary mb-2">${vacancy.company}</h5>
+            </#if>
+            <div class="d-flex align-items-center gap-3 mt-2">
                     <span class="fs-4 fw-bold text-success">
                         <#if vacancy.salary??>
                             ${vacancy.salary} KGS

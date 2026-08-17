@@ -45,8 +45,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">Название компаний</label>
-                <textarea class="form-control" id="company" name="company" rows="6" required placeholder="Название компаний"></textarea>
+                <label for="company" class="form-label">Название компании*</label>
+                <input type="text" class="form-control" id="company" name="company" required placeholder="Например: ООО Технологии">
             </div>
         </div>
     </div>

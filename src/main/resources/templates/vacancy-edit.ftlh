@@ -23,6 +23,11 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="company" class="form-label">Название компании*</label>
+                    <input type="text" class="form-control" id="company" name="company" value="${vacancyDto.company!''}" required>
+                </div>
+
+                <div class="mb-3">
                     <label for="categoryId" class="form-label">Категория*</label>
                     <select class="form-select" id="categoryId" name="categoryId" required>
                         <#if categories??>

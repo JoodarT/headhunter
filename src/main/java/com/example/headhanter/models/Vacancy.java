@@ -22,6 +22,9 @@ public class Vacancy {
     @Column(nullable = false)
     private String title;
 
+    @Column(name = "company", length = 150)
+    private String company;
+
     @Lob
     @Column(name = "description", columnDefinition = "CLOB")
     private String description;

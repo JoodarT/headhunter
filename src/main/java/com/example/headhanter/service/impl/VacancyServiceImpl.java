@@ -70,6 +70,7 @@ public class VacancyServiceImpl implements VacancyService {
 
         Vacancy vacancy = Vacancy.builder()
                 .title(dto.getTitle())
+                .company(dto.getCompany())
                 .description(dto.getDescription())
                 .salary(dto.getSalary())
                 .category(categoryService.getById(dto.getCategoryId()))
@@ -93,6 +94,7 @@ public class VacancyServiceImpl implements VacancyService {
         }
 
         vacancy.setTitle(dto.getTitle());
+        vacancy.setCompany(dto.getCompany());
         vacancy.setDescription(dto.getDescription());
         vacancy.setSalary(dto.getSalary());
         vacancy.setUpdateTime(LocalDateTime.now());
@@ -133,6 +135,7 @@ public class VacancyServiceImpl implements VacancyService {
         VacancyResponseDto dto = new VacancyResponseDto();
         dto.setId(vacancy.getId());
         dto.setTitle(vacancy.getTitle());
+        dto.setCompany(vacancy.getCompany());
         dto.setDescription(vacancy.getDescription());
         dto.setSalary(vacancy.getSalary());
         dto.setViews(vacancy.getViews());

@@ -168,6 +168,7 @@ public class VacancyWebController {
         VacancyCreateDto dto = new VacancyCreateDto();
         dto.setEmployerId(vacancy.getEmployerId());
         dto.setTitle(vacancy.getTitle());
+        dto.setCompany(vacancy.getCompany());
         dto.setDescription(vacancy.getDescription());
         dto.setSalary(vacancy.getSalary());
         dto.setCategoryId(vacancy.getCategoryId());

@@ -46,7 +46,10 @@
                         <h5 class="card-title text-primary mb-1">
                             <a href="/vacancies/${vacancy.id}" class="text-decoration-none">${vacancy.title!""}</a>
                         </h5>
-                        <p class="card-text text-muted mb-2">
+                        <#if vacancy.company?? && vacancy.company?has_content>
+                        <p class="card-subtitle mb-1 text-muted">${vacancy.company}</p>
+                    </#if>
+                    <p class="card-text text-muted mb-2">
                             <small>
                                 <#if vacancy.categoryName??>
                                 Категория: ${vacancy.categoryName}

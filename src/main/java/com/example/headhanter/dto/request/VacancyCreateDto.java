@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class VacancyCreateDto {
 
     @NotBlank (message =  "Название компании обязательно")
-    @Size(min = 4, max = 100, message = "Название вакансии должно быть от 3 до 100 символов")
+    @Size(min = 4, max = 100, message = "Название компании должно быть от 4 до 100 символов")
     private String company;
 
     @NotBlank(message = "Название вакансии не может быть пустым")

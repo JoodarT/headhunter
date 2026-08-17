@@ -9,6 +9,7 @@ public class VacancyResponseDto {
     private Long id;
     private Long employerId;
     private String title;
+    private String company;
     private String description;
     private BigDecimal salary;
     private Long categoryId;
