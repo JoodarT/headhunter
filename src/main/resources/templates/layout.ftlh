@@ -73,7 +73,7 @@
 
 <footer class="footer mt-auto py-3 bg-white border-top">
     <div class="container text-center text-muted fs-7">
-        &copy; ${.now?string('yyyy')} HeadHunter App. Все права защищены.
+        &copy; ${.now?string('yyyy')} HH App. Все права защищены.
     </div>
     <li class="nav-item mt-auto text-muted">
         <a class="nav-link ps-5" href="/resumes">Резюме</a>
