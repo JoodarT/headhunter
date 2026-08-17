@@ -39,7 +39,7 @@
 
                 <div class="mb-3">
                     <label for="applicantName" class="form-label">Имя и Фамилия соискателя</label>
-                    <input type="text" class="form-control" id="applicantName" name="applicantName" placeholder="Иван Иванов">
+                    <input type="text" class="form-control" id="applicantName" name="applicantName" placeholder="Асан Асанов">
                 </div>
 
                 <div class="mb-3">
@@ -71,10 +71,7 @@
                         <label for="contactInfo.telegram" class="form-label">Telegram</label>
                         <input type="text" class="form-control" id="contactInfo.telegram" name="contactInfo.telegram" placeholder="@username">
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="contactInfo.linkedin" class="form-label">LinkedIn</label>
-                        <input type="text" class="form-control" id="contactInfo.linkedin" name="contactInfo.linkedin" placeholder="linkedin.com/in/...">
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -123,10 +120,7 @@
                         <label class="form-label">Специальность / Факультет</label>
                         <input type="text" class="form-control" name="educations[0].faculty" placeholder="Программная инженерия">
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Год окончания</label>
-                        <input type="number" class="form-control" name="educations[0].graduationYear" placeholder="2023">
-                    </div>
+
                 </div>
             </div>
         </div>
