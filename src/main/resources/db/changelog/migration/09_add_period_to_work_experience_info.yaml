@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2026-08-14-add-period-to-work-experience-info
+      author: joodar
+      changes:
+        - addColumn:
+            tableName: work_experience_info
+            columns:
+              - column:
+                  name: period
+                  type: VARCHAR(255)

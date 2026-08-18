@@ -1,21 +1,31 @@
 package com.example.headhanter.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
+@Table(name = "education_info")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class EducationInfo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Resume resume;
+
     private String institution;
-    private String program;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String degree;
+    private String faculty;
+
+    @Column(name = "enrollment_year")
+    private Integer enrollmentYear;
+
+    @Column(name = "graduation_year")
+    private Integer graduationYear;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 }

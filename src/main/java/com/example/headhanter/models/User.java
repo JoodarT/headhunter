@@ -1,20 +1,35 @@
 package com.example.headhanter.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.util.List;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
+
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
-   private String email;
-   private String password;
+
    private String name;
+
+   @Column(nullable = false, unique = true)
+   private String email;
+
+   @Column(nullable = false)
+   private String password;
+
    private String phone;
-   private String accountType;
-   private List<ContactsInfo> contacts;
-   private String avatarFileName;
+
+   @Column(name = "avatar_url")
+   private String avatarUrl;
+
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "role_id")
+   private RoleEntity role;
 }

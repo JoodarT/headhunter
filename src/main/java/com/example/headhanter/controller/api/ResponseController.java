@@ -1,20 +1,26 @@
-package com.example.headhanter.controller;
+package com.example.headhanter.controller.api;
 
 import com.example.headhanter.models.RespondedApplicant;
+import com.example.headhanter.models.User;
 import com.example.headhanter.models.Vacancy;
 import com.example.headhanter.service.ResponseService;
+import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/responses")
+@RequestMapping("api/responses")
 @RequiredArgsConstructor
 public class ResponseController {
 
     private final ResponseService responseService;
+    private final UserService userService;
 
     @GetMapping("/by-vacancy/{vacancyId}")
     public List<RespondedApplicant> getResponsesByVacancy(@PathVariable Long vacancyId) {
@@ -27,8 +33,16 @@ public class ResponseController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> respond(@RequestParam Long resumeId, @RequestParam Long vacancyId) {
-        responseService.respondToVacancy(resumeId, vacancyId);
+    public ResponseEntity<Void> respond(
+            @RequestParam Long resumeId,
+            @RequestParam Long vacancyId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        responseService.respondToVacancy(resumeId, vacancyId, currentUser.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -36,12 +50,6 @@ public class ResponseController {
     public List<RespondedApplicant> getAll() {
         return responseService.getAllResponses();
     }
-
-//    @PutMapping("/{id}/confirm")
-//    public ResponseEntity<Void> confirm(@PathVariable Long id, @RequestParam boolean status) {
-//        boolean updated = responseService.updateConfirmation(id, status);
-//        return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
-//    }
 
     @PutMapping("/{id}/confirm")
     public String confirmApplicant(@PathVariable Long id, @RequestParam boolean status) {

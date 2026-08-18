@@ -1,0 +1,62 @@
+<#import "layout.ftlh" as layout>
+
+<@layout.mainLayout title="Войти">
+<div class="row justify-content-center">
+    <div class="col-md-5 bg-white p-4 rounded shadow-sm">
+        <h2 class="mb-4 text-center">Войти</h2>
+
+        <#if registered??>
+        <div class="alert alert-success" role="alert">
+            Вы успешно зарегистрировались! Теперь войдите в аккаунт.
+        </div>
+    </#if>
+
+    <#if error??>
+    <div class="alert alert-danger" role="alert">
+        Неверный email или пароль.
+    </div>
+</#if>
+
+<#if roleMismatch??>
+<div class="alert alert-danger" role="alert">
+    Этот аккаунт зарегистрирован под другой ролью. Проверьте выбор "Соискатель" / "Работодатель" и попробуйте снова.
+</div>
+</#if>
+
+<#if logout??>
+<div class="alert alert-info" role="alert">
+    Вы успешно вышли.
+</div>
+</#if>
+
+<form action="/login" method="post">
+    <div class="mb-4">
+
+        <div class="btn-group w-100" role="group" aria-label="Роль">
+            <input type="radio" class="btn-check" name="role" id="roleApplicant" value="APPLICANT" checked>
+            <label class="btn btn-outline-primary" for="roleApplicant">Ищу работу</label>
+
+            <input type="radio" class="btn-check" name="role" id="roleEmployer" value="EMPLOYER">
+            <label class="btn btn-outline-primary" for="roleEmployer">Ищу сотрудника</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+
+        <i class="bi bi-envelope-at-fill"></i>
+        <label class="form-label">Email</label>
+        <input type="email" name="username" class="form-control" required placeholder="name@example.com">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Пароль</label>
+        <input type="password" name="password" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Войти</button>
+</form>
+
+<div class="mt-3 text-center">
+    <a href="/register" class="text-decoration-none">Зарегистрироваться</a>
+</div>
+</div>
+</div>
+</@layout.mainLayout>
