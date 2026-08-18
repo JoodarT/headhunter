@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContactsInfo {
+
     private String phone;
     private String email;
     private String telegram;
