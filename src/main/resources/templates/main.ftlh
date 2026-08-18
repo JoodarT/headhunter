@@ -11,21 +11,21 @@
     <div class="carousel-inner rounded shadow-sm">
         <div class="carousel-item active">
             <div class="d-flex flex-column align-items-center justify-content-center text-white text-center p-5"
-                 style="background: linear-gradient(135deg, #0d6efd, #0a58ca); min-height: 320px;">
+                 style="background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/carousel/slide1.png') center/cover no-repeat; min-height: 320px;">
                 <h1 class="fw-bold">Найдите работу мечты</h1>
                 <p class="fs-5 mb-0">Тысячи вакансий от проверенных работодателей</p>
             </div>
         </div>
         <div class="carousel-item">
             <div class="d-flex flex-column align-items-center justify-content-center text-white text-center p-5"
-                 style="background: linear-gradient(135deg, #198754, #146c43); min-height: 320px;">
+                 style="background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/carousel/slide2.png') center/cover no-repeat; min-height: 320px;">
                 <h1 class="fw-bold">Найдите лучших сотрудников</h1>
                 <p class="fs-5 mb-0">Публикуйте вакансии и просматривайте резюме соискателей</p>
             </div>
         </div>
         <div class="carousel-item">
             <div class="d-flex flex-column align-items-center justify-content-center text-white text-center p-5"
-                 style="background: linear-gradient(135deg, #6f42c1, #59359a); min-height: 320px;">
+                 style="background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/carousel/slide3.jpg') center/cover no-repeat; min-height: 320px;">
                 <h1 class="fw-bold">Быстро и просто</h1>
                 <p class="fs-5 mb-0">Регистрация занимает меньше минуты</p>
             </div>
