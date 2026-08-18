@@ -1,6 +1,7 @@
 package com.example.headhanter.service;
 
 import com.example.headhanter.dto.request.VacancyCreateDto;
+import com.example.headhanter.dto.response.CompanyResponseDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.models.Vacancy;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,9 @@ public interface VacancyService {
     VacancyResponseDto getById(Long id);
     List<VacancyResponseDto> getRespondedVacanciesByUser(Long userId);
     List<VacancyResponseDto> searchVacancy(String keywords);
+    List<VacancyResponseDto> getVacanciesByEmployer(Long employerId);
+    List<VacancyResponseDto> getVacanciesByCompany(String company);
+    List<CompanyResponseDto> getAllCompanies();
     VacancyResponseDto update(Long id, VacancyCreateDto dto, Long currentUserId);
     void delete(Long id, Long currentUserId);
 

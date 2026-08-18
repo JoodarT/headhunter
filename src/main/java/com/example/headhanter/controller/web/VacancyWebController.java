@@ -42,6 +42,7 @@ public class VacancyWebController {
             @RequestParam(required = false) String sort,
             @RequestParam(defaultValue = "desc") String direction,
             @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "company", required = false) String company,
             Model model
     ) {
         boolean sortByResponses = "responses".equals(sort);
@@ -59,6 +60,9 @@ public class VacancyWebController {
         if (search != null && !search.trim().isEmpty()){
 
             model.addAttribute("vacancies", vacancyService.searchVacancy(search));
+        } else if (company != null && !company.trim().isEmpty()) {
+            model.addAttribute("vacancies", vacancyService.getVacanciesByCompany(company.trim()));
+            model.addAttribute("company", company.trim());
         }
         return "vacancies";
     }

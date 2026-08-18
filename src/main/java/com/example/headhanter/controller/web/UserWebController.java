@@ -3,7 +3,9 @@ package com.example.headhanter.controller.web;
 import com.example.headhanter.dto.request.UserDto;
 import com.example.headhanter.models.Role;
 import com.example.headhanter.models.User;
+import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
+import com.example.headhanter.service.VacancyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserWebController {
 
     private final UserService userService;
+    private final VacancyService vacancyService;
+    private final ResumeService resumeService;
 
     @GetMapping
     public String showProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -33,6 +37,14 @@ public class UserWebController {
 
         User user = userService.getUserByEmail(userDetails.getUsername());
         model.addAttribute("user", user);
+
+        String role = user.getRole() != null ? user.getRole().getRole() : null;
+        if ("EMPLOYER".equals(role)) {
+            model.addAttribute("myVacancies", vacancyService.getVacanciesByEmployer(user.getId()));
+        } else if ("APPLICANT".equals(role)) {
+            model.addAttribute("myResumes", resumeService.getResumesByUserId(user.getId()));
+        }
+
         return "profile";
     }
 

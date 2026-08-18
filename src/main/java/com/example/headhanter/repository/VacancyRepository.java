@@ -36,4 +36,13 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     )
     List<Vacancy> searchByKeyword(@Param("keyword") String keyword);
 
+    List<Vacancy> findByEmployerIdAndIsActiveTrue(Long employerId);
+
+    List<Vacancy> findByCompanyAndIsActiveTrue(String company);
+
+    @Query("SELECT v.company, COUNT(v) FROM Vacancy v " +
+            "WHERE v.isActive = true AND v.company IS NOT NULL AND v.company <> '' " +
+            "GROUP BY v.company ORDER BY COUNT(v) DESC")
+    List<Object[]> countActiveVacanciesGroupedByCompany();
+
 }

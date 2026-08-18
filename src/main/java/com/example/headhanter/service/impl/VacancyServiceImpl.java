@@ -1,6 +1,7 @@
 package com.example.headhanter.service.impl;
 
 import com.example.headhanter.dto.request.VacancyCreateDto;
+import com.example.headhanter.dto.response.CompanyResponseDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.models.Vacancy;
@@ -159,5 +160,26 @@ public class VacancyServiceImpl implements VacancyService {
             : vacancyRepository.searchByKeyword(keyword.trim());
 
         return vacancies.stream().map(this::mapToResponseDto).toList();
+    }
+
+    @Override
+    public List<VacancyResponseDto> getVacanciesByEmployer(Long employerId) {
+        return vacancyRepository.findByEmployerIdAndIsActiveTrue(employerId).stream()
+                .map(this::mapToResponseDto)
+                .toList();
+    }
+
+    @Override
+    public List<VacancyResponseDto> getVacanciesByCompany(String company) {
+        return vacancyRepository.findByCompanyAndIsActiveTrue(company).stream()
+                .map(this::mapToResponseDto)
+                .toList();
+    }
+
+    @Override
+    public List<CompanyResponseDto> getAllCompanies() {
+        return vacancyRepository.countActiveVacanciesGroupedByCompany().stream()
+                .map(row -> new CompanyResponseDto((String) row[0], (Long) row[1]))
+                .toList();
     }
 }
