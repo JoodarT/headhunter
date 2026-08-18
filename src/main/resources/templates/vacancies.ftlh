@@ -2,7 +2,7 @@
 <@layout.mainLayout title="Список вакансий" fluid=true>
 <div class="mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <h2>Список вакансий</h2>
+        <h2>Список вакансий<#if company?? && company?has_content> &middot; ${company}</#if></h2>
         <div class="d-flex gap-2 align-items-center">
             <#if sort?? && sort == "responses">
             <a href="/vacancies?sort=responses&amp;direction=<#if direction?? && direction == "asc">desc<#else>asc</#if>"
@@ -36,6 +36,13 @@
 <!--    </div>-->
 </#if>
 
+    <#if company?? && company?has_content>
+    <div class="alert alert-secondary d-flex justify-content-between align-items-center py-2">
+        <span>Компания: <strong>${company}</strong></span>
+        <a href="/vacancies" class="btn btn-sm btn-outline-secondary">Сбросить фильтр</a>
+    </div>
+</#if>
+
 <div class="row">
         <#if vacancies?? && (vacancies?size > 0)>
         <#list vacancies as vacancy>
@@ -47,7 +54,9 @@
                             <a href="/vacancies/${vacancy.id}" class="text-decoration-none">${vacancy.title!""}</a>
                         </h5>
                         <#if vacancy.company?? && vacancy.company?has_content>
-                        <p class="card-subtitle mb-1 text-muted">${vacancy.company}</p>
+                        <p class="card-subtitle mb-1 text-muted">
+                            <a href="/vacancies?company=${vacancy.company?url('UTF-8')}" class="text-decoration-none text-muted">${vacancy.company}</a>
+                        </p>
                     </#if>
                     <p class="card-text text-muted mb-2">
                             <small>

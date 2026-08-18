@@ -41,6 +41,9 @@
                         <a class="nav-link" href="/vacancies">Вакансии</a>
                     </li>
                     </#if>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/companies">Компании</a>
+                    </li>
                 </ul>
 
                 <ul class="navbar-nav ms-auto">

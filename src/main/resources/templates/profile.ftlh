@@ -53,6 +53,52 @@
     <#else>
     <div class="alert alert-warning">Пользователь не найден или вы не авторизованы.</div>
 </#if>
+
+    <#if myVacancies??>
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Мои вакансии (${myVacancies?size})</h4>
+                <a href="/vacancies/create" class="btn btn-success btn-sm">+ Создать вакансию</a>
+            </div>
+            <#if myVacancies?size gt 0>
+            <ul class="list-group list-group-flush">
+                <#list myVacancies as vacancy>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="/vacancies/${vacancy.id}" class="text-decoration-none">${vacancy.title!""}</a>
+                    <span class="text-muted small">Откликов: ${vacancy.responsesCount!0}</span>
+                </li>
+            </#list>
+            </ul>
+            <#else>
+            <p class="text-muted mb-0">Вы ещё не создали ни одной вакансии.</p>
+        </#if>
+        </div>
+    </div>
+</#if>
+
+    <#if myResumes??>
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Мои резюме (${myResumes?size})</h4>
+                <a href="/resumes/create" class="btn btn-success btn-sm">+ Создать резюме</a>
+            </div>
+            <#if myResumes?size gt 0>
+            <ul class="list-group list-group-flush">
+                <#list myResumes as resume>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="/resumes/${resume.id}" class="text-decoration-none">${resume.title!""}</a>
+                    <span class="text-muted small">${resume.categoryName!""}</span>
+                </li>
+            </#list>
+            </ul>
+            <#else>
+            <p class="text-muted mb-0">Вы ещё не создали ни одного резюме.</p>
+        </#if>
+        </div>
+    </div>
+</#if>
 </div>
 </div>
 </@layout.mainLayout>
