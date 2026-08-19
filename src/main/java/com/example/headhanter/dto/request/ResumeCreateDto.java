@@ -30,7 +30,7 @@ public class ResumeCreateDto {
 
     @NotNull(message = "Контактные данные обязательны")
     @Valid
-    private ContactsInfoDto contactInfo;
+    private List<ContactInfoDto> contactInfos;
 
     @NotEmpty(message = "Добавьте хотя бы одно место работы")
     @Valid
