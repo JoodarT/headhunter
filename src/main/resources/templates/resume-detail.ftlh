@@ -103,34 +103,38 @@
 </div>
 
 <!-- Контакты -->
+<#function contactTypeLabel typeName>
+    <#switch typeName>
+        <#case "PHONE">
+            <#return "Телефон">
+        <#case "EMAIL">
+            <#return "Email">
+        <#case "TELEGRAM">
+            <#return "Telegram">
+        <#case "LINKEDIN">
+            <#return "LinkedIn">
+        <#default>
+            <#return typeName>
+    </#switch>
+</#function>
 <div class="mb-4">
     <h5 class="text-muted text-uppercase fs-6 mb-3">Контакты</h5>
-    <#if resume.contactInfo??>
+    <#if resume.contactInfos?? && resume.contactInfos?has_content>
     <div class="row g-2">
-        <#if resume.contactInfo.email?? && resume.contactInfo.email?has_content>
+        <#list resume.contactInfos as c>
         <div class="col-md-6">
-            <strong>Email:</strong> <a href="mailto:${resume.contactInfo.email}">${resume.contactInfo.email}</a>
+            <strong>${contactTypeLabel(c.typeName)}:</strong>
+            <#if c.typeName == "EMAIL">
+            <a href="mailto:${c.value}">${c.value}</a>
+            <#else>
+            ${c.value}
+            </#if>
         </div>
-    </#if>
-    <#if resume.contactInfo.phone?? && resume.contactInfo.phone?has_content>
-    <div class="col-md-6">
-        <strong>Телефон:</strong> ${resume.contactInfo.phone}
+        </#list>
     </div>
-</#if>
-<#if resume.contactInfo.telegram?? && resume.contactInfo.telegram?has_content>
-<div class="col-md-6">
-    <strong>Telegram:</strong> ${resume.contactInfo.telegram}
-</div>
-</#if>
-<#if resume.contactInfo.linkedin?? && resume.contactInfo.linkedin?has_content>
-<div class="col-md-6">
-    <strong>LinkedIn:</strong> ${resume.contactInfo.linkedin}
-</div>
-</#if>
-</div>
-<#else>
-<p class="text-muted italic">Контакты не указаны</p>
-</#if>
+    <#else>
+    <p class="text-muted italic">Контакты не указаны</p>
+    </#if>
 </div>
 
 <!-- Кнопка назад -->

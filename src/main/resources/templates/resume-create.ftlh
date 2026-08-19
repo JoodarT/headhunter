@@ -54,24 +54,32 @@
             </div>
         </div>
 
+        <#function contactTypeLabel typeName>
+            <#switch typeName>
+                <#case "PHONE">
+                    <#return "Телефон">
+                <#case "EMAIL">
+                    <#return "Email">
+                <#case "TELEGRAM">
+                    <#return "Telegram">
+                <#case "LINKEDIN">
+                    <#return "LinkedIn">
+                <#default>
+                    <#return typeName>
+            </#switch>
+        </#function>
         <#-- Контактная информация -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-light fw-bold">Контактная информация</div>
             <div class="card-body">
                 <div class="row">
+                    <#list contactTypes as ct>
                     <div class="col-md-3 mb-3">
-                        <label for="contactInfo.phone" class="form-label">Телефон</label>
-                        <input type="text" class="form-control" id="contactInfo.phone" name="contactInfo.phone" placeholder="+996 555 00-00-00">
+                        <label for="contactInfos${ct_index}.value" class="form-label">${contactTypeLabel(ct.typeName)}</label>
+                        <input type="hidden" name="contactInfos[${ct_index}].contactTypeId" value="${ct.id?c}">
+                        <input type="text" class="form-control" id="contactInfos${ct_index}.value" name="contactInfos[${ct_index}].value">
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="contactInfo.email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="contactInfo.email" name="contactInfo.email" placeholder="example@mail.com">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="contactInfo.telegram" class="form-label">Telegram</label>
-                        <input type="text" class="form-control" id="contactInfo.telegram" name="contactInfo.telegram" placeholder="@username">
-                    </div>
-
+                    </#list>
                 </div>
             </div>
         </div>

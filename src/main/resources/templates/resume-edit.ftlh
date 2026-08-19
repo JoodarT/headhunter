@@ -56,23 +56,36 @@
     <div class="card mb-4">
         <div class="card-header fw-bold">Контактная информация</div>
         <div class="card-body">
+            <#function getContactValue contactInfos typeId>
+                <#list contactInfos![] as c>
+                    <#if c.contactTypeId?? && c.contactTypeId == typeId>
+                        <#return c.value!''>
+                    </#if>
+                </#list>
+                <#return ''>
+            </#function>
+            <#function contactTypeLabel typeName>
+                <#switch typeName>
+                    <#case "PHONE">
+                        <#return "Телефон">
+                    <#case "EMAIL">
+                        <#return "Email">
+                    <#case "TELEGRAM">
+                        <#return "Telegram">
+                    <#case "LINKEDIN">
+                        <#return "LinkedIn">
+                    <#default>
+                        <#return typeName>
+                </#switch>
+            </#function>
             <div class="row">
+                <#list contactTypes as ct>
                 <div class="col-md-3 mb-3">
-                    <label for="contactInfo.phone" class="form-label">Телефон</label>
-                    <input type="text" class="form-control" id="contactInfo.phone" name="contactInfo.phone" value="${(resume.contactInfo.phone)!''}">
+                    <label for="contactInfos${ct_index}.value" class="form-label">${contactTypeLabel(ct.typeName)}</label>
+                    <input type="hidden" name="contactInfos[${ct_index}].contactTypeId" value="${ct.id?c}">
+                    <input type="text" class="form-control" id="contactInfos${ct_index}.value" name="contactInfos[${ct_index}].value" value="${getContactValue(resume.contactInfos, ct.id)}">
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label for="contactInfo.email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="contactInfo.email" name="contactInfo.email" value="${(resume.contactInfo.email)!''}">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="contactInfo.telegram" class="form-label">Telegram</label>
-                    <input type="text" class="form-control" id="contactInfo.telegram" name="contactInfo.telegram" value="${(resume.contactInfo.telegram)!''}">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="contactInfo.linkedin" class="form-label">LinkedIn</label>
-                    <input type="text" class="form-control" id="contactInfo.linkedin" name="contactInfo.linkedin" value="${(resume.contactInfo.linkedin)!''}">
-                </div>
+                </#list>
             </div>
         </div>
     </div>

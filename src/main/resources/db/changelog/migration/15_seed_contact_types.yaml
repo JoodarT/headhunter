@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15-seed-contact-types
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM contact_types
+      changes:
+        - insert:
+            tableName: contact_types
+            columns:
+              - column: { name: type_name, value: "PHONE" }
+        - insert:
+            tableName: contact_types
+            columns:
+              - column: { name: type_name, value: "EMAIL" }
+        - insert:
+            tableName: contact_types
+            columns:
+              - column: { name: type_name, value: "TELEGRAM" }
+        - insert:
+            tableName: contact_types
+            columns:
+              - column: { name: type_name, value: "LINKEDIN" }

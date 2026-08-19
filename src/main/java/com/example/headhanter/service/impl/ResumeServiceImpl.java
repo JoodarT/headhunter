@@ -1,6 +1,6 @@
 package com.example.headhanter.service.impl;
 
-import com.example.headhanter.dto.request.ContactsInfoDto;
+import com.example.headhanter.dto.request.ContactInfoDto;
 import com.example.headhanter.dto.request.EducationInfoDto;
 import com.example.headhanter.dto.request.ResumeCreateDto;
 import com.example.headhanter.dto.request.WorkExperienceInfoDto;
@@ -8,6 +8,7 @@ import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.models.*;
 import com.example.headhanter.repository.ResumeRepository;
 import com.example.headhanter.service.CategoryService;
+import com.example.headhanter.service.ContactTypeService;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final ContactTypeService contactTypeService;
 
     @Override
     @Transactional
@@ -120,18 +122,26 @@ public class ResumeServiceImpl implements ResumeService {
             resume.setSalary(BigDecimal.valueOf(dto.getExpectedSalary()));
         }
 
-        if (dto.getContactInfo() != null) {
-            ContactsInfoDto c = dto.getContactInfo();
-            resume.setContactInfo(ContactsInfo.builder()
-                    .phone(c.getPhone())
-                    .email(c.getEmail())
-                    .telegram(c.getTelegram())
-                    .linkedin(c.getLinkedin())
-                    .build());
-        }
-
+        syncContactInfos(resume, dto.getContactInfos());
         syncExperiences(resume, dto.getExperiences());
         syncEducations(resume, dto.getEducations());
+    }
+
+    private void syncContactInfos(Resume resume, List<ContactInfoDto> contactInfos) {
+        resume.getContactInfos().clear();
+        if (contactInfos == null) {
+            return;
+        }
+        for (ContactInfoDto d : contactInfos) {
+            if (d.getContactTypeId() == null || d.getValue() == null || d.getValue().isBlank()) {
+                continue;
+            }
+            resume.getContactInfos().add(ContactInfo.builder()
+                    .contactType(contactTypeService.getById(d.getContactTypeId()))
+                    .value(d.getValue())
+                    .resume(resume)
+                    .build());
+        }
     }
 
     private void syncExperiences(Resume resume, List<WorkExperienceInfoDto> experiences) {
@@ -190,15 +200,13 @@ public class ResumeServiceImpl implements ResumeService {
 
         dto.setCreatedDate(resume.getCreatedDate());
 
-        if (resume.getContactInfo() != null) {
-            ContactsInfo c = resume.getContactInfo();
-            ContactsInfoDto contactDto = new ContactsInfoDto();
-            contactDto.setPhone(c.getPhone());
-            contactDto.setEmail(c.getEmail());
-            contactDto.setTelegram(c.getTelegram());
-            contactDto.setLinkedin(c.getLinkedin());
-            dto.setContactInfo(contactDto);
-        }
+        dto.setContactInfos(resume.getContactInfos().stream().map(c -> {
+            ContactInfoDto d = new ContactInfoDto();
+            d.setContactTypeId(c.getContactType().getId());
+            d.setTypeName(c.getContactType().getTypeName());
+            d.setValue(c.getValue());
+            return d;
+        }).toList());
 
         dto.setExperiences(resume.getExperiences().stream().map(e -> {
             WorkExperienceInfoDto d = new WorkExperienceInfoDto();
