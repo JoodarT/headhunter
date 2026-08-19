@@ -1,7 +1,6 @@
 package com.example.headhanter.service.impl;
 
 import com.example.headhanter.dto.request.UserDto;
-import com.example.headhanter.models.Role;
 import com.example.headhanter.models.RoleEntity;
 import com.example.headhanter.models.User;
 import com.example.headhanter.repository.UserRepository;
@@ -45,8 +44,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    private RoleEntity resolveRole(Role accountType) {
-        String roleName = (accountType != null) ? accountType.name() : Role.APPLICANT.name();
+    private RoleEntity resolveRole(String accountType) {
+        String roleName = (accountType != null && !accountType.isBlank()) ? accountType : "APPLICANT";
         return roleService.getByName(roleName);
     }
 

@@ -1,6 +1,5 @@
 package com.example.headhanter.service.impl;
 
-import com.example.headhanter.models.Role;
 import com.example.headhanter.models.RoleEntity;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.RoleService;
@@ -33,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Пользователь с email " + email + " не найден");
         }
 
-        RoleEntity role = user.getRole() != null ? user.getRole() : roleService.getByName(Role.APPLICANT.name());
+        RoleEntity role = user.getRole() != null ? user.getRole() : roleService.getByName("APPLICANT");
         String authority = role.getAuthority().getAuthority();
 
         return org.springframework.security.core.userdetails.User.builder()
