@@ -1,6 +1,5 @@
 package com.example.headhanter.config;
 
-import com.example.headhanter.models.Role;
 import com.example.headhanter.service.impl.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,35 +55,35 @@ public class SecurityConfig {
 
 
 
-                        .requestMatchers(HttpMethod.GET, "/resumes").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers(HttpMethod.GET, "/vacancies").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.GET, "/resumes").hasRole("EMPLOYER")
+                        .requestMatchers(HttpMethod.GET, "/vacancies").hasRole("APPLICANT")
 
-                        .requestMatchers(HttpMethod.GET, "/resumes/create", "/resumes/*/edit").hasRole(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.POST, "/resumes/create", "/resumes/*/edit", "/resumes/*/delete").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.GET, "/resumes/create", "/resumes/*/edit").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.POST, "/resumes/create", "/resumes/*/edit", "/resumes/*/delete").hasRole("APPLICANT")
 
-                        .requestMatchers(HttpMethod.GET, "/vacancies/create", "/vacancies/*/edit").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers(HttpMethod.POST, "/vacancies/create", "/vacancies/*/edit", "/vacancies/*/delete").hasRole(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.GET, "/vacancies/create", "/vacancies/*/edit").hasRole("EMPLOYER")
+                        .requestMatchers(HttpMethod.POST, "/vacancies/create", "/vacancies/*/edit", "/vacancies/*/delete").hasRole("EMPLOYER")
 
-                        .requestMatchers(HttpMethod.POST, "/vacancies/*/respond").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.POST, "/vacancies/*/respond").hasRole("APPLICANT")
 
                         .requestMatchers("/", "/register", "/login", "/resumes/**", "/vacancies/**").permitAll()
                         .requestMatchers("/profile/**").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/users", "/users").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/api/vacancies/**").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers(HttpMethod.PUT, "/api/vacancies/**").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/vacancies/**").hasRole(Role.EMPLOYER.name())
+                        .requestMatchers(HttpMethod.POST, "/api/vacancies/**").hasRole("EMPLOYER")
+                        .requestMatchers(HttpMethod.PUT, "/api/vacancies/**").hasRole("EMPLOYER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/vacancies/**").hasRole("EMPLOYER")
                         .requestMatchers(HttpMethod.GET, "/api/vacancies/**").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/api/resumes/**").hasRole(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.PUT, "/api/resumes/**").hasRole(Role.APPLICANT.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/resumes/**").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.POST, "/api/resumes/**").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.PUT, "/api/resumes/**").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/resumes/**").hasRole("APPLICANT")
                         .requestMatchers(HttpMethod.GET, "/api/resumes/**").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/api/responses").hasRole(Role.APPLICANT.name())
-                        .requestMatchers("/api/responses/by-vacancy/**", "/api/responses/*/confirm").hasRole(Role.EMPLOYER.name())
-                        .requestMatchers("/api/responses/my-vacancies/**").hasRole(Role.APPLICANT.name())
+                        .requestMatchers(HttpMethod.POST, "/api/responses").hasRole("APPLICANT")
+                        .requestMatchers("/api/responses/by-vacancy/**", "/api/responses/*/confirm").hasRole("EMPLOYER")
+                        .requestMatchers("/api/responses/my-vacancies/**").hasRole("APPLICANT")
 
                         .anyRequest().permitAll()
                 )

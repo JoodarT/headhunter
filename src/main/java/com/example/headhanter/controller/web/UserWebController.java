@@ -1,7 +1,6 @@
 package com.example.headhanter.controller.web;
 
 import com.example.headhanter.dto.request.UserDto;
-import com.example.headhanter.models.Role;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
@@ -60,7 +59,7 @@ public class UserWebController {
         userDto.setName(currentUser.getName());
         userDto.setPhone(currentUser.getPhone());
         if (currentUser.getRole() != null) {
-            userDto.setAccountType(Role.valueOf(currentUser.getRole().getRole()));
+            userDto.setAccountType(currentUser.getRole().getRole());
         }
 
         model.addAttribute("userDto", userDto);
