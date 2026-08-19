@@ -1,6 +1,6 @@
 package com.example.headhanter.dto.response;
 
-import com.example.headhanter.dto.request.ContactsInfoDto;
+import com.example.headhanter.dto.request.ContactInfoDto;
 import com.example.headhanter.dto.request.EducationInfoDto;
 import com.example.headhanter.dto.request.WorkExperienceInfoDto;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class ResumeResponseDto {
     private Double expectedSalary;
     private LocalDateTime createdDate;
 
-    private ContactsInfoDto contactInfo;
+    private List<ContactInfoDto> contactInfos;
     private List<WorkExperienceInfoDto> experiences;
     private List<EducationInfoDto> educations;
 }
