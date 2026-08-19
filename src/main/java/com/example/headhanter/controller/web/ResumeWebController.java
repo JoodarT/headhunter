@@ -4,6 +4,7 @@ import com.example.headhanter.dto.request.ResumeCreateDto;
 import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.models.User;
 import com.example.headhanter.service.CategoryService;
+import com.example.headhanter.service.ContactTypeService;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
 import jakarta.validation.Valid;
@@ -23,6 +24,7 @@ public class ResumeWebController {
     private final ResumeService resumeService;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final ContactTypeService contactTypeService;
 
     @GetMapping
     public String getAllResumes(
@@ -50,6 +52,7 @@ public class ResumeWebController {
         }
         model.addAttribute("resumeDto", new ResumeCreateDto());
         model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("contactTypes", contactTypeService.getAll());
         return "resume-create";
     }
 
@@ -66,6 +69,7 @@ public class ResumeWebController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAll());
+            model.addAttribute("contactTypes", contactTypeService.getAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
             return "resume-create";
         }
@@ -97,6 +101,7 @@ public class ResumeWebController {
 
         model.addAttribute("resume", resume);
         model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("contactTypes", contactTypeService.getAll());
         return "resume-edit";
     }
 
@@ -116,6 +121,7 @@ public class ResumeWebController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("resume", resumeService.getResumeById(id));
             model.addAttribute("categories", categoryService.getAll());
+            model.addAttribute("contactTypes", contactTypeService.getAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
             return "resume-edit";
         }
