@@ -3,6 +3,9 @@ package com.example.headhanter.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
 @Getter
@@ -18,4 +21,12 @@ public class Category {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    @Builder.Default
+    private List<Vacancy> vacancies = new ArrayList<>();
+
+    @OneToMany(mappedBy = "category")
+    @Builder.Default
+    private List<Resume> resumes = new ArrayList<>();
 }

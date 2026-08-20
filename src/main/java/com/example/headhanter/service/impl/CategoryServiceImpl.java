@@ -1,6 +1,8 @@
 package com.example.headhanter.service.impl;
 
 import com.example.headhanter.models.Category;
+import com.example.headhanter.models.Resume;
+import com.example.headhanter.models.Vacancy;
 import com.example.headhanter.repository.CategoryRepository;
 import com.example.headhanter.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +28,21 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Категория с id " + id + " не найдена"));
+    }
+
+    @Override
+    public List<Vacancy> getActiveVacanciesByCategory(Long categoryId) {
+        Category category = getById(categoryId);
+        return category.getVacancies().stream()
+                .filter(Vacancy::getIsActive)
+                .toList();
+    }
+
+    @Override
+    public List<Resume> getActiveResumesByCategory(Long categoryId) {
+        Category category = getById(categoryId);
+        return category.getResumes().stream()
+                .filter(Resume::getIsActive)
+                .toList();
     }
 }
