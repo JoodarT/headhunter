@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User createUser(UserDto userDto) {
-        if (userRepository.existsByEmail(userDto.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(userDto.getEmail())) {
             throw new IllegalArgumentException("Пользователь с email " + userDto.getEmail() + " уже существует");
         }
 
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(id);
 
         if (userDto.getEmail() != null && !userDto.getEmail().equalsIgnoreCase(user.getEmail())
-                && userRepository.existsByEmail(userDto.getEmail())) {
+                && userRepository.existsByEmailIgnoreCase(userDto.getEmail())) {
             throw new IllegalArgumentException("Пользователь с email " + userDto.getEmail() + " уже существует");
         }
 
@@ -100,13 +100,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new NoSuchElementException("Пользователь не найден"));
     }
 
     @Override
     public boolean checkUserExists(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmailIgnoreCase(email);
     }
 
     @Override
