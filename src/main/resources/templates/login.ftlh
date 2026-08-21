@@ -30,6 +30,9 @@
 </#if>
 
 <form action="/login" method="post">
+    <#if _csrf??>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </#if>
     <div class="mb-4">
 
         <div class="btn-group w-100" role="group" aria-label="Роль">

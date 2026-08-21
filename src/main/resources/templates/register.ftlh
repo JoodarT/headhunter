@@ -11,6 +11,9 @@
     </#if>
 
     <form action="/register" method="post">
+        <#if _csrf??>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </#if>
         <div class="mb-3">
             <label class="form-label">Имя</label>
             <input type="text" name="name" class="form-control" value="${(userDto.name)!''}" required>
