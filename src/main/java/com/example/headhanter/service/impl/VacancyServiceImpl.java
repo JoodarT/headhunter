@@ -170,10 +170,10 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<VacancyResponseDto> getVacanciesByCompany(String company) {
-        return vacancyRepository.findByCompanyAndIsActiveTrue(company).stream()
-                .map(this::mapToResponseDto)
-                .toList();
+    public Page<VacancyResponseDto> getVacanciesByCompany(String company, int page, int size) {
+        Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
+        return vacancyRepository.findByCompanyAndIsActiveTrue(company, pageable)
+                .map(this::mapToResponseDto);
     }
 
     @Override

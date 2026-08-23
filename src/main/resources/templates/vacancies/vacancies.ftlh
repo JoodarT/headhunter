@@ -102,15 +102,15 @@
 <nav class="mt-4" aria-label="Страницы">
     <ul class="pagination justify-content-center">
         <li class="page-item <#if currentPage lte 0>disabled</#if>">
-            <a class="page-link" href="/vacancies?page=${currentPage - 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if>">Назад</a>
+            <a class="page-link" href="/vacancies?page=${currentPage - 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if>">Назад</a>
         </li>
         <#list 0..(totalPages - 1) as p>
         <li class="page-item <#if p == currentPage>active</#if>">
-            <a class="page-link" href="/vacancies?page=${p}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if>">${p + 1}</a>
+            <a class="page-link" href="/vacancies?page=${p}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if>">${p + 1}</a>
         </li>
     </#list>
     <li class="page-item <#if currentPage gte (totalPages - 1)>disabled</#if>">
-        <a class="page-link" href="/vacancies?page=${currentPage + 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if>">Вперёд</a>
+        <a class="page-link" href="/vacancies?page=${currentPage + 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if>">Вперёд</a>
     </li>
     </ul>
 </nav>

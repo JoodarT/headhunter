@@ -48,22 +48,26 @@ public class VacancyWebController {
         boolean sortByResponses = "responses".equals(sort);
         boolean ascending = "asc".equalsIgnoreCase(direction);
 
-        Page<VacancyResponseDto> vacancyPage = vacancyService.getAllPaged(page, PAGE_SIZE, sortByResponses, ascending);
+        Page<VacancyResponseDto> vacancyPage;
 
-        model.addAttribute("vacancies", vacancyPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", vacancyPage.getTotalPages());
-        model.addAttribute("sort", sort);
-        model.addAttribute("direction", direction);
-//        model.addAttribute("vacancies", vacancyService);
-
-        if (search != null && !search.trim().isEmpty()){
-
+        if (search != null && !search.trim().isEmpty()) {
+            vacancyPage = null;
             model.addAttribute("vacancies", vacancyService.searchVacancy(search));
         } else if (company != null && !company.trim().isEmpty()) {
-            model.addAttribute("vacancies", vacancyService.getVacanciesByCompany(company.trim()));
+            vacancyPage = vacancyService.getVacanciesByCompany(company.trim(), page, PAGE_SIZE);
             model.addAttribute("company", company.trim());
+        } else {
+            vacancyPage = vacancyService.getAllPaged(page, PAGE_SIZE, sortByResponses, ascending);
         }
+
+        if (vacancyPage != null) {
+            model.addAttribute("vacancies", vacancyPage.getContent());
+            model.addAttribute("totalPages", vacancyPage.getTotalPages());
+        }
+        model.addAttribute("currentPage", page);
+        model.addAttribute("sort", sort);
+        model.addAttribute("direction", direction);
+
         return "vacancies/vacancies";
     }
 

@@ -16,7 +16,8 @@ public interface VacancyService {
     List<VacancyResponseDto> getRespondedVacanciesByUser(Long userId);
     List<VacancyResponseDto> searchVacancy(String keywords);
     List<VacancyResponseDto> getVacanciesByEmployer(Long employerId);
-    List<VacancyResponseDto> getVacanciesByCompany(String company);
+
+    Page<VacancyResponseDto> getVacanciesByCompany(String company, int page, int size);
     List<CompanyResponseDto> getAllCompanies();
     VacancyResponseDto update(Long id, VacancyCreateDto dto, Long currentUserId);
     void delete(Long id, Long currentUserId);
