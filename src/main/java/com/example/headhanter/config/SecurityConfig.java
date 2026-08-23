@@ -58,7 +58,6 @@ public class SecurityConfig {
 
 
                         .requestMatchers(HttpMethod.GET, "/resumes").hasRole("EMPLOYER")
-                        .requestMatchers(HttpMethod.GET, "/vacancies").hasRole("APPLICANT")
 
                         .requestMatchers(HttpMethod.GET, "/resumes/create", "/resumes/*/edit").hasRole("APPLICANT")
                         .requestMatchers(HttpMethod.POST, "/resumes/create", "/resumes/*/edit", "/resumes/*/delete").hasRole("APPLICANT")
@@ -68,7 +67,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/vacancies/*/respond").hasRole("APPLICANT")
 
-                        .requestMatchers("/", "/register", "/login", "/resumes/**", "/vacancies/**").permitAll()
+                        .requestMatchers("/", "/register", "/login", "/resumes/**", "/vacancies", "/vacancies/**").permitAll()
                         .requestMatchers("/profile/**").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/users", "/users").permitAll()
