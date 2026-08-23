@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
 
-
+                        .requestMatchers(HttpMethod.GET, "/companies").hasRole("APPLICANT")
                         .requestMatchers(HttpMethod.GET, "/resumes").hasRole("EMPLOYER")
 
                         .requestMatchers(HttpMethod.GET, "/resumes/create", "/resumes/*/edit").hasRole("APPLICANT")
