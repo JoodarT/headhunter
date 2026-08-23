@@ -64,7 +64,7 @@ public class VacancyWebController {
             model.addAttribute("vacancies", vacancyService.getVacanciesByCompany(company.trim()));
             model.addAttribute("company", company.trim());
         }
-        return "vacancies";
+        return "vacancies/vacancies";
     }
 
     @GetMapping("/create")
@@ -74,7 +74,7 @@ public class VacancyWebController {
         }
         model.addAttribute("vacancyDto", new VacancyCreateDto());
         model.addAttribute("categories", categoryService.getAll());
-        return "vacancy-create";
+        return "vacancies/vacancy-create";
     }
 
     @PostMapping("/create")
@@ -91,7 +91,7 @@ public class VacancyWebController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
-            return "vacancy-create";
+            return "vacancies/vacancy-create";
         }
 
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
@@ -133,7 +133,7 @@ public class VacancyWebController {
         }
         model.addAttribute("isOwner", isOwner);
 
-        return "vacancy-detail";
+        return "vacancies/vacancy-detail";
     }
 
     @PostMapping("/{id:\\d+}/respond")
@@ -181,7 +181,7 @@ public class VacancyWebController {
         model.addAttribute("vacancyId", id);
         model.addAttribute("categories", categoryService.getAll());
 
-        return "vacancy-edit";
+        return "vacancies/vacancy-edit";
     }
 
     @PostMapping("/{id:\\d+}/edit")
@@ -202,7 +202,7 @@ public class VacancyWebController {
             model.addAttribute("vacancyId", id);
             model.addAttribute("categories", categoryService.getAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
-            return "vacancy-edit";
+            return "vacancies/vacancy-edit";
         }
 
         vacancyDto.setEmployerId(currentUser.getId());

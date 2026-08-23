@@ -47,9 +47,9 @@
                 </ul>
 
                 <ul class="navbar-nav ms-auto">
-                    <#if user??>
+                    <#if navUser??>
                     <li class="nav-item">
-                        <a class="nav-link" href="/profile"><i class="bi bi-person-circle"></i> ${user.name!"Профиль"}</a>
+                        <a class="nav-link" href="/profile"><i class="bi bi-person-circle"></i> ${navUser.name!"Профиль"}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Выход</a>

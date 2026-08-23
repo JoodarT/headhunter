@@ -1,4 +1,4 @@
-<#import "layout.ftlh" as layout>
+<#import "../layout.ftlh" as layout>
 <@layout.mainLayout title="Список вакансий" fluid=true>
 <div class="mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">

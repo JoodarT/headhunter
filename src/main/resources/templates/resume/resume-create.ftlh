@@ -1,4 +1,4 @@
-<#import "layout.ftlh" as main>
+<#import "../layout.ftlh" as main>
 <@main.mainLayout title="Создание резюме">
 <div class="container mt-4">
     <div class="row justify-content-center">

@@ -1,4 +1,4 @@
-<#import "layout.ftlh" as layout>
+<#import "../layout.ftlh" as layout>
 <@layout.mainLayout title="Создание вакансии">
 <div class="row justify-content-center mt-4">
     <div class="col-md-8">

@@ -1,4 +1,4 @@
-<#import "layout.ftlh" as main>
+<#import "../layout.ftlh" as main>
 <@main.mainLayout title="Редактирование резюме">
 <div class="container mt-4">
     <h2>Редактирование резюме</h2>

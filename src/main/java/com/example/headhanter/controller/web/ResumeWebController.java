@@ -42,7 +42,7 @@ public class ResumeWebController {
             model.addAttribute("currentUser", userService.getUserByEmail(userDetails.getUsername()));
         }
 
-        return "resumes";
+        return "resume/resumes";
     }
 
     @GetMapping("/create")
@@ -53,7 +53,7 @@ public class ResumeWebController {
         model.addAttribute("resumeDto", new ResumeCreateDto());
         model.addAttribute("categories", categoryService.getAll());
         model.addAttribute("contactTypes", contactTypeService.getAll());
-        return "resume-create";
+        return "resume/resume-create";
     }
 
     @PostMapping("/create")
@@ -71,7 +71,7 @@ public class ResumeWebController {
             model.addAttribute("categories", categoryService.getAll());
             model.addAttribute("contactTypes", contactTypeService.getAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
-            return "resume-create";
+            return "resume/resume-create";
         }
 
         User currentUser = userService.getUserByEmail(userDetails.getUsername());
@@ -102,7 +102,7 @@ public class ResumeWebController {
         model.addAttribute("resume", resume);
         model.addAttribute("categories", categoryService.getAll());
         model.addAttribute("contactTypes", contactTypeService.getAll());
-        return "resume-edit";
+        return "resume/resume-edit";
     }
 
     @PostMapping("/{id}/edit")
@@ -123,7 +123,7 @@ public class ResumeWebController {
             model.addAttribute("categories", categoryService.getAll());
             model.addAttribute("contactTypes", contactTypeService.getAll());
             model.addAttribute("error", WebValidationUtils.toErrorMessage(bindingResult));
-            return "resume-edit";
+            return "resume/resume-edit";
         }
 
         resumeDto.setUserId(currentUser.getId());
@@ -166,6 +166,6 @@ public class ResumeWebController {
         }
         model.addAttribute("isOwner", isOwner);
 
-        return "resume-detail";
+        return "resume/resume-detail";
     }
 }
