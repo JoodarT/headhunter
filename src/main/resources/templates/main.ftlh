@@ -49,21 +49,23 @@
     </div>
     <div class="row g-3">
         <#list vacancies as vacancy>
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title text-primary mb-1">
-                        <a href="/vacancies/${vacancy.id}" class="text-decoration-none">${vacancy.title!""}</a>
-                    </h5>
-                    <p class="card-text text-muted mb-2">
-                        <small>
-                            <#if vacancy.categoryName??>
-                            ${vacancy.categoryName}
-                            <#else>
-                            Категория не указана
-                        </#if>
-                        </small>
-                    </p>
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <h5 class="card-title text-primary mb-1">
+                            <a href="/vacancies/${vacancy.id}" class="text-decoration-none">${vacancy.title!""}</a>
+                        </h5>
+                        <p class="card-text text-muted mb-0">
+                            <small>
+                                <#if vacancy.categoryName??>
+                                ${vacancy.categoryName}
+                                <#else>
+                                Категория не указана
+                            </#if>
+                            </small>
+                        </p>
+                    </div>
                     <p class="card-text text-success fw-bold mb-0">
                         <#if vacancy.salary??>
                             ${vacancy.salary} KGS
