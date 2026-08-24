@@ -18,4 +18,5 @@ public class VacancyResponseDto {
     private Long responsesCount;
     private Boolean isActive;
     private LocalDateTime updateTime;
+    private LocalDateTime createdDate;
 }

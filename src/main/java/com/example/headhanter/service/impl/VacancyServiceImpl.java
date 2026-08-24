@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,15 +39,19 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public Page<VacancyResponseDto> getAllPaged(int page, int size, boolean sortByResponses, boolean ascending) {
-        Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
-
+    public Page<VacancyResponseDto> getAllPaged(int page, int size, boolean sortByResponses, boolean sortByDate, boolean ascending) {
         Page<Vacancy> vacancies;
         if (sortByResponses) {
+            Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
             vacancies = ascending
                     ? vacancyRepository.findAllActiveOrderByResponsesAsc(pageable)
                     : vacancyRepository.findAllActiveOrderByResponsesDesc(pageable);
+        } else if (sortByDate) {
+            Sort.Direction direction = ascending ? Sort.Direction.ASC : Sort.Direction.DESC;
+            Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1), Sort.by(direction, "createdDate"));
+            vacancies = vacancyRepository.findByIsActiveTrue(pageable);
         } else {
+            Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
             vacancies = vacancyRepository.findByIsActiveTrue(pageable);
         }
 
@@ -79,6 +84,7 @@ public class VacancyServiceImpl implements VacancyService {
                 .views(0)
                 .isActive(true)
                 .updateTime(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .build();
 
         return mapToResponseDto(vacancyRepository.save(vacancy));
@@ -142,6 +148,7 @@ public class VacancyServiceImpl implements VacancyService {
         dto.setViews(vacancy.getViews());
         dto.setIsActive(vacancy.getIsActive());
         dto.setUpdateTime(vacancy.getUpdateTime());
+        dto.setCreatedDate(vacancy.getCreatedDate());
         if (vacancy.getCategory() != null) {
             dto.setCategoryId(vacancy.getCategory().getId());
             dto.setCategoryName(vacancy.getCategory().getName());

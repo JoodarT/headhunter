@@ -41,7 +41,7 @@ public class MainController {
     @GetMapping("/")
     public String index(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails == null) {
-            model.addAttribute("vacancies", vacancyService.getAllPaged(0, PREVIEW_VACANCIES_COUNT, false, false).getContent());
+            model.addAttribute("vacancies", vacancyService.getAllPaged(0, PREVIEW_VACANCIES_COUNT, false, true, false).getContent());
             return "main";
         }
 

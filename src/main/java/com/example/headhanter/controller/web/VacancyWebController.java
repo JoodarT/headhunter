@@ -46,6 +46,7 @@ public class VacancyWebController {
             Model model
     ) {
         boolean sortByResponses = "responses".equals(sort);
+        boolean sortByDate = "date".equals(sort);
         boolean ascending = "asc".equalsIgnoreCase(direction);
 
         Page<VacancyResponseDto> vacancyPage;
@@ -57,7 +58,7 @@ public class VacancyWebController {
             vacancyPage = vacancyService.getVacanciesByCompany(company.trim(), page, PAGE_SIZE);
             model.addAttribute("company", company.trim());
         } else {
-            vacancyPage = vacancyService.getAllPaged(page, PAGE_SIZE, sortByResponses, ascending);
+            vacancyPage = vacancyService.getAllPaged(page, PAGE_SIZE, sortByResponses, sortByDate, ascending);
         }
 
         model.addAttribute("vacancies", vacancyPage.getContent());

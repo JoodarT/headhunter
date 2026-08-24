@@ -10,9 +10,18 @@
                 По откликам <#if direction?? && direction == "asc">▲<#else>▼</#if>
             </a>
             <a href="/vacancies" class="btn btn-outline-secondary btn-sm">Сбросить сортировку</a>
+            <#elseif sort?? && sort == "date">
+            <a href="/vacancies?sort=date&amp;direction=<#if direction?? && direction == "asc">desc<#else>asc</#if>"
+               class="btn btn-outline-secondary btn-sm">
+                По дате <#if direction?? && direction == "asc">▲<#else>▼</#if>
+            </a>
+            <a href="/vacancies" class="btn btn-outline-secondary btn-sm">Сбросить сортировку</a>
             <#else>
             <a href="/vacancies?sort=responses&amp;direction=desc" class="btn btn-outline-secondary btn-sm">
                 Сортировать по откликам
+            </a>
+            <a href="/vacancies?sort=date&amp;direction=desc" class="btn btn-outline-secondary btn-sm">
+                Сортировать по дате
             </a>
         </#if>
         <#if navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER">

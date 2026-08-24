@@ -48,4 +48,7 @@ public class Vacancy {
 
     @Column(name = "update_time")
     private LocalDateTime updateTime;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
 }
