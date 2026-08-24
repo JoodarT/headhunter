@@ -154,12 +154,10 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<VacancyResponseDto> searchVacancy(String keyword){
-        List<Vacancy> vacancies = (keyword == null || keyword.trim().isEmpty())
-            ? vacancyRepository.findAll()
-            : vacancyRepository.searchByKeyword(keyword.trim());
-
-        return vacancies.stream().map(this::mapToResponseDto).toList();
+    public Page<VacancyResponseDto> searchVacancy(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
+        return vacancyRepository.searchByKeyword(keyword.trim(), pageable)
+                .map(this::mapToResponseDto);
     }
 
     @Override

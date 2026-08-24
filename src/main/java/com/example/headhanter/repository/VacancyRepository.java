@@ -28,17 +28,18 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     long countResponsesByVacancyId(@Param("vacancyId") Long vacancyId);
 
 
-    @Query(" SELECT v FROM Vacancy v LEFT JOIN v.category c WHERE " +
+    @Query(value = " SELECT v FROM Vacancy v LEFT JOIN v.category c WHERE " +
             "LOWER (v.title) LIKE  LOWER (CONCAT('%', :keyword,'%')) OR " +
             "LOWER (CAST(v.description AS string)) LIKE  LOWER (CONCAT('%', :keyword,'%')) OR " +
-            "LOWER(c.name) LIKE LOWER (CONCAT('%', :keyword, '%'))"
-
-    )
-    List<Vacancy> searchByKeyword(@Param("keyword") String keyword);
+            "LOWER(c.name) LIKE LOWER (CONCAT('%', :keyword, '%'))",
+            countQuery = " SELECT COUNT(v) FROM Vacancy v LEFT JOIN v.category c WHERE " +
+            "LOWER (v.title) LIKE  LOWER (CONCAT('%', :keyword,'%')) OR " +
+            "LOWER (CAST(v.description AS string)) LIKE  LOWER (CONCAT('%', :keyword,'%')) OR " +
+            "LOWER(c.name) LIKE LOWER (CONCAT('%', :keyword, '%'))")
+    Page<Vacancy> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     List<Vacancy> findByEmployerIdAndIsActiveTrue(Long employerId);
 
-    List<Vacancy> findByCompanyAndIsActiveTrue(String company);
     Page<Vacancy> findByCompanyAndIsActiveTrue(String company, Pageable pageable);
 
     @Query("SELECT v.company, COUNT(v) FROM Vacancy v " +
