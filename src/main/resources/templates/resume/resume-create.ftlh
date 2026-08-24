@@ -86,9 +86,8 @@
 
         <#-- Опыт работы -->
         <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center fw-bold">
+            <div class="card-header bg-light fw-bold">
                 <span>Опыт работы</span>
-                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addExperience()">+ Добавить место работы</button>
             </div>
             <div class="card-body" id="experienceContainer">
                 <div class="experience-item border p-3 mb-3 rounded position-relative" id="exp-0">
@@ -114,9 +113,8 @@
 
         <#-- Образование -->
         <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center fw-bold">
+            <div class="card-header bg-light fw-bold">
                 <span>Образование</span>
-                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addEducation()">+ Добавить место учебы</button>
             </div>
             <div class="card-body" id="educationContainer">
                 <div class="education-item border p-3 mb-3 rounded position-relative" id="edu-0">
@@ -150,77 +148,4 @@
 </div>
 </div>
 
-<script>
-    function renumberItems(containerId, itemClass, idPrefix, fieldPrefix) {
-        const items = document.querySelectorAll('#' + containerId + ' .' + itemClass);
-        items.forEach((item, index) => {
-            item.id = idPrefix + '-' + index;
-            item.querySelectorAll('[name^="' + fieldPrefix + '["]').forEach(input => {
-                input.name = input.name.replace(/\[\d+\]/, '[' + index + ']');
-            });
-        });
-    }
-
-    function addExperience() {
-        const container = document.getElementById('experienceContainer');
-        const index = container.querySelectorAll('.experience-item').length;
-        const html = `
-            <div class="experience-item border p-3 mb-3 rounded position-relative" id="exp-` + index + `">
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" onclick="removeExperience(this)"></button>
-                <div class="mb-2">
-                    <label class="form-label">Компания / Организация*</label>
-                    <input type="text" class="form-control" name="experiences[` + index + `].companyName" required placeholder="Название компании">
-                </div>
-                <div class="mb-2">
-                    <label class="form-label">Должность*</label>
-                    <input type="text" class="form-control" name="experiences[` + index + `].position" required placeholder="Разработчик">
-                </div>
-                <div class="mb-2">
-                    <label class="form-label">Период работы</label>
-                    <input type="text" class="form-control" name="experiences[` + index + `].period" placeholder="2021 - По настоящее время">
-                </div>
-                <div class="mb-2">
-                    <label class="form-label">Обязанности и достижения</label>
-                    <textarea class="form-control" name="experiences[` + index + `].responsibilities" rows="2" placeholder="Опишите ваши ключевые задачи..."></textarea>
-                </div>
-            </div>`;
-        container.insertAdjacentHTML('beforeend', html);
-    }
-
-    function removeExperience(btn) {
-        btn.parentElement.remove();
-        renumberItems('experienceContainer', 'experience-item', 'exp', 'experiences');
-    }
-
-    function addEducation() {
-        const container = document.getElementById('educationContainer');
-        const index = container.querySelectorAll('.education-item').length;
-        const html = `
-            <div class="education-item border p-3 mb-3 rounded position-relative" id="edu-` + index + `">
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" onclick="removeEducation(this)"></button>
-                <div class="mb-2">
-                    <label class="form-label">Учебное заведение</label>
-                    <input type="text" class="form-control" name="educations[` + index + `].institution" placeholder="Название университета / колледжа">
-                </div>
-                <div class="mb-2">
-                    <label class="form-label">Специальность / Факультет</label>
-                    <input type="text" class="form-control" name="educations[` + index + `].faculty" placeholder="Программная инженерия">
-                </div>
-                <div class="mb-2">
-                    <label class="form-label">Год поступления</label>
-                    <input type="number" class="form-control" name="educations[` + index + `].enrollmentYear" placeholder="2019">
-                </div>
-                <div class="mb-2">
-                    <label class="form-label">Год окончания</label>
-                    <input type="number" class="form-control" name="educations[` + index + `].graduationYear" placeholder="2023">
-                </div>
-            </div>`;
-        container.insertAdjacentHTML('beforeend', html);
-    }
-
-    function removeEducation(btn) {
-        btn.parentElement.remove();
-        renumberItems('educationContainer', 'education-item', 'edu', 'educations');
-    }
-</script>
 </@main.mainLayout>

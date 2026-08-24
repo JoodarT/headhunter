@@ -92,9 +92,8 @@
 
     <#-- Опыт работы -->
     <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center fw-bold">
+        <div class="card-header fw-bold">
             <span>Опыт работы</span>
-            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addExperience()">+ Добавить место работы</button>
         </div>
         <div class="card-body" id="experienceContainer">
             <#if resume.experiences?? && resume.experiences?size gt 0>
@@ -127,9 +126,8 @@
 
 <#-- Образование -->
 <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center fw-bold">
+    <div class="card-header fw-bold">
         <span>Образование</span>
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="addEducation()">+ Добавить место учебы</button>
     </div>
     <div class="card-body" id="educationContainer">
         <#if resume.educations?? && resume.educations?size gt 0>
