@@ -49,7 +49,7 @@
                 <ul class="navbar-nav ms-auto">
                     <#if navUser??>
                     <li class="nav-item">
-                        <a class="nav-link" href="/profile"><i class="bi bi-person-circle"></i> ${navUser.name!"Профиль"}</a>
+                        <a class="btn btn-outline-light btn-sm me-2" href="/profile"><i class="bi bi-person-circle"></i> Личный кабинет</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Выход</a>
