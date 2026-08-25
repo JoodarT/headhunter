@@ -50,7 +50,7 @@
                 <#if currentUser?? && resume.userId?? && resume.userId == currentUser.id>
                 <a href="/resumes/${resume.id}/edit" class="btn btn-sm btn-outline-primary">Редактировать</a>
 
-                <form action="/resumes/${resume.id}/delete" method="post" class="d-inline" onsubmit="return confirm('Удалить резюме?');">
+                <form action="/resumes/${resume.id}/delete" method="post" class="d-inline">
                     <#if _csrf??>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </#if>

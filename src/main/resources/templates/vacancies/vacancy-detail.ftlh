@@ -24,14 +24,14 @@
                 </div>
             </div>
 
-            <!-- Если смотрит работодатель-владелец — показываем кнопки управления -->
+            <!-- Кнопка редактировать -->
             <#if isOwner?? && isOwner>
             <div class="d-flex gap-2">
                 <a href="/vacancies/${vacancy.id}/edit" class="btn btn-outline-primary">
                     Редактировать
                 </a>
 
-                <form action="/vacancies/${vacancy.id}/delete" method="post" style="display:inline;" onsubmit="return confirm('Вы действительно хотите удалить эту вакансию?');">
+                <form action="/vacancies/${vacancy.id}/delete" method="post" style="display:inline;">
                     <#if _csrf??>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </#if>
@@ -41,7 +41,7 @@
         </#if>
     </div>
 
-    <!-- Отклик на вакансию (только для соискателей) -->
+    <!-- Отклик на вакансию -->
     <#if isApplicant?? && isApplicant>
     <div class="mb-4">
         <#if availableResumes?? && (availableResumes?size > 0)>

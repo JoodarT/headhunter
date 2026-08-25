@@ -31,7 +31,7 @@
             <i class="bi bi-pencil"></i> Редактировать
         </a>
 
-        <form action="/resumes/${resume.id}/delete" method="post" style="display:inline;" onsubmit="return confirm('Вы действительно хотите удалить резюме?');">
+        <form action="/resumes/${resume.id}/delete" method="post" style="display:inline;">
             <#if _csrf??>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </#if>
