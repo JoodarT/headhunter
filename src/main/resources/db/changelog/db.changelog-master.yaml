@@ -60,3 +60,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/19_add_updated_date_to_resumes.yaml
 
+  - include:
+      file: db/changelog/migration/20_update_password.yaml
+
