@@ -17,4 +17,7 @@ public interface UserService {
     User getUserByEmail(String email);
     boolean checkUserExists(String email);
     User uploadAvatar(Long userId, MultipartFile file);
+    String createPasswordResetToken(String email);
+    void resetPassword(String token, String newPassword);
+    boolean isResetTokenValid(String token);
 }

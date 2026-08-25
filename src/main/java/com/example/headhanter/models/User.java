@@ -3,6 +3,8 @@ package com.example.headhanter.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -32,5 +34,11 @@ public class User {
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "role_id")
    private RoleEntity role;
+
+   @Column(name = "reset_password_token")
+   private String resetPasswordToken;
+
+   @Column(name = "reset_password_token_expiry")
+   private LocalDateTime resetPasswordTokenExpiry;
 
 }

@@ -29,6 +29,12 @@
 </div>
 </#if>
 
+<#if passwordReset??>
+<div class="alert alert-success" role="alert">
+    Пароль успешно изменён. Теперь войдите с новым паролем.
+</div>
+</#if>
+
 <form action="/login" method="post">
     <#if _csrf??>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -53,6 +59,9 @@
     <div class="mb-3">
         <label class="form-label">Пароль</label>
         <input type="password" name="password" class="form-control" required>
+    </div>
+    <div class="mb-3 text-end">
+        <a href="/forgot-password" class="text-decoration-none">Забыли пароль?</a>
     </div>
     <button type="submit" class="btn btn-primary w-100">Войти</button>
 </form>

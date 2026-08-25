@@ -13,13 +13,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
+
+    private static final Duration RESET_TOKEN_TTL = Duration.ofMinutes(30);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -126,4 +131,42 @@ public class UserServiceImpl implements UserService {
 
         return savedUser;
     }
+
+
+    @Override
+    @Transactional
+    public String createPasswordResetToken(String email) {
+        User user = getUserByEmail(email);
+
+        String token = UUID.randomUUID().toString();
+        user.setResetPasswordToken(token);
+        user.setResetPasswordTokenExpiry(LocalDateTime.now().plus(RESET_TOKEN_TTL));
+        userRepository.save(user);
+
+        return token;
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(String token, String newPassword) {
+        User user = userRepository.findByResetPasswordToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Недействительный токен"));
+
+        if (user.getResetPasswordTokenExpiry() == null || user.getResetPasswordTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Токен просрочен или уже использован");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetPasswordToken(null);
+        user.setResetPasswordTokenExpiry(null);
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean isResetTokenValid(String token) {
+        return userRepository.findByResetPasswordToken(token)
+                .filter(u -> u.getResetPasswordTokenExpiry() != null && u.getResetPasswordTokenExpiry().isAfter(LocalDateTime.now()))
+                .isPresent();
+    }
+
 }
