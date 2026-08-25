@@ -1,6 +1,6 @@
 <#import "../layout.ftlh" as main>
-<@main.mainLayout title="Список резюме">
-<div class="container mt-4">
+<@main.mainLayout title="Список резюме" fluid=true>
+<div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Список резюме</h2>
         <#if navUser?? && navUser.role?? && navUser.role.role == "APPLICANT">
@@ -25,7 +25,7 @@
     <div class="row">
         <#if resumes?? && resumes?has_content>
         <#list resumes as resume>
-        <div class="col-md-6 mb-4">
+        <div class="col-md-12 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="card-title">

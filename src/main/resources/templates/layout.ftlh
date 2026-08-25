@@ -52,7 +52,12 @@
                         <a class="btn btn-outline-light btn-sm me-2" href="/profile"><i class="bi bi-person-circle"></i> Личный кабинет</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Выход</a>
+                        <form action="/logout" method="post" class="d-inline">
+                            <#if _csrf??>
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        </#if>
+                        <button type="submit" class="nav-link btn btn-link p-0 border-0 align-baseline">Выход</button>
+                        </form>
                     </li>
                     <#else>
                     <li class="nav-item">
