@@ -13,11 +13,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow-sm">
         <div class="container">
-            <#if navUser?? && navUser.role?? && navUser.role.role == "APPLICANT">
-            <a class="navbar-brand fw-bold fs-4" href="/vacancies">HH</a>
-            <#else>
-            <a class="navbar-brand fw-bold fs-4" href="/resumes">HH</a>
-        </#if>
+            <a class="navbar-brand fw-bold fs-4" href="/">HH</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
