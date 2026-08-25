@@ -36,7 +36,9 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeResponseDto createResume(ResumeCreateDto dto) {
         Resume resume = new Resume();
         mapDtoToEntity(dto, resume);
-        resume.setCreatedDate(LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+        resume.setCreatedDate(now);
+        resume.setUpdatedDate(now);
         resume.setIsActive(true);
 
         Resume savedResume = resumeRepository.save(resume);
@@ -73,6 +75,7 @@ public class ResumeServiceImpl implements ResumeService {
         }
 
         mapDtoToEntity(dto, existingResume);
+        existingResume.setUpdatedDate(LocalDateTime.now());
 
         Resume updatedResume = resumeRepository.save(existingResume);
         return mapToDto(updatedResume);
@@ -199,6 +202,7 @@ public class ResumeServiceImpl implements ResumeService {
         }
 
         dto.setCreatedDate(resume.getCreatedDate());
+        dto.setUpdatedDate(resume.getUpdatedDate());
 
         dto.setContactInfos(resume.getContactInfos().stream().map(c -> {
             ContactInfoDto d = new ContactInfoDto();

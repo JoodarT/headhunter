@@ -1,5 +1,6 @@
 package com.example.headhanter.service;
 
+import com.example.headhanter.dto.response.RespondedApplicantResponseDto;
 import com.example.headhanter.models.RespondedApplicant;
 import com.example.headhanter.models.Vacancy;
 
@@ -12,4 +13,6 @@ public interface ResponseService {
     boolean hasResponded(Long vacancyId, Long resumeId);
     List<RespondedApplicant> getAllResponses();
     void updateConfirmationStatus(Long id, boolean status);
+    List<RespondedApplicantResponseDto> getResponsesByApplicantUserId(Long userId);
+    List<RespondedApplicantResponseDto> getResponsesByEmployerId(Long employerId);
 }

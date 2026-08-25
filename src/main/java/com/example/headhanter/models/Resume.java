@@ -47,6 +47,9 @@ public class Resume {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
+
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ContactInfo> contactInfos = new ArrayList<>();

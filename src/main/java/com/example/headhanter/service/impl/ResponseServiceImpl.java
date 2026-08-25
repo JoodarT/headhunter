@@ -1,5 +1,6 @@
 package com.example.headhanter.service.impl;
 
+import com.example.headhanter.dto.response.RespondedApplicantResponseDto;
 import com.example.headhanter.models.RespondedApplicant;
 import com.example.headhanter.models.Resume;
 import com.example.headhanter.models.Vacancy;
@@ -78,5 +79,41 @@ public class ResponseServiceImpl implements ResponseService {
 
         response.setConfirmation(status);
         respondedApplicantRepository.save(response);
+    }
+
+    @Override
+    public List<RespondedApplicantResponseDto> getResponsesByApplicantUserId(Long userId) {
+        return respondedApplicantRepository.findByResumeUserId(userId).stream()
+                .map(this::mapToResponseDto)
+                .toList();
+    }
+
+    @Override
+    public List<RespondedApplicantResponseDto> getResponsesByEmployerId(Long employerId) {
+        return respondedApplicantRepository.findByVacancyEmployerId(employerId).stream()
+                .map(this::mapToResponseDto)
+                .toList();
+    }
+
+    private RespondedApplicantResponseDto mapToResponseDto(RespondedApplicant response) {
+        RespondedApplicantResponseDto dto = new RespondedApplicantResponseDto();
+        dto.setId(response.getId());
+        dto.setConfirmation(response.getConfirmation());
+
+        Vacancy vacancy = response.getVacancy();
+        if (vacancy != null) {
+            dto.setVacancyId(vacancy.getId());
+            dto.setVacancyTitle(vacancy.getTitle());
+            dto.setCompany(vacancy.getCompany());
+        }
+
+        Resume resume = response.getResume();
+        if (resume != null) {
+            dto.setResumeId(resume.getId());
+            dto.setResumeTitle(resume.getTitle());
+            dto.setApplicantName(resume.getApplicantName());
+        }
+
+        return dto;
     }
 }

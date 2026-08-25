@@ -16,7 +16,7 @@
                                  class="rounded-circle img-thumbnail shadow-sm"
                                  style="width: 150px; height: 150px; object-fit: cover;">
                             <#else>
-                            <#-- Исправлено: путь теперь без /static -->
+                            <#--  аватар -->
                             <img src="/images/default-avatar.png"
                                  alt="Дефолтный аватар"
                                  class="rounded-circle img-thumbnail shadow-sm"
@@ -45,6 +45,7 @@
                         <span class="badge bg-info text-dark">${(user.role.role)!""}</span>
                     </p>
                     <a href="/profile/edit" class="btn btn-warning">Редактировать профиль</a>
+                    <a href="/responses" class="btn btn-outline-primary ms-2">Отклики</a>
                 </div>
 
             </div>
@@ -78,26 +79,36 @@
 </#if>
 
     <#if myResumes??>
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+        <h4 class="mb-0">Мои резюме (${myResumes?size})</h4>
+        <a href="/resumes/create" class="btn btn-success btn-sm">+ Создать резюме</a>
+    </div>
+    <#if myResumes?size gt 0>
+    <#list myResumes as resume>
+    <#assign resumeUpdatedAt = (resume.updatedDate)!(resume.createdDate)!"">
     <div class="card mt-3">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="mb-0">Мои резюме (${myResumes?size})</h4>
-                <a href="/resumes/create" class="btn btn-success btn-sm">+ Создать резюме</a>
+        <div class="card-body d-flex justify-content-between align-items-start">
+            <div>
+                <a href="/resumes/${resume.id}" class="text-decoration-none fw-semibold">${resume.title!""}</a>
+                <div class="text-muted small mt-1">
+                    <span>${resume.categoryName!"Без категории"}</span>
+                    <#if resume.skills?? && resume.skills?has_content>
+                    <span> &middot; ${resume.skills}</span>
+                </#if>
+                </div>
+                <#if resume.expectedSalary?? && (resume.expectedSalary > 0)>
+                <div class="text-success small fw-bold mt-1">${resume.expectedSalary?string.number} $</div>
+            </#if>
             </div>
-            <#if myResumes?size gt 0>
-            <ul class="list-group list-group-flush">
-                <#list myResumes as resume>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="/resumes/${resume.id}" class="text-decoration-none">${resume.title!""}</a>
-                    <span class="text-muted small">${resume.categoryName!""}</span>
-                </li>
-            </#list>
-            </ul>
-            <#else>
-            <p class="text-muted mb-0">Вы ещё не создали ни одного резюме.</p>
-        </#if>
+            <span class="text-muted small text-nowrap ms-3">
+                Обновлено: <#if resumeUpdatedAt?is_date_like>${resumeUpdatedAt?string("dd.MM.yyyy HH:mm")}<#else>—</#if>
+            </span>
         </div>
     </div>
+    </#list>
+    <#else>
+    <p class="text-muted mb-0">Вы ещё не создали ни одного резюме.</p>
+</#if>
 </#if>
 </div>
 </div>

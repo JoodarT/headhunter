@@ -23,6 +23,7 @@ public class ResumeResponseDto {
     private String skills;
     private Double expectedSalary;
     private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
     private List<ContactInfoDto> contactInfos;
     private List<WorkExperienceInfoDto> experiences;
