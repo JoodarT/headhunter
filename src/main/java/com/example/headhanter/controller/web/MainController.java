@@ -66,7 +66,6 @@ public class MainController {
             @RequestParam(required = false) String error,
             @RequestParam(required = false) String registered,
             @RequestParam(required = false) String logout,
-            @RequestParam(required = false) String roleMismatch,
             Model model
     ) {
         if (error != null) {
@@ -77,9 +76,6 @@ public class MainController {
         }
         if (logout != null) {
             model.addAttribute("logout", true);
-        }
-        if (roleMismatch != null) {
-            model.addAttribute("roleMismatch", true);
         }
         return "login";
     }

@@ -17,12 +17,6 @@
     </div>
 </#if>
 
-<#if roleMismatch??>
-<div class="alert alert-danger" role="alert">
-    Этот аккаунт зарегистрирован под другой ролью. Проверьте выбор "Соискатель" / "Работодатель" и попробуйте снова.
-</div>
-</#if>
-
 <#if logout??>
 <div class="alert alert-info" role="alert">
     Вы успешно вышли.
@@ -39,17 +33,6 @@
     <#if _csrf??>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </#if>
-    <div class="mb-4">
-
-        <div class="btn-group w-100" role="group" aria-label="Роль">
-            <input type="radio" class="btn-check" name="role" id="roleApplicant" value="APPLICANT" checked>
-            <label class="btn btn-outline-primary" for="roleApplicant">Ищу работу</label>
-
-            <input type="radio" class="btn-check" name="role" id="roleEmployer" value="EMPLOYER">
-            <label class="btn btn-outline-primary" for="roleEmployer">Ищу сотрудника</label>
-        </div>
-    </div>
-
     <div class="mb-3">
 
         <i class="bi bi-envelope-at-fill"></i>

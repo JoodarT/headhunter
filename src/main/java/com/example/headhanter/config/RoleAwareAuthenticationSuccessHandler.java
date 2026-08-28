@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,13 +25,6 @@ public class RoleAwareAuthenticationSuccessHandler implements AuthenticationSucc
         User user = userService.getUserByEmail(authentication.getName());
         RoleEntity role = user.getRole();
         String actualRole = role != null ? role.getRole() : null;
-
-        String requestedRole = request.getParameter("role");
-        if (requestedRole != null && !requestedRole.isBlank() && !requestedRole.equalsIgnoreCase(actualRole)) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-            response.sendRedirect("/login?roleMismatch");
-            return;
-        }
 
         if ("EMPLOYER".equals(actualRole)) {
             response.sendRedirect("/resumes");
