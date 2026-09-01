@@ -2,6 +2,9 @@ package com.example.headhanter.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
+import  java.util.ArrayList;
+
 
 @Entity
 @Table(name = "responded_applicants")
@@ -12,6 +15,10 @@ import lombok.*;
 @Builder
 public class RespondedApplicant {
 
+    @OneToMany(mappedBy = "respondedApplicant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+
+    private List<Message> messages = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
