@@ -11,6 +11,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.OneToMany;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "contact_types")
@@ -21,9 +24,17 @@ import lombok.Setter;
 @Builder
 public class ContactType {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "contactType")
+    @Builder.Default
+
+    private List<ContactInfo> contactInfos = new ArrayList<>();
+
 
     @Column(name = "type_name", nullable = false)
     private String typeName;
