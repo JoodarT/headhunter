@@ -3,6 +3,9 @@ package com.example.headhanter.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "education_info")
 @Getter
@@ -28,4 +31,6 @@ public class EducationInfo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
+
+
 }

@@ -62,5 +62,8 @@ public class Resume {
     @Builder.Default
     private List<EducationInfo> educations = new ArrayList<>();
 
-//    @OneToMany(mappedBy = )
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL,orphanRemoval = true)
+
+    @Builder.Default
+    private List<RespondedApplicant> respondedApplicants = new ArrayList<>();
 }
