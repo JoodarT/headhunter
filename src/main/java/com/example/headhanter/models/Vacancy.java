@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "vacancies")
@@ -51,4 +53,10 @@ public class Vacancy {
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;
+
+    @OneToMany(mappedBy = "vacancy", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @Builder.Default
+
+    private List<RespondedApplicant> respondedApplicants = new ArrayList<>();
 }
