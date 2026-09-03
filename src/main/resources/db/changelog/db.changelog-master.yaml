@@ -63,3 +63,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/20_update_password.yaml
 
+  - include:
+      file: db/changelog/migration/21_create_role_authorities.yaml
+
