@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -33,12 +33,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         RoleEntity role = user.getRole() != null ? user.getRole() : roleService.getByName("APPLICANT");
-        String authority = role.getAuthority().getAuthority();
-
+        List<SimpleGrantedAuthority> authorities = role.getAuthorities().stream()
+                .map(a -> new SimpleGrantedAuthority(a.getAuthority()))
+                .toList();
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(authority)))
+                .authorities(authorities)
                 .build();
     }
 }

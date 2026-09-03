@@ -3,6 +3,9 @@ package com.example.headhanter.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "roles")
 @Getter
@@ -19,7 +22,19 @@ public class RoleEntity {
     @Column(name = "role", length = 50, nullable = false)
     private String role;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "authority_id", nullable = false)
-    private Authority authority;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_authorities",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    @Builder.Default
+    private List<Authority> authorities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "role")
+    @Builder.Default
+    private List<User> users = new ArrayList<>();
+
 }
