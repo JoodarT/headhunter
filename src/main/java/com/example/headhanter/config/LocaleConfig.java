@@ -12,7 +12,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import java.util.Arrays;
 import java.util.List;
 
-// настройка смены языка через ?lang=ru|en
+
 @Configuration
 public class LocaleConfig implements WebMvcConfigurer {
 
