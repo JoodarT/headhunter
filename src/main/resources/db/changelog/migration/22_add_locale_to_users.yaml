@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 22-add-locale-to-users
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: users
+                columnName: locale
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: locale
+                  type: varchar(8)
