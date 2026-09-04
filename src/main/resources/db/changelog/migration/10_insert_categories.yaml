@@ -1,0 +1,119 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10-insert-categories
+      author: joodar
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Backend / Java" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Frontend" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "DevOps" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "QA / Тестирование" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Data Science / ML" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Базы данных (DBA)" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Системное администрирование" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Информационная безопасность" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Mobile / Android" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Mobile / iOS" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Game Development" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "1C" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "UI/UX Дизайн" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Управление проектами" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Бизнес-анализ" }
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "Другое" }
+
+  - changeSet:
+      id: 10-backfill-vacancy-categories
+      author: joodar
+      changes:
+        - sql:
+            splitStatements: true
+            endDelimiter: ";"
+            sql: >
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Backend / Java') WHERE category_id IS NULL AND UPPER(title) LIKE '%JAVA%';
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Frontend') WHERE category_id IS NULL AND UPPER(title) LIKE '%FRONTEND%';
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'DevOps') WHERE category_id IS NULL AND UPPER(title) LIKE '%DEVOPS%';
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'QA / Тестирование') WHERE category_id IS NULL AND UPPER(title) LIKE '%QA%';
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Базы данных (DBA)') WHERE category_id IS NULL AND (UPPER(title) LIKE '%DATABASE%' OR UPPER(title) LIKE '%POSTGRESQL%' OR UPPER(title) LIKE '%DBA%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Data Science / ML') WHERE category_id IS NULL AND (UPPER(title) LIKE '%DATA SCIENCE%' OR UPPER(title) LIKE '%DATA SCIENTIST%' OR UPPER(title) LIKE '%ML%' OR UPPER(title) LIKE '%PYTHON%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Информационная безопасность') WHERE category_id IS NULL AND (UPPER(title) LIKE '%БЕЗОПАСН%' OR UPPER(title) LIKE '%SECURITY%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Системное администрирование') WHERE category_id IS NULL AND UPPER(title) LIKE '%АДМИНИСТР%';
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Mobile / Android') WHERE category_id IS NULL AND (UPPER(title) LIKE '%ANDROID%' OR UPPER(title) LIKE '%KOTLIN%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Mobile / iOS') WHERE category_id IS NULL AND (UPPER(title) LIKE '%IOS%' OR UPPER(title) LIKE '%SWIFT%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Game Development') WHERE category_id IS NULL AND (UPPER(title) LIKE '%GAME%' OR UPPER(title) LIKE '%UNITY%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = '1C') WHERE category_id IS NULL AND (UPPER(title) LIKE '%1C%' OR UPPER(title) LIKE '%1С%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'UI/UX Дизайн') WHERE category_id IS NULL AND (UPPER(title) LIKE '%UI/UX%' OR UPPER(title) LIKE '%ДИЗАЙН%' OR UPPER(title) LIKE '%DESIGN%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Управление проектами') WHERE category_id IS NULL AND UPPER(title) LIKE '%PROJECT%';
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Бизнес-анализ') WHERE category_id IS NULL AND (UPPER(title) LIKE '%АНАЛИТИК%' OR UPPER(title) LIKE '%ANALYST%');
+              UPDATE vacancies SET category_id = (SELECT id FROM categories WHERE name = 'Другое') WHERE category_id IS NULL;
+
+  - changeSet:
+      id: 10-backfill-resume-categories
+      author: joodar
+      changes:
+        - sql:
+            splitStatements: true
+            endDelimiter: ";"
+            sql: >
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Backend / Java') WHERE category_id IS NULL AND UPPER(title) LIKE '%JAVA%';
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Frontend') WHERE category_id IS NULL AND UPPER(title) LIKE '%FRONTEND%';
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'DevOps') WHERE category_id IS NULL AND UPPER(title) LIKE '%DEVOPS%';
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'QA / Тестирование') WHERE category_id IS NULL AND UPPER(title) LIKE '%QA%';
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Базы данных (DBA)') WHERE category_id IS NULL AND (UPPER(title) LIKE '%DATABASE%' OR UPPER(title) LIKE '%POSTGRESQL%' OR UPPER(title) LIKE '%DBA%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Data Science / ML') WHERE category_id IS NULL AND (UPPER(title) LIKE '%DATA SCIENCE%' OR UPPER(title) LIKE '%DATA SCIENTIST%' OR UPPER(title) LIKE '%ML%' OR UPPER(title) LIKE '%PYTHON%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Информационная безопасность') WHERE category_id IS NULL AND (UPPER(title) LIKE '%БЕЗОПАСН%' OR UPPER(title) LIKE '%SECURITY%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Системное администрирование') WHERE category_id IS NULL AND UPPER(title) LIKE '%АДМИНИСТР%';
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Mobile / Android') WHERE category_id IS NULL AND (UPPER(title) LIKE '%ANDROID%' OR UPPER(title) LIKE '%KOTLIN%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Mobile / iOS') WHERE category_id IS NULL AND (UPPER(title) LIKE '%IOS%' OR UPPER(title) LIKE '%SWIFT%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Game Development') WHERE category_id IS NULL AND (UPPER(title) LIKE '%GAME%' OR UPPER(title) LIKE '%UNITY%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = '1C') WHERE category_id IS NULL AND (UPPER(title) LIKE '%1C%' OR UPPER(title) LIKE '%1С%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'UI/UX Дизайн') WHERE category_id IS NULL AND (UPPER(title) LIKE '%UI/UX%' OR UPPER(title) LIKE '%ДИЗАЙН%' OR UPPER(title) LIKE '%DESIGN%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Управление проектами') WHERE category_id IS NULL AND UPPER(title) LIKE '%PROJECT%';
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Бизнес-анализ') WHERE category_id IS NULL AND (UPPER(title) LIKE '%АНАЛИТИК%' OR UPPER(title) LIKE '%ANALYST%');
+              UPDATE resumes SET category_id = (SELECT id FROM categories WHERE name = 'Другое') WHERE category_id IS NULL;

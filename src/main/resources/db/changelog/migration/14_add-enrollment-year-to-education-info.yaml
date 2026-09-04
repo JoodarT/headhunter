@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14_add-enrollment-year-to-education-info
+      author: Joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: education_info
+                columnName: enrollment_year
+      changes:
+        - addColumn:
+            tableName: education_info
+            columns:
+              - column:
+                  name: enrollment_year
+                  type: INT

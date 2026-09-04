@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-email-to-resumes
+      author: Joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: resumes
+                columnName: email
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: email
+                  type: VARCHAR(255)

@@ -1,0 +1,74 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/migration/01_create_vacancies_table.yaml
+  - include:
+      file: db/changelog/migration/02_create_all_missing_tables_and_relations.yaml
+  - include:
+      file: db/changelog/migration/03_insert_test_data.yaml
+
+  - include:
+      file: db/changelog/migration/04_create_authorities_tables.yaml
+  - include:
+      file: db/changelog/migration/05_create_roles_table.yaml
+
+  - include:
+      file: db/changelog/migration/06_insert_users.yaml
+
+  - include:
+      file: db/changelog/migration/07-insert-initial-data.yaml
+
+  - include:
+      file: db/changelog/migration/08-create-education-info.yaml
+
+
+  - include:
+      file: db/changelog/migration/db.changelog-add-email-to-resumes.yml
+
+  - include:
+      file: db/changelog/migration/db.changelog-update-schema.yml
+
+  - include:
+     file: db/changelog/migration/09_add_period_to_work_experience_info.yaml
+
+  - include:
+      file: db/changelog/migration/10_insert_categories.yaml
+
+  - include:
+      file: db/changelog/migration/11_resume_enhancements.yaml
+
+  - include:
+      file: db/changelog/migration/12_migrate_roles_to_roles_table.yaml
+
+  - include:
+      file: db/changelog/migration/13_add_company_to_vacancies.yaml
+
+  - include:
+      file: db/changelog/migration/14_add-enrollment-year-to-education-info.yaml
+
+  - include:
+      file: db/changelog/migration/15_seed_contact_types.yaml
+
+  - include:
+      file: db/changelog/migration/16_migrate_legacy_contacts_to_contact_info.yaml
+
+  - include:
+      file: db/changelog/migration/17_rename_contact_info_value_column.yaml
+
+  - include:
+      file: db/changelog/migration/18_add_created_date_to_vacancies.yaml
+
+  - include:
+      file: db/changelog/migration/19_add_updated_date_to_resumes.yaml
+
+  - include:
+      file: db/changelog/migration/20_update_password.yaml
+
+  - include:
+      file: db/changelog/migration/21_create_role_authorities.yaml
+
+  - include:
+      file: db/changelog/migration/22_add_locale_to_users.yaml
+
+  - include:
+      file: db/changelog/migration/23_backfill_vacancy_update_time.yaml
+
