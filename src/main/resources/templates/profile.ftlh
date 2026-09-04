@@ -13,10 +13,11 @@
                         <div class="mb-3">
                             <#if user.avatarUrl?? && user.avatarUrl?has_content>
                             <img src="/uploads/avatars/${user.avatarUrl}" alt="<@spring.message "profile.avatar.alt"/>"
+                                 onerror="this.onerror=null;this.src='/images/default-avatar.svg';"
                                  class="rounded-circle img-thumbnail shadow-sm"
                                  style="width: 150px; height: 150px; object-fit: cover;">
                             <#else>
-                            <img src="/images/default-avatar.png"
+                            <img src="/images/default-avatar.svg"
                                  alt="<@spring.message "profile.avatar.default"/>"
                                  class="rounded-circle img-thumbnail shadow-sm"
                                  style="width: 150px; height: 150px; object-fit: cover;">
