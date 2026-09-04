@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ContactInfoDto {
 
-    @NotNull(message = "Укажите тип контакта")
+    @NotNull(message = "{validation.contact.type.notNull}")
     private Long contactTypeId;
 
     private String typeName;

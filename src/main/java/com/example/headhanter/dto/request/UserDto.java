@@ -12,20 +12,20 @@ public class UserDto {
 
     public interface OnCreate {}
 
-    @NotBlank(message = "Email не может быть пустым")
-    @Email(message = "Некорректный формат email")
+    @NotBlank(message = "{validation.user.email.notBlank}")
+    @Email(message = "{validation.user.email.invalid}")
     private String email;
 
-    @NotBlank(message = "Пароль не может быть пустым", groups = OnCreate.class)
-    @Size(min = 6, message = "Пароль должен содержать минимум 6 символов")
+    @NotBlank(message = "{validation.user.password.notBlank}", groups = OnCreate.class)
+    @Size(min = 6, message = "{validation.user.password.size}")
     private String password;
 
-    @NotBlank(message = "Имя обязательно")
+    @NotBlank(message = "{validation.user.name.notBlank}")
     private String name;
 
     private String phone;
 
-    @NotNull(message = "Укажите тип аккаунта")
+    @NotNull(message = "{validation.user.accountType.notNull}")
     private String accountType;
 
 }

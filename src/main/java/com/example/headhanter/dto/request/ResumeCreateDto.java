@@ -16,23 +16,23 @@ public class ResumeCreateDto {
 
     private String applicantName;
 
-    @NotBlank(message = "Название резюме обязательно")
+    @NotBlank(message = "{validation.resume.title.notBlank}")
     private String title;
 
-    @NotNull(message = "Укажите категорию")
+    @NotNull(message = "{validation.resume.category.notNull}")
     private Long categoryId;
 
     private String skills;
 
-    @NotNull(message = "Укажите желаемую зарплату")
-    @Positive(message = "Зарплата должна быть больше 0")
+    @NotNull(message = "{validation.resume.salary.notNull}")
+    @Positive(message = "{validation.resume.salary.positive}")
     private Double expectedSalary;
 
-    @NotNull(message = "Контактные данные обязательны")
+    @NotNull(message = "{validation.resume.contacts.notNull}")
     @Valid
     private List<ContactInfoDto> contactInfos;
 
-    @NotEmpty(message = "Добавьте хотя бы одно место работы")
+    @NotEmpty(message = "{validation.resume.experiences.notEmpty}")
     @Valid
     private List<WorkExperienceInfoDto> experiences;
 

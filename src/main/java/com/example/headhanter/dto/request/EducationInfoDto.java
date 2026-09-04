@@ -8,16 +8,16 @@ import lombok.Data;
 @Data
 public class EducationInfoDto {
 
-    @NotBlank(message = "Учебное заведение обязательно")
+    @NotBlank(message = "{validation.education.institution.notBlank}")
     private String institution;
 
-    @NotBlank(message = "Специальность обязательна")
+    @NotBlank(message = "{validation.education.faculty.notBlank}")
     private String faculty;
 
-    @NotNull(message =  "Укажите год поступления")
+    @NotNull(message = "{validation.education.enrollmentYear.notNull}")
     private Integer enrollmentYear;
 
-    @NotNull(message = "Укажите год окончания")
+    @NotNull(message = "{validation.education.graduationYear.notNull}")
     private Integer graduationYear;
 
 
