@@ -1,6 +1,9 @@
 package com.example.headhanter.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
@@ -14,7 +17,14 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 @ControllerAdvice(basePackages = "com.example.headhanter.controller")
+@RequiredArgsConstructor
 public class MvcExceptionHandler {
+
+    private final MessageSource messageSource;
+
+    private String msg(String key) {
+        return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+    }
 
     @ExceptionHandler(NoSuchElementException.class)
     public String handleNotFound(NoSuchElementException ex, RedirectAttributes redirectAttributes) {
@@ -31,15 +41,15 @@ public class MvcExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String handleAccessDenied(AccessDeniedException ex, HttpServletRequest request, Model model) {
-        populateModel(model, 403, "Отказ в доступе", ex.getMessage(), request);
+        populateModel(model, 403, msg("error.accessDenied"), ex.getMessage(), request);
         return "error";
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleGlobalException(Exception ex, HttpServletRequest request, Model model) {
-        populateModel(model, 500, "Внутренняя ошибка сервера",
-                ex.getMessage() != null ? ex.getMessage() : "Произошла непредвиденная ошибка", request);
+        populateModel(model, 500, msg("error.internal"),
+                ex.getMessage() != null ? ex.getMessage() : msg("error.unexpected"), request);
         return "error";
     }
 
