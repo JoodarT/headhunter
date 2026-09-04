@@ -7,13 +7,13 @@ import lombok.Data;
 @Data
 public class WorkExperienceInfoDto {
 
-    @NotBlank(message = "Название компании обязательно")
+    @NotBlank(message = "{validation.experience.company.notBlank}")
     private String companyName;
 
-    @NotBlank(message = "Должность обязательна")
+    @NotBlank(message = "{validation.experience.position.notBlank}")
     private String position;
 
-    @NotBlank(message = "Укажите период работы")
+    @NotBlank(message = "{validation.experience.period.notBlank}")
     private String period;
 
     private String responsibilities;
