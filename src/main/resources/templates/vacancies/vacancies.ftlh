@@ -1,54 +1,49 @@
 <#import "../layout.ftlh" as layout>
-<@layout.mainLayout title="Список вакансий" fluid=true>
+<#import "/spring.ftl" as spring>
+<@layout.mainLayout title=springMacroRequestContext.getMessage('page.vacancies.title') fluid=true>
 <div class="mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <h2>Список вакансий<#if company?? && company?has_content> &middot; ${company}</#if></h2>
+        <h2><@spring.message "vacancies.heading"/><#if company?? && company?has_content> &middot; ${company}</#if></h2>
         <div class="d-flex gap-2 align-items-center">
             <#if sort?? && sort == "responses">
             <a href="/vacancies?sort=responses&amp;direction=<#if direction?? && direction == "asc">desc<#else>asc</#if>"
                class="btn btn-outline-secondary btn-sm">
-                По откликам <#if direction?? && direction == "asc">▲<#else>▼</#if>
+                <@spring.message "vacancies.sort.responses"/> <#if direction?? && direction == "asc">▲<#else>▼</#if>
             </a>
-            <a href="/vacancies" class="btn btn-outline-secondary btn-sm">Сбросить сортировку</a>
+            <a href="/vacancies" class="btn btn-outline-secondary btn-sm"><@spring.message "vacancies.sort.reset"/></a>
             <#elseif sort?? && sort == "date">
             <a href="/vacancies?sort=date&amp;direction=<#if direction?? && direction == "asc">desc<#else>asc</#if>"
                class="btn btn-outline-secondary btn-sm">
-                По дате <#if direction?? && direction == "asc">▲<#else>▼</#if>
+                <@spring.message "vacancies.sort.date"/> <#if direction?? && direction == "asc">▲<#else>▼</#if>
             </a>
-            <a href="/vacancies" class="btn btn-outline-secondary btn-sm">Сбросить сортировку</a>
+            <a href="/vacancies" class="btn btn-outline-secondary btn-sm"><@spring.message "vacancies.sort.reset"/></a>
             <#else>
             <a href="/vacancies?sort=responses&amp;direction=desc" class="btn btn-outline-secondary btn-sm">
-                Сортировать по откликам
+                <@spring.message "vacancies.sort.byResponses"/>
             </a>
             <a href="/vacancies?sort=date&amp;direction=desc" class="btn btn-outline-secondary btn-sm">
-                Сортировать по дате
+                <@spring.message "vacancies.sort.byDate"/>
             </a>
         </#if>
         <#if navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER">
-        <a href="/vacancies/create" class="btn btn-success">+ Создать вакансию</a>
+        <a href="/vacancies/create" class="btn btn-success"><@spring.message "vacancies.create"/></a>
         <#else>
-        <a href="#" class="btn btn-success disabled" aria-disabled="true" tabindex="-1">+ Создать вакансию</a>
+        <a href="#" class="btn btn-success disabled" aria-disabled="true" tabindex="-1"><@spring.message "vacancies.create"/></a>
     </#if>
 
-        <#-- poisk -->
         </div>
         <form action="/vacancies" method="get" class="mb-4">
             <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Поиск по вакансий" value="${(search)!''}">
-                <button class="btn btn-primary" type="submit">Найти</button>
+                <input type="text" name="search" class="form-control" placeholder="<@spring.message "vacancies.search.placeholder"/>" value="${(search)!''}">
+                <button class="btn btn-primary" type="submit"><@spring.message "common.search"/></button>
             </div>
         </form>
             </div>
 
-    <#if !(navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER")>
-<!--    <div class="alert alert-warning" role="alert">-->
-<!--    </div>-->
-</#if>
-
     <#if company?? && company?has_content>
     <div class="alert alert-secondary d-flex justify-content-between align-items-center py-2">
-        <span>Компания: <strong>${company}</strong></span>
-        <a href="/vacancies" class="btn btn-sm btn-outline-secondary">Сбросить фильтр</a>
+        <span><@spring.message "vacancies.filter.company"/> <strong>${company}</strong></span>
+        <a href="/vacancies" class="btn btn-sm btn-outline-secondary"><@spring.message "vacancies.filter.reset"/></a>
     </div>
 </#if>
 
@@ -70,13 +65,13 @@
                     <p class="card-text text-muted mb-2">
                             <small>
                                 <#if vacancy.categoryName??>
-                                Категория: ${vacancy.categoryName}
+                                <@spring.message "vacancies.category"/> ${vacancy.categoryName}
                                 <#elseif vacancy.categoryId??>
-                                Категория ID: ${vacancy.categoryId}
+                                <@spring.message "vacancies.category.id"/> ${vacancy.categoryId}
                                 <#else>
-                                Категория: Не указана
+                                <@spring.message "vacancies.category"/> <@spring.message "vacancies.category.none"/>
                             </#if>
-                                &middot; Откликов: ${vacancy.responsesCount!0}
+                                &middot; <@spring.messageArgs "vacancies.responsesCount", [vacancy.responsesCount!0]/>
                             </small>
                         </p>
                         <p class="card-text text-secondary mb-0" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
@@ -87,12 +82,12 @@
                     <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 flex-shrink-0">
                         <span class="text-success fw-bold fs-5">
                             <#if vacancy.salary??>
-                                ${vacancy.salary} KGS
+                                ${vacancy.salary} <@spring.message "common.currency"/>
                             <#else>
-                                Договорная
+                                <@spring.message "vacancies.salary.negotiable"/>
                             </#if>
                         </span>
-                        <a href="/vacancies/${vacancy.id}" class="btn btn-outline-primary btn-sm">Подробнее</a>
+                        <a href="/vacancies/${vacancy.id}" class="btn btn-outline-primary btn-sm"><@spring.message "vacancies.details"/></a>
                     </div>
                 </div>
             </div>
@@ -101,17 +96,17 @@
     <#else>
     <div class="col-12">
         <div class="alert alert-info text-center py-4">
-            Список вакансий пока пуст. Будьте первыми, кто создаст вакансию!
+            <@spring.message "vacancies.empty"/>
         </div>
     </div>
 </#if>
 </div>
 
 <#if totalPages?? && totalPages gt 1>
-<nav class="mt-4" aria-label="Страницы">
+<nav class="mt-4" aria-label="<@spring.message "vacancies.pager.label"/>">
     <ul class="pagination justify-content-center">
         <li class="page-item <#if currentPage lte 0>disabled</#if>">
-            <a class="page-link" href="/vacancies?page=${currentPage - 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if><#if search??>&amp;search=${search?url('UTF-8')}</#if>">Назад</a>
+            <a class="page-link" href="/vacancies?page=${currentPage - 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if><#if search??>&amp;search=${search?url('UTF-8')}</#if>"><@spring.message "vacancies.pager.prev"/></a>
         </li>
         <#list 0..(totalPages - 1) as p>
         <li class="page-item <#if p == currentPage>active</#if>">
@@ -119,7 +114,7 @@
         </li>
     </#list>
     <li class="page-item <#if currentPage gte (totalPages - 1)>disabled</#if>">
-        <a class="page-link" href="/vacancies?page=${currentPage + 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if><#if search??>&amp;search=${search?url('UTF-8')}</#if>">Вперёд</a>
+        <a class="page-link" href="/vacancies?page=${currentPage + 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if><#if search??>&amp;search=${search?url('UTF-8')}</#if>"><@spring.message "vacancies.pager.next"/></a>
     </li>
     </ul>
 </nav>

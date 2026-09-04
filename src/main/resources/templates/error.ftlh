@@ -1,6 +1,7 @@
 <#import "layout.ftlh" as main>
+<#import "/spring.ftl" as spring>
 
-<@main.mainLayout title="Ошибка">
+<@main.mainLayout title=springMacroRequestContext.getMessage('page.error.title')>
 <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
 <link rel="dns-prefetch" href="https://fonts.bunny.net">
 <link href="https://fonts.bunny.net/css?family=Nunito+Sans" rel="stylesheet">
@@ -230,23 +231,23 @@
         </div>
         <div class="content">
             <h1>${status!"500"}</h1>
-            <h2><span data-l10n>UH OH</span>! <span data-l10n>${reason!"Ошибка сервера"}</span></h2>
+            <h2><span><@spring.message "error.uhoh"/></span>! <span>${reason!springMacroRequestContext.getMessage('error.serverError')}</span></h2>
 
             <#if details??>
             <ul class="details">
                 <#if details.serverName??>
-                <li><span><span data-l10n>Host</span>:</span> <code>${details.serverName}</code></li>
+                <li><span><@spring.message "error.host"/>:</span> <code>${details.serverName}</code></li>
             </#if>
             <#if details.requestURL??>
-            <li><span><span data-l10n>Original URI</span>:</span> <code>${details.requestURL}</code></li>
+            <li><span><@spring.message "error.originalUri"/>:</span> <code>${details.requestURL}</code></li>
         </#if>
         <#if details.serverPort??>
-        <li><span><span data-l10n>Service port</span>:</span> <code>${details.serverPort}</code></li>
+        <li><span><@spring.message "error.servicePort"/>:</span> <code>${details.serverPort}</code></li>
     </#if>
     <#if details.requestId??>
-    <li><span><span data-l10n>Request ID</span>:</span> <code>${details.requestId}</code></li>
+    <li><span><@spring.message "error.requestId"/>:</span> <code>${details.requestId}</code></li>
 </#if>
-<li><span><span data-l10n>Timestamp</span>:</span> <code>${.now}</code></li>
+<li><span><@spring.message "error.timestamp"/>:</span> <code>${.now}</code></li>
 </ul>
 </#if>
 </div>

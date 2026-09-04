@@ -1,65 +1,65 @@
 <#import "../layout.ftlh" as layout>
-<@layout.mainLayout title="${resume.title!'Резюме'}">
+<#import "/spring.ftl" as spring>
+<#function contactTypeLabel typeName>
+    <#return springMacroRequestContext.getMessage("contactType." + typeName, typeName)>
+</#function>
+<#assign pageTitle = (resume.title)!springMacroRequestContext.getMessage('page.resumeDetail.title')>
+<@layout.mainLayout title=pageTitle>
 <div class="row justify-content-center">
     <div class="col-md-9 bg-white p-4 rounded shadow-sm">
 
-        <!-- Шапка резюме -->
         <div class="d-flex justify-content-between align-items-start mb-4 border-bottom pb-3">
             <div>
-                <h2 class="mb-1 text-primary">${resume.title!"Заголовок не указан"}</h2>
+                <h2 class="mb-1 text-primary">${resume.title!springMacroRequestContext.getMessage('resumeDetail.title.none')}</h2>
                 <#if resume.applicantName??>
                 <h5 class="text-secondary mb-2">${resume.applicantName}</h5>
             </#if>
             <div class="d-flex align-items-center gap-3">
                     <span class="fs-4 fw-bold text-success">
                         <#if resume.expectedSalary??>
-                            ${resume.expectedSalary} KGS
+                            ${resume.expectedSalary} <@spring.message "common.currency"/>
                         <#else>
-                            Зарплата не указана
+                            <@spring.message "resumeDetail.salary.none"/>
                         </#if>
                 </span>
                 <#if resume.createdDate??>
-                <small class="text-muted">Опубликовано: ${resume.createdDate}</small>
+                <small class="text-muted"><@spring.message "resumeDetail.published"/> ${resume.createdDate}</small>
             </#if>
         </div>
     </div>
 
-    <!-- Кнопки управления видны только владельцу -->
     <#if isOwner?? && isOwner>
     <div class="d-flex gap-2">
         <a href="/resumes/${resume.id}/edit" class="btn btn-outline-primary">
-            <i class="bi bi-pencil"></i> Редактировать
+            <i class="bi bi-pencil"></i> <@spring.message "common.edit"/>
         </a>
 
         <form action="/resumes/${resume.id}/delete" method="post" style="display:inline;">
             <#if _csrf??>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </#if>
-        <button type="submit" class="btn btn-outline-danger">Удалить</button>
+        <button type="submit" class="btn btn-outline-danger"><@spring.message "common.delete"/></button>
         </form>
     </div>
 </#if>
 </div>
 
-<!-- Категория -->
 <div class="mb-4">
-    <h5 class="text-muted text-uppercase fs-6">Специализация / Категория</h5>
-    <p class="lead fw-normal">${resume.categoryName!"Не указана"}</p>
+    <h5 class="text-muted text-uppercase fs-6"><@spring.message "resumeDetail.section.category"/></h5>
+    <p class="lead fw-normal">${resume.categoryName!springMacroRequestContext.getMessage('resumeDetail.category.none')}</p>
 </div>
 
-<!-- Навыки -->
 <#if resume.skills?? && resume.skills?has_content>
 <div class="mb-4">
-    <h5 class="text-muted text-uppercase fs-6">Ключевые навыки</h5>
+    <h5 class="text-muted text-uppercase fs-6"><@spring.message "resumeDetail.section.skills"/></h5>
     <div class="p-3 bg-light rounded border">
         <p class="mb-0" style="white-space: pre-line;">${resume.skills}</p>
     </div>
 </div>
 </#if>
 
-<!-- Опыт работы -->
 <div class="mb-4">
-    <h5 class="text-muted text-uppercase fs-6 mb-3">Опыт работы</h5>
+    <h5 class="text-muted text-uppercase fs-6 mb-3"><@spring.message "resumeDetail.section.experience"/></h5>
     <#if resume.experiences?? && (resume.experiences?size > 0)>
     <#list resume.experiences as exp>
     <div class="card mb-3 border-0 bg-light p-3">
@@ -76,13 +76,12 @@
 </div>
 </#list>
 <#else>
-<p class="text-muted italic">Опыт работы не указан</p>
+<p class="text-muted italic"><@spring.message "resumeDetail.experience.none"/></p>
 </#if>
 </div>
 
-<!-- Образование -->
 <div class="mb-4">
-    <h5 class="text-muted text-uppercase fs-6 mb-3">Образование</h5>
+    <h5 class="text-muted text-uppercase fs-6 mb-3"><@spring.message "resumeDetail.section.education"/></h5>
     <#if resume.educations?? && (resume.educations?size > 0)>
     <#list resume.educations as edu>
     <div class="card mb-2 border-0 bg-light p-3">
@@ -90,35 +89,20 @@
         <p class="mb-0 text-secondary">
             ${edu.faculty!}
             <#if edu.enrollmentYear?? && edu.graduationYear??>
-            <strong class="ms-1">(${edu.enrollmentYear?c} - ${edu.graduationYear?c} г.)</strong>
+            <strong class="ms-1"><@spring.messageArgs "resumeDetail.education.years", [edu.enrollmentYear?c, edu.graduationYear?c]/></strong>
             <#elseif edu.graduationYear??>
-            <strong class="ms-1">(${edu.graduationYear?c} г.)</strong>
+            <strong class="ms-1"><@spring.messageArgs "resumeDetail.education.yearOne", [edu.graduationYear?c]/></strong>
         </#if>
         </p>
     </div>
 </#list>
 <#else>
-<p class="text-muted italic">Образование не указано</p>
+<p class="text-muted italic"><@spring.message "resumeDetail.education.none"/></p>
 </#if>
 </div>
 
-<!-- Контакты -->
-<#function contactTypeLabel typeName>
-    <#switch typeName>
-        <#case "PHONE">
-            <#return "Телефон">
-        <#case "EMAIL">
-            <#return "Email">
-        <#case "TELEGRAM">
-            <#return "Telegram">
-        <#case "LINKEDIN">
-            <#return "LinkedIn">
-        <#default>
-            <#return typeName>
-    </#switch>
-</#function>
 <div class="mb-4">
-    <h5 class="text-muted text-uppercase fs-6 mb-3">Контакты</h5>
+    <h5 class="text-muted text-uppercase fs-6 mb-3"><@spring.message "resumeDetail.section.contacts"/></h5>
     <#if resume.contactInfos?? && resume.contactInfos?has_content>
     <div class="row g-2">
         <#list resume.contactInfos as c>
@@ -133,13 +117,12 @@
         </#list>
     </div>
     <#else>
-    <p class="text-muted italic">Контакты не указаны</p>
+    <p class="text-muted italic"><@spring.message "resumeDetail.contacts.none"/></p>
     </#if>
 </div>
 
-<!-- Кнопка назад -->
 <div class="mt-4 pt-3 border-top">
-    <a href="/vacancies" class="btn btn-outline-secondary">← Назад</a>
+    <a href="/vacancies" class="btn btn-outline-secondary">← <@spring.message "common.back"/></a>
 </div>
 
 </div>

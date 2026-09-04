@@ -1,6 +1,7 @@
+<#import "/spring.ftl" as spring>
 <#macro mainLayout title="HeadHunter" fluid=false>
 <!DOCTYPE html>
-<html lang="ru" class="h-100">
+<html lang="${springMacroRequestContext.locale.language}" class="h-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,44 +24,54 @@
                 <ul class="navbar-nav me-auto">
                     <#if navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER">
                     <li class="nav-item">
-                        <a class="nav-link" href="/resumes">Резюме</a>
+                        <a class="nav-link" href="/resumes"><@spring.message "nav.resumes"/></a>
                     </li>
                     <#elseif navUser?? && navUser.role?? && navUser.role.role == "APPLICANT">
                     <li class="nav-item">
-                        <a class="nav-link" href="/vacancies">Вакансии</a>
+                        <a class="nav-link" href="/vacancies"><@spring.message "nav.vacancies"/></a>
                     </li>
                     <#else>
                     <li class="nav-item">
-                        <a class="nav-link" href="/resumes">Резюме</a>
+                        <a class="nav-link" href="/resumes"><@spring.message "nav.resumes"/></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/vacancies">Вакансии</a>
+                        <a class="nav-link" href="/vacancies"><@spring.message "nav.vacancies"/></a>
                     </li>
                     </#if>
                     <li class="nav-item">
-                        <a class="nav-link" href="/companies">Компании</a>
+                        <a class="nav-link" href="/companies"><@spring.message "nav.companies"/></a>
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-translate"></i>
+                            <#if springMacroRequestContext.locale.language == "en">EN<#else>RU</#if>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item<#if springMacroRequestContext.locale.language == "ru"> active</#if>" href="?lang=ru"><@spring.message "lang.ru"/></a></li>
+                            <li><a class="dropdown-item<#if springMacroRequestContext.locale.language == "en"> active</#if>" href="?lang=en"><@spring.message "lang.en"/></a></li>
+                        </ul>
+                    </li>
                     <#if navUser??>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light btn-sm me-2" href="/profile"><i class="bi bi-person-circle"></i> Личный кабинет</a>
+                        <a class="btn btn-outline-light btn-sm ms-2 me-2" href="/profile"><i class="bi bi-person-circle"></i> <@spring.message "nav.profile"/></a>
                     </li>
                     <li class="nav-item">
                         <form action="/logout" method="post" class="d-inline">
                             <#if _csrf??>
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         </#if>
-                        <button type="submit" class="nav-link btn btn-link p-0 border-0 align-baseline">Выход</button>
+                        <button type="submit" class="nav-link btn btn-link p-0 border-0 align-baseline"><@spring.message "nav.logout"/></button>
                         </form>
                     </li>
                     <#else>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Вход</a>
+                        <a class="nav-link ms-2" href="/login"><@spring.message "nav.login"/></a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light ms-2" href="/register">Регистрация</a>
+                        <a class="btn btn-outline-light ms-2" href="/register"><@spring.message "nav.register"/></a>
                     </li>
                 </#if>
                 </ul>
@@ -77,14 +88,14 @@
 
 <footer class="footer mt-auto py-3 bg-white border-top">
     <div class="container text-center text-muted fs-7">
-        &copy; ${.now?string('yyyy')} HH App. Все права защищены.
+        &copy; ${.now?string('yyyy')} HH App. <@spring.message "footer.rights"/>
     </div>
     <li class="nav-item mt-auto text-muted">
-        <a class="nav-link ps-5" href="/resumes">Резюме</a>
+        <a class="nav-link ps-5" href="/resumes"><@spring.message "nav.resumes"/></a>
     </li>
 
     <li class="nav-item mt-auto text-muted">
-        <a class="nav-link ps-5" href="/vacancies">Вакансии</a>
+        <a class="nav-link ps-5" href="/vacancies"><@spring.message "nav.vacancies"/></a>
     </li>
 
 </footer>

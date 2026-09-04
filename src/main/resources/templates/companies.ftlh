@@ -1,7 +1,8 @@
 <#import "layout.ftlh" as layout>
-<@layout.mainLayout title="Компании">
+<#import "/spring.ftl" as spring>
+<@layout.mainLayout title=springMacroRequestContext.getMessage('page.companies.title')>
 <div class="mt-4">
-    <h2 class="mb-4">Компании</h2>
+    <h2 class="mb-4"><@spring.message "companies.heading"/></h2>
 
     <div class="row">
         <#if companies?? && (companies?size > 0)>
@@ -12,11 +13,11 @@
                     <div>
                         <h5 class="card-title mb-1">${c.name}</h5>
                         <p class="card-text text-muted mb-0">
-                            Вакансий: ${c.vacancyCount}
+                            <@spring.messageArgs "companies.vacancyCount", [c.vacancyCount]/>
                         </p>
                     </div>
                     <a href="/vacancies?company=${c.name?url('UTF-8')}" class="btn btn-outline-primary btn-sm">
-                        Смотреть
+                        <@spring.message "companies.view"/>
                     </a>
                 </div>
             </div>
@@ -25,7 +26,7 @@
         <#else>
         <div class="col-12">
             <div class="alert alert-info text-center py-4">
-                Компании пока не добавили вакансии.
+                <@spring.message "companies.empty"/>
             </div>
         </div>
     </#if>
