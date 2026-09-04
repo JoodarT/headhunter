@@ -15,7 +15,6 @@ import java.util.Locale;
 
 public class SiteLocaleResolver implements LocaleResolver {
 
-    // ключ, под которым язык лежит в сессии
     static final String SESSION_ATTR = "SITE_LANG";
 
     private final List<Locale> supported = new ArrayList<>();
@@ -37,13 +36,11 @@ public class SiteLocaleResolver implements LocaleResolver {
 
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
-        // 1) уже выбирали в этой сессии
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute(SESSION_ATTR) instanceof Locale) {
             return (Locale) session.getAttribute(SESSION_ATTR);
         }
 
-        // 2) пользователь залогинен - берём из БД (это и даёт язык "в другом браузере")
         String email = getEmail();
         if (email != null) {
             try {
@@ -54,11 +51,10 @@ public class SiteLocaleResolver implements LocaleResolver {
                     return fromDb;
                 }
             } catch (RuntimeException e) {
-                // юзера могло не быть - не страшно, идём дальше
+                return defaultLocale;
             }
         }
 
-        // 3) гость - смотрим cookie
         if (request.getCookies() != null) {
             for (Cookie c : request.getCookies()) {
                 if (cookieName.equals(c.getName()) && c.getValue() != null && !c.getValue().isBlank()) {
@@ -67,7 +63,6 @@ public class SiteLocaleResolver implements LocaleResolver {
             }
         }
 
-        // 4) язык по умолчанию
         return defaultLocale;
     }
 
@@ -85,7 +80,6 @@ public class SiteLocaleResolver implements LocaleResolver {
             response.addCookie(cookie);
         }
 
-        // если вошёл - запоминаем выбор в БД
         String email = getEmail();
         if (email != null) {
             userService.updateLocale(email, chosen.getLanguage());
@@ -95,12 +89,11 @@ public class SiteLocaleResolver implements LocaleResolver {
     private String getEmail() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || auth.getPrincipal() instanceof String) {
-            return null; // anonymousUser приходит строкой
+            return null;
         }
         return auth.getName();
     }
 
-    // приводим к одному из поддерживаемых языков, иначе - дефолт
     private Locale normalize(Locale candidate) {
         if (candidate != null) {
             for (Locale s : supported) {

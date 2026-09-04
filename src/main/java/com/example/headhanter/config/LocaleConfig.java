@@ -12,7 +12,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import java.util.Arrays;
 import java.util.List;
 
-
 @Configuration
 public class LocaleConfig implements WebMvcConfigurer {
 

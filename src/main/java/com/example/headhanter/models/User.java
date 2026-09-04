@@ -44,7 +44,6 @@ public class User {
    @Column(name = "reset_password_token_expiry")
    private LocalDateTime resetPasswordTokenExpiry;
 
-   // выбранный язык интерфейса (ru / en)
    @Column(name = "locale", length = 8)
    private String locale;
 

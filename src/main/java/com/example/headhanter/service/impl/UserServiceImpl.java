@@ -165,7 +165,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateLocale(String email, String locale) {
-        // просто сохраняем выбранный язык у пользователя
         userRepository.findByEmail(email).ifPresent(user -> {
             user.setLocale(locale);
             userRepository.save(user);
