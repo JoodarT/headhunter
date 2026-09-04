@@ -43,10 +43,9 @@ public class VacancyWebController {
             @RequestParam(defaultValue = "desc") String direction,
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "company", required = false) String company,
+            @RequestParam(value = "category", required = false) Long category,
             Model model
     ) {
-        boolean sortByResponses = "responses".equals(sort);
-        boolean sortByDate = "date".equals(sort);
         boolean ascending = "asc".equalsIgnoreCase(direction);
 
         Page<VacancyResponseDto> vacancyPage;
@@ -58,7 +57,7 @@ public class VacancyWebController {
             vacancyPage = vacancyService.getVacanciesByCompany(company.trim(), page, PAGE_SIZE);
             model.addAttribute("company", company.trim());
         } else {
-            vacancyPage = vacancyService.getAllPaged(page, PAGE_SIZE, sortByResponses, sortByDate, ascending);
+            vacancyPage = vacancyService.getAllPaged(page, PAGE_SIZE, sort, ascending, category);
         }
 
         model.addAttribute("vacancies", vacancyPage.getContent());
@@ -66,6 +65,8 @@ public class VacancyWebController {
         model.addAttribute("currentPage", page);
         model.addAttribute("sort", sort);
         model.addAttribute("direction", direction);
+        model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("selectedCategory", category);
 
         return "vacancies/vacancies";
     }

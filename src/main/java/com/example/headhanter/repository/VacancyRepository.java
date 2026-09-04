@@ -14,15 +14,25 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     List<Vacancy> findByIsActiveTrue();
     Page<Vacancy> findByIsActiveTrue(Pageable pageable);
 
-    @Query(value = "SELECT v FROM Vacancy v LEFT JOIN RespondedApplicant ra ON ra.vacancy = v " +
-            "WHERE v.isActive = true GROUP BY v ORDER BY COUNT(ra) DESC",
-            countQuery = "SELECT COUNT(v) FROM Vacancy v WHERE v.isActive = true")
-    Page<Vacancy> findAllActiveOrderByResponsesDesc(Pageable pageable);
+    @Query(value = "SELECT v FROM Vacancy v WHERE v.isActive = true " +
+            "AND (:categoryId IS NULL OR v.category.id = :categoryId)",
+            countQuery = "SELECT COUNT(v) FROM Vacancy v WHERE v.isActive = true " +
+            "AND (:categoryId IS NULL OR v.category.id = :categoryId)")
+    Page<Vacancy> findActive(@Param("categoryId") Long categoryId, Pageable pageable);
 
     @Query(value = "SELECT v FROM Vacancy v LEFT JOIN RespondedApplicant ra ON ra.vacancy = v " +
-            "WHERE v.isActive = true GROUP BY v ORDER BY COUNT(ra) ASC",
-            countQuery = "SELECT COUNT(v) FROM Vacancy v WHERE v.isActive = true")
-    Page<Vacancy> findAllActiveOrderByResponsesAsc(Pageable pageable);
+            "WHERE v.isActive = true AND (:categoryId IS NULL OR v.category.id = :categoryId) " +
+            "GROUP BY v ORDER BY COUNT(ra) DESC",
+            countQuery = "SELECT COUNT(v) FROM Vacancy v WHERE v.isActive = true " +
+            "AND (:categoryId IS NULL OR v.category.id = :categoryId)")
+    Page<Vacancy> findAllActiveOrderByResponsesDesc(@Param("categoryId") Long categoryId, Pageable pageable);
+
+    @Query(value = "SELECT v FROM Vacancy v LEFT JOIN RespondedApplicant ra ON ra.vacancy = v " +
+            "WHERE v.isActive = true AND (:categoryId IS NULL OR v.category.id = :categoryId) " +
+            "GROUP BY v ORDER BY COUNT(ra) ASC",
+            countQuery = "SELECT COUNT(v) FROM Vacancy v WHERE v.isActive = true " +
+            "AND (:categoryId IS NULL OR v.category.id = :categoryId)")
+    Page<Vacancy> findAllActiveOrderByResponsesAsc(@Param("categoryId") Long categoryId, Pageable pageable);
 
     @Query("SELECT COUNT(ra) FROM RespondedApplicant ra WHERE ra.vacancy.id = :vacancyId")
     long countResponsesByVacancyId(@Param("vacancyId") Long vacancyId);

@@ -1,51 +1,58 @@
 <#import "../layout.ftlh" as layout>
 <#import "/spring.ftl" as spring>
 <@layout.mainLayout title=springMacroRequestContext.getMessage('page.vacancies.title') fluid=true>
+<#assign dir = (direction)!'desc'>
+<#assign keepParams>
+<#if sort?? && sort?has_content>&amp;sort=${sort}</#if><#if direction??>&amp;direction=${dir}</#if><#if selectedCategory??>&amp;category=${selectedCategory?c}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if><#if search??>&amp;search=${search?url('UTF-8')}</#if></#assign>
 <div class="mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <h2><@spring.message "vacancies.heading"/><#if company?? && company?has_content> &middot; ${company}</#if></h2>
-        <div class="d-flex gap-2 align-items-center">
-            <#if sort?? && sort == "responses">
-            <a href="/vacancies?sort=responses&amp;direction=<#if direction?? && direction == "asc">desc<#else>asc</#if>"
-               class="btn btn-outline-secondary btn-sm">
-                <@spring.message "vacancies.sort.responses"/> <#if direction?? && direction == "asc">▲<#else>▼</#if>
-            </a>
-            <a href="/vacancies" class="btn btn-outline-secondary btn-sm"><@spring.message "vacancies.sort.reset"/></a>
-            <#elseif sort?? && sort == "date">
-            <a href="/vacancies?sort=date&amp;direction=<#if direction?? && direction == "asc">desc<#else>asc</#if>"
-               class="btn btn-outline-secondary btn-sm">
-                <@spring.message "vacancies.sort.date"/> <#if direction?? && direction == "asc">▲<#else>▼</#if>
-            </a>
-            <a href="/vacancies" class="btn btn-outline-secondary btn-sm"><@spring.message "vacancies.sort.reset"/></a>
-            <#else>
-            <a href="/vacancies?sort=responses&amp;direction=desc" class="btn btn-outline-secondary btn-sm">
-                <@spring.message "vacancies.sort.byResponses"/>
-            </a>
-            <a href="/vacancies?sort=date&amp;direction=desc" class="btn btn-outline-secondary btn-sm">
-                <@spring.message "vacancies.sort.byDate"/>
-            </a>
-        </#if>
         <#if navUser?? && navUser.role?? && navUser.role.role == "EMPLOYER">
         <a href="/vacancies/create" class="btn btn-success"><@spring.message "vacancies.create"/></a>
         <#else>
         <a href="#" class="btn btn-success disabled" aria-disabled="true" tabindex="-1"><@spring.message "vacancies.create"/></a>
-    </#if>
+        </#if>
+    </div>
 
+    <form action="/vacancies" method="get" class="row g-2 mb-4">
+        <div class="col-12 col-lg">
+            <input type="text" name="search" class="form-control" placeholder="<@spring.message "vacancies.search.placeholder"/>" value="${(search)!''}">
         </div>
-        <form action="/vacancies" method="get" class="mb-4">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="<@spring.message "vacancies.search.placeholder"/>" value="${(search)!''}">
-                <button class="btn btn-primary" type="submit"><@spring.message "common.search"/></button>
-            </div>
-        </form>
-            </div>
+        <div class="col-6 col-lg-auto">
+            <select name="category" class="form-select" onchange="this.form.submit()">
+                <option value=""><@spring.message "vacancies.filter.category.all"/></option>
+                <#if categories??>
+                <#list categories as c>
+                <option value="${c.id?c}" <#if selectedCategory?? && selectedCategory == c.id>selected</#if>>${c.name}</option>
+                </#list>
+                </#if>
+            </select>
+        </div>
+        <div class="col-6 col-lg-auto">
+            <select name="sort" class="form-select" onchange="this.form.submit()">
+                <option value="" <#if !(sort??) || !sort?has_content>selected</#if>><@spring.message "vacancies.sort.default"/></option>
+                <option value="salary" <#if sort?? && sort == "salary">selected</#if>><@spring.message "vacancies.sort.salary"/></option>
+                <option value="date" <#if sort?? && sort == "date">selected</#if>><@spring.message "vacancies.sort.date"/></option>
+                <option value="responses" <#if sort?? && sort == "responses">selected</#if>><@spring.message "vacancies.sort.responses"/></option>
+            </select>
+        </div>
+        <div class="col-6 col-lg-auto">
+            <select name="direction" class="form-select" onchange="this.form.submit()">
+                <option value="desc" <#if dir == "desc">selected</#if>><@spring.message "vacancies.dir.desc"/></option>
+                <option value="asc" <#if dir == "asc">selected</#if>><@spring.message "vacancies.dir.asc"/></option>
+            </select>
+        </div>
+        <div class="col-6 col-lg-auto">
+            <button class="btn btn-primary w-100" type="submit"><@spring.message "common.search"/></button>
+        </div>
+    </form>
 
     <#if company?? && company?has_content>
     <div class="alert alert-secondary d-flex justify-content-between align-items-center py-2">
         <span><@spring.message "vacancies.filter.company"/> <strong>${company}</strong></span>
         <a href="/vacancies" class="btn btn-sm btn-outline-secondary"><@spring.message "vacancies.filter.reset"/></a>
     </div>
-</#if>
+    </#if>
 
 <div class="row">
         <#if vacancies?? && (vacancies?size > 0)>
@@ -106,15 +113,15 @@
 <nav class="mt-4" aria-label="<@spring.message "vacancies.pager.label"/>">
     <ul class="pagination justify-content-center">
         <li class="page-item <#if currentPage lte 0>disabled</#if>">
-            <a class="page-link" href="/vacancies?page=${currentPage - 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if><#if search??>&amp;search=${search?url('UTF-8')}</#if>"><@spring.message "vacancies.pager.prev"/></a>
+            <a class="page-link" href="/vacancies?page=${currentPage - 1}${keepParams}"><@spring.message "vacancies.pager.prev"/></a>
         </li>
         <#list 0..(totalPages - 1) as p>
         <li class="page-item <#if p == currentPage>active</#if>">
-            <a class="page-link" href="/vacancies?page=${p}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if><#if search??>&amp;search=${search?url('UTF-8')}</#if>">${p + 1}</a>
+            <a class="page-link" href="/vacancies?page=${p}${keepParams}">${p + 1}</a>
         </li>
     </#list>
     <li class="page-item <#if currentPage gte (totalPages - 1)>disabled</#if>">
-        <a class="page-link" href="/vacancies?page=${currentPage + 1}<#if sort??>&amp;sort=${sort}&amp;direction=${direction!'desc'}</#if><#if company??>&amp;company=${company?url('UTF-8')}</#if><#if search??>&amp;search=${search?url('UTF-8')}</#if>"><@spring.message "vacancies.pager.next"/></a>
+        <a class="page-link" href="/vacancies?page=${currentPage + 1}${keepParams}"><@spring.message "vacancies.pager.next"/></a>
     </li>
     </ul>
 </nav>

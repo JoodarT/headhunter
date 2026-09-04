@@ -11,7 +11,7 @@ import java.util.List;
 public interface VacancyService {
     VacancyResponseDto create(VacancyCreateDto dto);
     List<VacancyResponseDto> getAll();
-    Page<VacancyResponseDto> getAllPaged(int page, int size, boolean sortByResponses, boolean sortByDate, boolean ascending);
+    Page<VacancyResponseDto> getAllPaged(int page, int size, String sort, boolean ascending, Long categoryId);
     VacancyResponseDto getById(Long id);
     List<VacancyResponseDto> getRespondedVacanciesByUser(Long userId);
     Page<VacancyResponseDto> searchVacancy(String keywords, int page, int size);

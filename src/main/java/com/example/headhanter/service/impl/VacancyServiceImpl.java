@@ -39,20 +39,26 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public Page<VacancyResponseDto> getAllPaged(int page, int size, boolean sortByResponses, boolean sortByDate, boolean ascending) {
+    public Page<VacancyResponseDto> getAllPaged(int page, int size, String sort, boolean ascending, Long categoryId) {
+        int pageNum = Math.max(page, 0);
+        int pageSize = Math.max(size, 1);
+        Sort.Direction direction = ascending ? Sort.Direction.ASC : Sort.Direction.DESC;
+
         Page<Vacancy> vacancies;
-        if (sortByResponses) {
-            Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
+        if ("responses".equals(sort)) {
+            Pageable pageable = PageRequest.of(pageNum, pageSize);
             vacancies = ascending
-                    ? vacancyRepository.findAllActiveOrderByResponsesAsc(pageable)
-                    : vacancyRepository.findAllActiveOrderByResponsesDesc(pageable);
-        } else if (sortByDate) {
-            Sort.Direction direction = ascending ? Sort.Direction.ASC : Sort.Direction.DESC;
-            Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1), Sort.by(direction, "createdDate"));
-            vacancies = vacancyRepository.findByIsActiveTrue(pageable);
+                    ? vacancyRepository.findAllActiveOrderByResponsesAsc(categoryId, pageable)
+                    : vacancyRepository.findAllActiveOrderByResponsesDesc(categoryId, pageable);
+        } else if ("salary".equals(sort)) {
+            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(direction, "salary"));
+            vacancies = vacancyRepository.findActive(categoryId, pageable);
+        } else if ("date".equals(sort)) {
+            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(direction, "createdDate"));
+            vacancies = vacancyRepository.findActive(categoryId, pageable);
         } else {
-            Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
-            vacancies = vacancyRepository.findByIsActiveTrue(pageable);
+            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "createdDate"));
+            vacancies = vacancyRepository.findActive(categoryId, pageable);
         }
 
         return vacancies.map(this::mapToResponseDto);
