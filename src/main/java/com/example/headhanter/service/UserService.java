@@ -20,4 +20,5 @@ public interface UserService {
     String createPasswordResetToken(String email);
     void resetPassword(String token, String newPassword);
     boolean isResetTokenValid(String token);
+    void updateLocale(String email, String locale);
 }

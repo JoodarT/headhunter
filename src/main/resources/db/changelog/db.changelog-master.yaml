@@ -66,3 +66,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/21_create_role_authorities.yaml
 
+  - include:
+      file: db/changelog/migration/22_add_locale_to_users.yaml
+
