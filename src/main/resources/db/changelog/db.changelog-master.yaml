@@ -69,3 +69,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/22_add_locale_to_users.yaml
 
+  - include:
+      file: db/changelog/migration/23_backfill_vacancy_update_time.yaml
+

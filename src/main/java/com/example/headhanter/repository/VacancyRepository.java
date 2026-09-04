@@ -22,14 +22,14 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
 
     @Query(value = "SELECT v FROM Vacancy v LEFT JOIN RespondedApplicant ra ON ra.vacancy = v " +
             "WHERE v.isActive = true AND (:categoryId IS NULL OR v.category.id = :categoryId) " +
-            "GROUP BY v ORDER BY COUNT(ra) DESC",
+            "GROUP BY v ORDER BY COUNT(ra) DESC, v.id DESC",
             countQuery = "SELECT COUNT(v) FROM Vacancy v WHERE v.isActive = true " +
             "AND (:categoryId IS NULL OR v.category.id = :categoryId)")
     Page<Vacancy> findAllActiveOrderByResponsesDesc(@Param("categoryId") Long categoryId, Pageable pageable);
 
     @Query(value = "SELECT v FROM Vacancy v LEFT JOIN RespondedApplicant ra ON ra.vacancy = v " +
             "WHERE v.isActive = true AND (:categoryId IS NULL OR v.category.id = :categoryId) " +
-            "GROUP BY v ORDER BY COUNT(ra) ASC",
+            "GROUP BY v ORDER BY COUNT(ra) ASC, v.id DESC",
             countQuery = "SELECT COUNT(v) FROM Vacancy v WHERE v.isActive = true " +
             "AND (:categoryId IS NULL OR v.category.id = :categoryId)")
     Page<Vacancy> findAllActiveOrderByResponsesAsc(@Param("categoryId") Long categoryId, Pageable pageable);

@@ -44,6 +44,8 @@ public class VacancyServiceImpl implements VacancyService {
         int pageSize = Math.max(size, 1);
         Sort.Direction direction = ascending ? Sort.Direction.ASC : Sort.Direction.DESC;
 
+        Sort tieBreaker = Sort.by(Sort.Direction.DESC, "id");
+
         Page<Vacancy> vacancies;
         if ("responses".equals(sort)) {
             Pageable pageable = PageRequest.of(pageNum, pageSize);
@@ -51,13 +53,13 @@ public class VacancyServiceImpl implements VacancyService {
                     ? vacancyRepository.findAllActiveOrderByResponsesAsc(categoryId, pageable)
                     : vacancyRepository.findAllActiveOrderByResponsesDesc(categoryId, pageable);
         } else if ("salary".equals(sort)) {
-            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(direction, "salary"));
+            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(direction, "salary").and(tieBreaker));
             vacancies = vacancyRepository.findActive(categoryId, pageable);
         } else if ("date".equals(sort)) {
-            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(direction, "createdDate"));
+            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(direction, "updateTime").and(tieBreaker));
             vacancies = vacancyRepository.findActive(categoryId, pageable);
         } else {
-            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "createdDate"));
+            Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "updateTime").and(tieBreaker));
             vacancies = vacancyRepository.findActive(categoryId, pageable);
         }
 
