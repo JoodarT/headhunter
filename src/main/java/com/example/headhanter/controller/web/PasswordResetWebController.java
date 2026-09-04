@@ -2,6 +2,8 @@ package com.example.headhanter.controller.web;
 
 import com.example.headhanter.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import java.util.NoSuchElementException;
 public class PasswordResetWebController {
 
     private final UserService userService;
+    private final MessageSource messageSource;
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordForm() {
@@ -51,7 +54,8 @@ public class PasswordResetWebController {
     ) {
         if (!password.equals(confirmPassword)) {
             model.addAttribute("token", token);
-            model.addAttribute("error", "Пароли не совпадают");
+            model.addAttribute("error", messageSource.getMessage(
+                    "resetPassword.error.mismatch", null, LocaleContextHolder.getLocale()));
             return "reset-password";
         }
 
