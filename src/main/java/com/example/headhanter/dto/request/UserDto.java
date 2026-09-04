@@ -23,6 +23,7 @@ public class UserDto {
     @NotBlank(message = "{validation.user.name.notBlank}")
     private String name;
 
+    @NotBlank(message = "{validation.user.phone.notBlank}")
     private String phone;
 
     @NotNull(message = "{validation.user.accountType.notNull}")

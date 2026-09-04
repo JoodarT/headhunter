@@ -29,7 +29,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label"><@spring.message "register.phone"/></label>
-            <input type="text" name="phone" class="form-control" value="${(userDto.phone)!''}">
+            <input type="tel" name="phone" class="form-control" value="${(userDto.phone)!''}" required>
         </div>
         <div class="mb-3">
             <label class="form-label"><@spring.message "register.accountType"/></label>

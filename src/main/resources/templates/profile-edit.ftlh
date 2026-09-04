@@ -30,7 +30,7 @@
 
         <div class="mb-3">
             <label class="form-label"><@spring.message "profileEdit.phone"/></label>
-            <input type="text" name="phone" value="${userDto.phone!''}" class="form-control">
+            <input type="tel" name="phone" value="${userDto.phone!''}" class="form-control" required>
         </div>
 
         <div class="d-flex justify-content-between mt-4">
