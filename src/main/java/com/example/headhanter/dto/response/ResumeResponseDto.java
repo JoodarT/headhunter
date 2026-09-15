@@ -24,6 +24,7 @@ public class ResumeResponseDto {
     private Double expectedSalary;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private Boolean isActive;
 
     private List<ContactInfoDto> contactInfos;
     private List<WorkExperienceInfoDto> experiences;
