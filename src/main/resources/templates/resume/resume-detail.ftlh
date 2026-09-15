@@ -64,6 +64,31 @@
 </form>
 </div>
 </#if>
+
+<#if isEmployerViewer?? && isEmployerViewer>
+<div class="border rounded p-3 bg-light">
+    <#if myVacancies?? && myVacancies?has_content>
+    <form action="/chat/start" method="post" class="d-flex flex-wrap align-items-end gap-2">
+        <#if _csrf??>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </#if>
+    <input type="hidden" name="resumeId" value="${resume.id}"/>
+    <div class="flex-grow-1">
+        <label class="form-label mb-1"><@spring.message "resumeDetail.chat.selectVacancy"/></label>
+        <select name="vacancyId" class="form-select" required>
+            <option value="" disabled selected><@spring.message "resumeDetail.chat.selectVacancy.choose"/></option>
+            <#list myVacancies as v>
+            <option value="${v.id}">${v.title}</option>
+        </#list>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary"><@spring.message "resumeDetail.chat.submit"/></button>
+    </form>
+    <#else>
+    <p class="text-muted mb-0"><@spring.message "resumeDetail.chat.noVacancies"/></p>
+</#if>
+</div>
+</#if>
 </div>
 
 <div class="mb-4">

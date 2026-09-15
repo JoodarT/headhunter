@@ -27,11 +27,14 @@
                     </div>
                 </#if>
                 </div>
-                <#if response.confirmation?? && response.confirmation>
-                <span class="badge bg-success"><@spring.message "responses.status.confirmed"/></span>
-                <#else>
-                <span class="badge bg-secondary"><@spring.message "responses.status.pending"/></span>
-            </#if>
+                <div class="d-flex flex-column align-items-end gap-2">
+                    <#if response.confirmation?? && response.confirmation>
+                    <span class="badge bg-success"><@spring.message "responses.status.confirmed"/></span>
+                    <#else>
+                    <span class="badge bg-secondary"><@spring.message "responses.status.pending"/></span>
+                </#if>
+                    <a href="/chat/${response.id}" class="btn btn-sm btn-outline-primary"><@spring.message "responses.chat"/></a>
+                </div>
             </div>
         </div>
         </#list>

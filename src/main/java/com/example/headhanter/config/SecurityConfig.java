@@ -48,7 +48,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**", "/h2-console/**")
+                        .ignoringRequestMatchers("/api/**", "/h2-console/**", "/ws/**")
                 )
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
@@ -69,6 +69,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/", "/register", "/login", "/forgot-password", "/reset-password", "/resumes/**", "/vacancies", "/vacancies/**").permitAll()
                         .requestMatchers("/profile/**").authenticated()
+                        .requestMatchers("/chat/**", "/ws/**").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/users", "/users").permitAll()
 

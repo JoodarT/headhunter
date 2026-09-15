@@ -7,6 +7,7 @@ import com.example.headhanter.service.CategoryService;
 import com.example.headhanter.service.ContactTypeService;
 import com.example.headhanter.service.ResumeService;
 import com.example.headhanter.service.UserService;
+import com.example.headhanter.service.VacancyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +26,7 @@ public class ResumeWebController {
     private final UserService userService;
     private final CategoryService categoryService;
     private final ContactTypeService contactTypeService;
+    private final VacancyService vacancyService;
 
     @GetMapping
     public String getAllResumes(
@@ -196,6 +198,12 @@ public class ResumeWebController {
             User currentUser = userService.getUserByEmail(userDetails.getUsername());
             if (resume.getUserId() != null && resume.getUserId().equals(currentUser.getId())) {
                 isOwner = true;
+            }
+
+            boolean isEmployer = currentUser.getRole() != null && "EMPLOYER".equals(currentUser.getRole().getRole());
+            if (isEmployer && !isOwner) {
+                model.addAttribute("isEmployerViewer", true);
+                model.addAttribute("myVacancies", vacancyService.getVacanciesByEmployer(currentUser.getId()));
             }
         }
 
