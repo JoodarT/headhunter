@@ -46,8 +46,8 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<ResumeResponseDto> getAllResumes() {
-        return resumeRepository.findAll().stream()
+    public List<ResumeResponseDto> getAllResumes(Long categoryId) {
+        return resumeRepository.findActive(categoryId, null).stream()
                 .map(this::mapToDto)
                 .toList();
     }
@@ -69,10 +69,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Transactional
     public ResumeResponseDto updateResume(Long id, ResumeCreateDto dto, Long currentUserId) {
         Resume existingResume = findById(id);
-
-        if (existingResume.getUser() == null || !existingResume.getUser().getId().equals(currentUserId)) {
-            throw new AccessDeniedException("У вас нет прав на редактирование этого резюме");
-        }
+        assertOwner(existingResume, currentUserId, "У вас нет прав на редактирование этого резюме");
 
         mapDtoToEntity(dto, existingResume);
         existingResume.setUpdatedDate(LocalDateTime.now());
@@ -82,30 +79,53 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<ResumeResponseDto> searchResumes(String keyword) {
-        List<Resume> resumes = (keyword == null || keyword.trim().isEmpty())
-                ? resumeRepository.findAll()
-                : resumeRepository.searchByKeyword(keyword.trim());
-        return resumes.stream().map(this::mapToDto).toList();
+    public List<ResumeResponseDto> searchResumes(String keyword, Long categoryId) {
+        String normalizedKeyword = (keyword == null || keyword.isBlank()) ? null : keyword.trim();
+        return resumeRepository.findActive(categoryId, normalizedKeyword).stream()
+                .map(this::mapToDto)
+                .toList();
     }
 
     @Override
     @Transactional
     public boolean deleteResume(Long id, Long currentUserId) {
         Resume existingResume = findById(id);
-
-        if (existingResume.getUser() == null || !existingResume.getUser().getId().equals(currentUserId)) {
-            throw new AccessDeniedException("У вас нет прав на удаление этого резюме");
-        }
+        assertOwner(existingResume, currentUserId, "У вас нет прав на удаление этого резюме");
 
         resumeRepository.deleteById(id);
         return true;
     }
 
     @Override
+    @Transactional
+    public ResumeResponseDto publishResume(Long id, Long currentUserId) {
+        Resume resume = findById(id);
+        assertOwner(resume, currentUserId, "У вас нет прав на публикацию этого резюме");
+
+        resume.setIsActive(true);
+        return mapToDto(resumeRepository.save(resume));
+    }
+
+    @Override
+    @Transactional
+    public ResumeResponseDto unpublishResume(Long id, Long currentUserId) {
+        Resume resume = findById(id);
+        assertOwner(resume, currentUserId, "У вас нет прав на снятие с публикации этого резюме");
+
+        resume.setIsActive(false);
+        return mapToDto(resumeRepository.save(resume));
+    }
+
+    @Override
     public Resume findById(Long id) {
         return resumeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Резюме с ID " + id + " не найдено"));
+    }
+
+    private void assertOwner(Resume resume, Long currentUserId, String message) {
+        if (resume.getUser() == null || !resume.getUser().getId().equals(currentUserId)) {
+            throw new AccessDeniedException(message);
+        }
     }
 
     private void mapDtoToEntity(ResumeCreateDto dto, Resume resume) {
@@ -203,6 +223,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         dto.setCreatedDate(resume.getCreatedDate());
         dto.setUpdatedDate(resume.getUpdatedDate());
+        dto.setIsActive(resume.getIsActive());
 
         dto.setContactInfos(resume.getContactInfos().stream().map(c -> {
             ContactInfoDto d = new ContactInfoDto();
