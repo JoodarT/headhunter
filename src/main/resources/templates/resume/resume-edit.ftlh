@@ -82,61 +82,113 @@
         <div class="card-header fw-bold">
             <span><@spring.message "resumeForm.section.experience"/></span>
         </div>
-        <div class="card-body" id="experienceContainer">
-            <#if resume.experiences?? && resume.experiences?size gt 0>
-            <#list resume.experiences as exp>
-            <div class="experience-item border p-3 mb-3 rounded">
-                <div class="mb-2">
-                    <label class="form-label"><@spring.message "resumeForm.exp.company"/></label>
-                    <input type="text" class="form-control" name="experiences[${exp_index}].companyName" value="${(exp.companyName)!''}" required>
+        <div class="card-body">
+            <div id="experienceContainer">
+                <#if resume.experiences?? && resume.experiences?size gt 0>
+                <#list resume.experiences as exp>
+                <div class="experience-item border p-3 mb-3 rounded position-relative">
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn position-absolute top-0 end-0 m-2"><@spring.message "common.delete"/></button>
+                    <div class="mb-2">
+                        <label class="form-label"><@spring.message "resumeForm.exp.company"/></label>
+                        <input type="text" class="form-control" name="experiences[${exp_index}].companyName" value="${(exp.companyName)!''}" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label"><@spring.message "resumeForm.exp.position"/></label>
+                        <input type="text" class="form-control" name="experiences[${exp_index}].position" value="${(exp.position)!''}" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label"><@spring.message "resumeForm.exp.period"/></label>
+                        <input type="text" class="form-control" name="experiences[${exp_index}].period" value="${(exp.period)!''}">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label"><@spring.message "resumeForm.exp.responsibilities"/></label>
+                        <textarea class="form-control" name="experiences[${exp_index}].responsibilities" rows="2">${(exp.responsibilities)!''}</textarea>
+                    </div>
                 </div>
-                <div class="mb-2">
-                    <label class="form-label"><@spring.message "resumeForm.exp.position"/></label>
-                    <input type="text" class="form-control" name="experiences[${exp_index}].position" value="${(exp.position)!''}" required>
-                </div>
-                <div class="mb-2">
-                    <label class="form-label"><@spring.message "resumeForm.exp.period"/></label>
-                    <input type="text" class="form-control" name="experiences[${exp_index}].period" value="${(exp.period)!''}">
-                </div>
-                <div class="mb-2">
-                    <label class="form-label"><@spring.message "resumeForm.exp.responsibilities"/></label>
-                    <textarea class="form-control" name="experiences[${exp_index}].responsibilities" rows="2">${(exp.responsibilities)!''}</textarea>
-                </div>
-            </div>
-        </#list>
-    </#if>
+            </#list>
+        </#if>
+        </div>
+        <button type="button" id="addExperienceBtn" class="btn btn-outline-primary btn-sm"><@spring.message "resumeForm.addExperience"/></button>
+    </div>
 </div>
-</div>
+
+<template id="experienceTemplate">
+    <div class="experience-item border p-3 mb-3 rounded position-relative">
+        <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn position-absolute top-0 end-0 m-2"><@spring.message "common.delete"/></button>
+        <div class="mb-2">
+            <label class="form-label"><@spring.message "resumeForm.exp.company"/></label>
+            <input type="text" class="form-control" name="experiences[0].companyName" required placeholder="<@spring.message "resumeForm.exp.company.placeholder"/>">
+        </div>
+        <div class="mb-2">
+            <label class="form-label"><@spring.message "resumeForm.exp.position"/></label>
+            <input type="text" class="form-control" name="experiences[0].position" required placeholder="<@spring.message "resumeForm.exp.position.placeholder"/>">
+        </div>
+        <div class="mb-2">
+            <label class="form-label"><@spring.message "resumeForm.exp.period"/></label>
+            <input type="text" class="form-control" name="experiences[0].period" placeholder="<@spring.message "resumeForm.exp.period.placeholder"/>">
+        </div>
+        <div class="mb-2">
+            <label class="form-label"><@spring.message "resumeForm.exp.responsibilities"/></label>
+            <textarea class="form-control" name="experiences[0].responsibilities" rows="2" placeholder="<@spring.message "resumeForm.exp.responsibilities.placeholder"/>"></textarea>
+        </div>
+    </div>
+</template>
 
 <div class="card mb-4">
     <div class="card-header fw-bold">
         <span><@spring.message "resumeForm.section.education"/></span>
     </div>
-    <div class="card-body" id="educationContainer">
-        <#if resume.educations?? && resume.educations?size gt 0>
-        <#list resume.educations as edu>
-        <div class="education-item border p-3 mb-3 rounded">
-            <div class="mb-2">
-                <label class="form-label"><@spring.message "resumeForm.edu.institution"/></label>
-                <input type="text" class="form-control" name="educations[${edu_index}].institution" value="${(edu.institution)!''}">
+    <div class="card-body">
+        <div id="educationContainer">
+            <#if resume.educations?? && resume.educations?size gt 0>
+            <#list resume.educations as edu>
+            <div class="education-item border p-3 mb-3 rounded position-relative">
+                <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn position-absolute top-0 end-0 m-2"><@spring.message "common.delete"/></button>
+                <div class="mb-2">
+                    <label class="form-label"><@spring.message "resumeForm.edu.institution"/></label>
+                    <input type="text" class="form-control" name="educations[${edu_index}].institution" value="${(edu.institution)!''}">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label"><@spring.message "resumeForm.edu.faculty"/></label>
+                    <input type="text" class="form-control" name="educations[${edu_index}].faculty" value="${(edu.faculty)!''}">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label"><@spring.message "resumeForm.edu.enrollmentYear"/></label>
+                    <input type="number" class="form-control" name="educations[${edu_index}].enrollmentYear" value="${(edu.enrollmentYear?c)!''}">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label"><@spring.message "resumeForm.edu.graduationYear"/></label>
+                    <input type="number" class="form-control" name="educations[${edu_index}].graduationYear" value="${(edu.graduationYear?c)!''}">
+                </div>
             </div>
-            <div class="mb-2">
-                <label class="form-label"><@spring.message "resumeForm.edu.faculty"/></label>
-                <input type="text" class="form-control" name="educations[${edu_index}].faculty" value="${(edu.faculty)!''}">
-            </div>
-            <div class="mb-2">
-                <label class="form-label"><@spring.message "resumeForm.edu.enrollmentYear"/></label>
-                <input type="number" class="form-control" name="educations[${edu_index}].enrollmentYear" value="${(edu.enrollmentYear?c)!''}">
-            </div>
-            <div class="mb-2">
-                <label class="form-label"><@spring.message "resumeForm.edu.graduationYear"/></label>
-                <input type="number" class="form-control" name="educations[${edu_index}].graduationYear" value="${(edu.graduationYear?c)!''}">
-            </div>
+        </#list>
+    </#if>
+    </div>
+    <button type="button" id="addEducationBtn" class="btn btn-outline-primary btn-sm"><@spring.message "resumeForm.addEducation"/></button>
+</div>
+</div>
+
+<template id="educationTemplate">
+    <div class="education-item border p-3 mb-3 rounded position-relative">
+        <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn position-absolute top-0 end-0 m-2"><@spring.message "common.delete"/></button>
+        <div class="mb-2">
+            <label class="form-label"><@spring.message "resumeForm.edu.institution"/></label>
+            <input type="text" class="form-control" name="educations[0].institution" placeholder="<@spring.message "resumeForm.edu.institution.placeholder"/>">
         </div>
-    </#list>
-</#if>
-</div>
-</div>
+        <div class="mb-2">
+            <label class="form-label"><@spring.message "resumeForm.edu.faculty"/></label>
+            <input type="text" class="form-control" name="educations[0].faculty" placeholder="<@spring.message "resumeForm.edu.faculty.placeholder"/>">
+        </div>
+        <div class="mb-2">
+            <label class="form-label"><@spring.message "resumeForm.edu.enrollmentYear"/></label>
+            <input type="number" class="form-control" name="educations[0].enrollmentYear" placeholder="2019">
+        </div>
+        <div class="mb-2">
+            <label class="form-label"><@spring.message "resumeForm.edu.graduationYear"/></label>
+            <input type="number" class="form-control" name="educations[0].graduationYear" placeholder="2023">
+        </div>
+    </div>
+</template>
 
 <div class="d-flex gap-2 mb-5">
     <button type="submit" class="btn btn-primary btn-lg"><@spring.message "resumeForm.submit.edit"/></button>
@@ -144,4 +196,6 @@
 </div>
 </form>
 </div>
+
+<script src="/js/resume-form.js"></script>
 </@main.mainLayout>
