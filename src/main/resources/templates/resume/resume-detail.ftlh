@@ -29,18 +29,40 @@
     </div>
 
     <#if isOwner?? && isOwner>
-    <div class="d-flex gap-2">
-        <a href="/resumes/${resume.id}/edit" class="btn btn-outline-primary">
-            <i class="bi bi-pencil"></i> <@spring.message "common.edit"/>
-        </a>
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+        <#if resume.isActive?? && resume.isActive>
+        <span class="badge bg-success"><@spring.message "resumeDetail.status.published"/></span>
+        <#else>
+        <span class="badge bg-secondary"><@spring.message "resumeDetail.status.unpublished"/></span>
+    </#if>
 
-        <form action="/resumes/${resume.id}/delete" method="post" style="display:inline;">
-            <#if _csrf??>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        </#if>
-        <button type="submit" class="btn btn-outline-danger"><@spring.message "common.delete"/></button>
-        </form>
-    </div>
+    <a href="/resumes/${resume.id}/edit" class="btn btn-outline-primary">
+        <i class="bi bi-pencil"></i> <@spring.message "common.edit"/>
+    </a>
+
+    <#if resume.isActive?? && resume.isActive>
+    <form action="/resumes/${resume.id}/unpublish" method="post" style="display:inline;">
+        <#if _csrf??>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </#if>
+    <button type="submit" class="btn btn-outline-secondary"><@spring.message "common.unpublish"/></button>
+    </form>
+    <#else>
+    <form action="/resumes/${resume.id}/publish" method="post" style="display:inline;">
+        <#if _csrf??>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </#if>
+    <button type="submit" class="btn btn-outline-success"><@spring.message "common.publish"/></button>
+    </form>
+</#if>
+
+<form action="/resumes/${resume.id}/delete" method="post" style="display:inline;">
+    <#if _csrf??>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</#if>
+<button type="submit" class="btn btn-outline-danger"><@spring.message "common.delete"/></button>
+</form>
+</div>
 </#if>
 </div>
 

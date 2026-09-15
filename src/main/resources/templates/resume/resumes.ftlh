@@ -11,10 +11,22 @@
     </#if>
     </div>
 
-    <form action="/resumes" method="get" class="mb-4">
-        <div class="input-group">
+    <form action="/resumes" method="get" class="row g-2 mb-4">
+        <div class="col-12 col-lg">
             <input type="text" name="search" class="form-control" placeholder="<@spring.message "resumes.search.placeholder"/>" value="${(search)!''}">
-            <button class="btn btn-primary" type="submit"><@spring.message "common.search"/></button>
+        </div>
+        <div class="col-8 col-lg-auto">
+            <select name="category" class="form-select" onchange="this.form.submit()">
+                <option value=""><@spring.message "vacancies.filter.category.all"/></option>
+                <#if categories??>
+                <#list categories as c>
+                <option value="${c.id?c}" <#if selectedCategory?? && selectedCategory == c.id>selected</#if>>${c.name}</option>
+                </#list>
+            </#if>
+            </select>
+        </div>
+        <div class="col-4 col-lg-auto">
+            <button class="btn btn-primary w-100" type="submit"><@spring.message "common.search"/></button>
         </div>
     </form>
 
