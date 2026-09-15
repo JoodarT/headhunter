@@ -29,14 +29,19 @@ public class ResumeWebController {
     @GetMapping
     public String getAllResumes(
             @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "category", required = false) Long category,
             @AuthenticationPrincipal UserDetails userDetails,
             Model model
     ) {
         if (search != null && !search.trim().isEmpty()) {
-            model.addAttribute("resumes", resumeService.searchResumes(search));
+            model.addAttribute("resumes", resumeService.searchResumes(search, category));
+            model.addAttribute("search", search.trim());
         } else {
-            model.addAttribute("resumes", resumeService.getAllResumes());
+            model.addAttribute("resumes", resumeService.getAllResumes(category));
         }
+
+        model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("selectedCategory", category);
 
         if (userDetails != null) {
             model.addAttribute("currentUser", userService.getUserByEmail(userDetails.getUsername()));
@@ -148,6 +153,36 @@ public class ResumeWebController {
         return "redirect:/vacancies";
     }
 
+    @PostMapping("/{id}/publish")
+    public String publishResume(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        resumeService.publishResume(id, currentUser.getId());
+
+        return "redirect:/resumes/" + id;
+    }
+
+    @PostMapping("/{id}/unpublish")
+    public String unpublishResume(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        resumeService.unpublishResume(id, currentUser.getId());
+
+        return "redirect:/resumes/" + id;
+    }
+
     @GetMapping("/{id}")
     public String showResumeDetail(
             @PathVariable("id") Long id,
@@ -155,7 +190,6 @@ public class ResumeWebController {
             Model model
     ) {
         var resume = resumeService.getResumeById(id);
-        model.addAttribute("resume", resume);
 
         boolean isOwner = false;
         if (userDetails != null) {
@@ -164,6 +198,12 @@ public class ResumeWebController {
                 isOwner = true;
             }
         }
+
+        if (!isOwner && !Boolean.TRUE.equals(resume.getIsActive())) {
+            return "redirect:/resumes?error=notFound";
+        }
+
+        model.addAttribute("resume", resume);
         model.addAttribute("isOwner", isOwner);
 
         return "resume/resume-detail";
