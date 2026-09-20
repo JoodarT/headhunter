@@ -42,6 +42,8 @@ public class UserServiceImpl implements UserService {
                 .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .name(userDto.getName())
+                .surname(userDto.getSurname())
+                .age(userDto.getAge())
                 .phone(userDto.getPhone())
                 .role(resolveRole(userDto.getAccountType()))
                 .build();
@@ -76,6 +78,8 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setName(userDto.getName());
+        user.setSurname(userDto.getSurname());
+        user.setAge(userDto.getAge());
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
         user.setRole(resolveRole(userDto.getAccountType()));

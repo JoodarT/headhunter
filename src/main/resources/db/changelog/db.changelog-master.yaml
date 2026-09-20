@@ -75,3 +75,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/24_add_sender_to_messages.yaml
 
+  - include:
+      file: db/changelog/migration/25_add_surname_and_age_to_users.yaml
+
