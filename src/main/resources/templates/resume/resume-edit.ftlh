@@ -98,7 +98,16 @@
                     </div>
                     <div class="mb-2">
                         <label class="form-label"><@spring.message "resumeForm.exp.period"/></label>
-                        <input type="text" class="form-control" name="experiences[${exp_index}].period" value="${(exp.period)!''}">
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <input type="month" class="form-control period-start" style="max-width: 170px;" aria-label="<@spring.message "resumeForm.exp.period.start"/>" required>
+                            <span>—</span>
+                            <input type="month" class="form-control period-end" style="max-width: 170px;" aria-label="<@spring.message "resumeForm.exp.period.end"/>">
+                            <label class="form-check form-check-inline ms-2 mb-0">
+                                <input type="checkbox" class="form-check-input period-current">
+                                <span class="form-check-label"><@spring.message "resumeForm.exp.period.current"/></span>
+                            </label>
+                        </div>
+                        <input type="hidden" class="period-value" name="experiences[${exp_index}].period" value="${(exp.period)!''}">
                     </div>
                     <div class="mb-2">
                         <label class="form-label"><@spring.message "resumeForm.exp.responsibilities"/></label>
@@ -125,7 +134,16 @@
         </div>
         <div class="mb-2">
             <label class="form-label"><@spring.message "resumeForm.exp.period"/></label>
-            <input type="text" class="form-control" name="experiences[0].period" placeholder="<@spring.message "resumeForm.exp.period.placeholder"/>">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <input type="month" class="form-control period-start" style="max-width: 170px;" aria-label="<@spring.message "resumeForm.exp.period.start"/>" required>
+                <span>—</span>
+                <input type="month" class="form-control period-end" style="max-width: 170px;" aria-label="<@spring.message "resumeForm.exp.period.end"/>">
+                <label class="form-check form-check-inline ms-2 mb-0">
+                    <input type="checkbox" class="form-check-input period-current">
+                    <span class="form-check-label"><@spring.message "resumeForm.exp.period.current"/></span>
+                </label>
+            </div>
+            <input type="hidden" class="period-value" name="experiences[0].period">
         </div>
         <div class="mb-2">
             <label class="form-label"><@spring.message "resumeForm.exp.responsibilities"/></label>
