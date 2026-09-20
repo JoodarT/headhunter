@@ -36,9 +36,10 @@
                 </div>
 
                 <div class="col-md-8 ps-md-4 mt-3 mt-md-0">
-                    <h4 class="card-title mb-3">${user.name!springMacroRequestContext.getMessage('profile.name.none')}</h4>
+                    <h4 class="card-title mb-3">${user.name!springMacroRequestContext.getMessage('profile.name.none')} ${user.surname!''}</h4>
                     <p class="card-text mb-2"><strong><@spring.message "profile.email"/>:</strong> ${user.email!""}</p>
                     <p class="card-text mb-2"><strong><@spring.message "profile.phone"/>:</strong> ${user.phone!springMacroRequestContext.getMessage('profile.phone.none')}</p>
+                    <p class="card-text mb-2"><strong><@spring.message "profile.age"/>:</strong> ${(user.age?c)!springMacroRequestContext.getMessage('profile.age.none')}</p>
                     <p class="card-text mb-3"><strong><@spring.message "profile.accountType"/>:</strong>
                         <span class="badge bg-info text-dark">${(user.role.role)!""}</span>
                     </p>

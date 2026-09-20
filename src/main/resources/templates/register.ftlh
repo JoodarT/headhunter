@@ -20,6 +20,10 @@
             <input type="text" name="name" class="form-control" value="${(userDto.name)!''}" required>
         </div>
         <div class="mb-3">
+            <label class="form-label"><@spring.message "register.surname"/></label>
+            <input type="text" name="surname" class="form-control" value="${(userDto.surname)!''}" required>
+        </div>
+        <div class="mb-3">
             <label class="form-label"><@spring.message "register.email"/></label>
             <input type="email" name="email" class="form-control" value="${(userDto.email)!''}" required>
         </div>
@@ -30,6 +34,10 @@
         <div class="mb-3">
             <label class="form-label"><@spring.message "register.phone"/></label>
             <input type="tel" name="phone" class="form-control" value="${(userDto.phone)!''}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label"><@spring.message "register.age"/></label>
+            <input type="number" name="age" class="form-control" min="16" max="100" value="${(userDto.age)!''}" required>
         </div>
         <div class="mb-3">
             <label class="form-label"><@spring.message "register.accountType"/></label>

@@ -24,6 +24,11 @@
         </div>
 
         <div class="mb-3">
+            <label class="form-label"><@spring.message "profileEdit.surname"/></label>
+            <input type="text" name="surname" value="${userDto.surname!''}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
             <label class="form-label"><@spring.message "profileEdit.email"/></label>
             <input type="email" name="email" value="${userDto.email!''}" class="form-control" required>
         </div>
@@ -31,6 +36,11 @@
         <div class="mb-3">
             <label class="form-label"><@spring.message "profileEdit.phone"/></label>
             <input type="tel" name="phone" value="${userDto.phone!''}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><@spring.message "profileEdit.age"/></label>
+            <input type="number" name="age" min="16" max="100" value="${(userDto.age)!''}" class="form-control" required>
         </div>
 
         <div class="d-flex justify-content-between mt-4">

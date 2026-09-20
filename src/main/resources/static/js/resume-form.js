@@ -1,5 +1,3 @@
-// Dynamic add/remove of "Work experience" and "Education" blocks
-// on the resume create/edit forms, without a page reload.
 (function () {
 
     function initDynamicSection(options) {
