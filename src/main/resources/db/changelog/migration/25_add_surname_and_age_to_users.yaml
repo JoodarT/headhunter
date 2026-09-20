@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 25-add-surname-and-age-to-users
+      author: joodar
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: surname
+                  type: varchar(255)
+              - column:
+                  name: age
+                  type: integer

@@ -57,6 +57,8 @@ public class UserWebController {
         UserDto userDto = new UserDto();
         userDto.setEmail(currentUser.getEmail());
         userDto.setName(currentUser.getName());
+        userDto.setSurname(currentUser.getSurname());
+        userDto.setAge(currentUser.getAge());
         userDto.setPhone(currentUser.getPhone());
         if (currentUser.getRole() != null) {
             userDto.setAccountType(currentUser.getRole().getRole());
