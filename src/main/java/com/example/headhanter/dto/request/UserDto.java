@@ -2,6 +2,8 @@ package com.example.headhanter.dto.request;
 
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,6 +24,14 @@ public class UserDto {
 
     @NotBlank(message = "{validation.user.name.notBlank}")
     private String name;
+
+    @NotBlank(message = "{validation.user.surname.notBlank}")
+    private String surname;
+
+    @NotNull(message = "{validation.user.age.notNull}")
+    @Min(value = 16, message = "{validation.user.age.min}")
+    @Max(value = 100, message = "{validation.user.age.max}")
+    private Integer age;
 
     @NotBlank(message = "{validation.user.phone.notBlank}")
     private String phone;
