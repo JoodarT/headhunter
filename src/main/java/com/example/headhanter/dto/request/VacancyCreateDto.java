@@ -29,5 +29,7 @@ public class VacancyCreateDto {
 
     private Long employerId;
 
+    private Boolean isActive;
+
 
 }
