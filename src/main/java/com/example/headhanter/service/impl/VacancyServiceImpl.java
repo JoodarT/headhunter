@@ -90,7 +90,7 @@ public class VacancyServiceImpl implements VacancyService {
                 .category(categoryService.getById(dto.getCategoryId()))
                 .employer(employer)
                 .views(0)
-                .isActive(true)
+                .isActive(dto.getIsActive() != null ? dto.getIsActive() : true)
                 .updateTime(LocalDateTime.now())
                 .createdDate(LocalDateTime.now())
                 .build();
@@ -112,6 +112,9 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setCompany(dto.getCompany());
         vacancy.setDescription(dto.getDescription());
         vacancy.setSalary(dto.getSalary());
+        if (dto.getIsActive() != null) {
+            vacancy.setIsActive(dto.getIsActive());
+        }
         vacancy.setUpdateTime(LocalDateTime.now());
 
         return mapToResponseDto(vacancyRepository.save(vacancy));

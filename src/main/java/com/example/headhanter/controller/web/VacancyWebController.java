@@ -180,6 +180,7 @@ public class VacancyWebController {
         dto.setDescription(vacancy.getDescription());
         dto.setSalary(vacancy.getSalary());
         dto.setCategoryId(vacancy.getCategoryId());
+        dto.setIsActive(vacancy.getIsActive());
 
         model.addAttribute("vacancyDto", dto);
         model.addAttribute("vacancyId", id);
