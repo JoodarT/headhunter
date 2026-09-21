@@ -49,6 +49,12 @@
                 <label for="company" class="form-label"><@spring.message "vacancyForm.company"/></label>
                 <input type="text" class="form-control" id="company" name="company" required placeholder="<@spring.message "vacancyForm.company.placeholder"/>">
             </div>
+
+            <div class="mb-3 form-check">
+                <input type="hidden" name="isActive" value="false">
+                <input type="checkbox" class="form-check-input" id="isActive" name="isActive" value="true" checked>
+                <label class="form-check-label" for="isActive"><@spring.message "vacancyForm.isActive"/></label>
+            </div>
         </div>
     </div>
 

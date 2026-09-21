@@ -50,6 +50,12 @@
             <label for="description" class="form-label"><@spring.message "vacancyForm.description"/></label>
             <textarea class="form-control" id="description" name="description" rows="6" required>${vacancyDto.description!''}</textarea>
         </div>
+
+        <div class="mb-3 form-check">
+            <input type="hidden" name="isActive" value="false">
+            <input type="checkbox" class="form-check-input" id="isActive" name="isActive" value="true" <#if !vacancyDto.isActive?? || vacancyDto.isActive>checked</#if>>
+            <label class="form-check-label" for="isActive"><@spring.message "vacancyForm.isActive"/></label>
+        </div>
     </div>
 </div>
 
