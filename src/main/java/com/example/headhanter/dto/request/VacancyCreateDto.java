@@ -24,6 +24,16 @@ public class VacancyCreateDto {
     @Min(value = 0, message = "{validation.vacancy.salary.min}")
     private BigDecimal salary;
 
+    @NotNull(message = "{validation.vacancy.experienceFrom.notNull}")
+    @Min(value = 0, message = "{validation.vacancy.experienceFrom.min}")
+    @Max(value = 50, message = "{validation.vacancy.experienceFrom.max}")
+    private Integer experienceFrom;
+
+    @NotNull(message = "{validation.vacancy.experienceTo.notNull}")
+    @Min(value = 0, message = "{validation.vacancy.experienceTo.min}")
+    @Max(value = 50, message = "{validation.vacancy.experienceTo.max}")
+    private Integer experienceTo;
+
     @NotNull(message = "{validation.vacancy.category.notNull}")
     private Long categoryId;
 
@@ -31,5 +41,11 @@ public class VacancyCreateDto {
 
     private Boolean isActive;
 
-
+    @AssertTrue(message = "{validation.vacancy.experience.range}")
+    public boolean isExperienceRangeValid() {
+        if (experienceFrom == null || experienceTo == null) {
+            return true;
+        }
+        return experienceTo >= experienceFrom;
+    }
 }

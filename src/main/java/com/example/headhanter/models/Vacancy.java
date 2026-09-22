@@ -33,6 +33,12 @@ public class Vacancy {
 
     private BigDecimal salary;
 
+    @Column(name = "experience_from")
+    private Integer experienceFrom;
+
+    @Column(name = "experience_to")
+    private Integer experienceTo;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;

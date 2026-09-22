@@ -12,6 +12,8 @@ public class VacancyResponseDto {
     private String company;
     private String description;
     private BigDecimal salary;
+    private Integer experienceFrom;
+    private Integer experienceTo;
     private Long categoryId;
     private String categoryName;
     private Integer views;
