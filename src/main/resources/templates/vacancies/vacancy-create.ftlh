@@ -40,6 +40,17 @@
                 <input type="number" step="0.01" class="form-control" id="salary" name="salary" required placeholder="100000">
             </div>
 
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label for="experienceFrom" class="form-label"><@spring.message "vacancyForm.experienceFrom"/></label>
+                    <input type="number" class="form-control" id="experienceFrom" name="experienceFrom" min="0" max="50" required placeholder="0">
+                </div>
+                <div class="col-6">
+                    <label for="experienceTo" class="form-label"><@spring.message "vacancyForm.experienceTo"/></label>
+                    <input type="number" class="form-control" id="experienceTo" name="experienceTo" min="0" max="50" required placeholder="3">
+                </div>
+            </div>
+
             <div class="mb-3">
                 <label for="description" class="form-label"><@spring.message "vacancyForm.description"/></label>
                 <textarea class="form-control" id="description" name="description" rows="6" required placeholder="<@spring.message "vacancyForm.description.placeholder"/>"></textarea>

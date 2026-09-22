@@ -70,6 +70,17 @@
 </#if>
 
 <div class="mb-4">
+    <h5 class="text-muted text-uppercase fs-6"><@spring.message "vacancyDetail.section.experience"/></h5>
+    <p class="lead fw-normal">
+        <#if vacancy.experienceFrom?? && vacancy.experienceTo??>
+        <@spring.messageArgs "vacancyDetail.experience.range", [vacancy.experienceFrom, vacancy.experienceTo]/>
+        <#else>
+        <@spring.message "vacancyDetail.experience.none"/>
+    </#if>
+    </p>
+</div>
+
+<div class="mb-4">
     <h5 class="text-muted text-uppercase fs-6"><@spring.message "vacancyDetail.section.category"/></h5>
         <p class="lead fw-normal">
             <#if vacancy.categoryName??>

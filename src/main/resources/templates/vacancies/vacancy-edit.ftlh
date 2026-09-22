@@ -46,6 +46,17 @@
             <input type="number" step="0.01" class="form-control" id="salary" name="salary" value="${(vacancyDto.salary!0)?c}" required>
         </div>
 
+        <div class="row mb-3">
+            <div class="col-6">
+                <label for="experienceFrom" class="form-label"><@spring.message "vacancyForm.experienceFrom"/></label>
+                <input type="number" class="form-control" id="experienceFrom" name="experienceFrom" min="0" max="50" <#if vacancyDto.experienceFrom??>value="${vacancyDto.experienceFrom?c}"</#if> required>
+            </div>
+            <div class="col-6">
+                <label for="experienceTo" class="form-label"><@spring.message "vacancyForm.experienceTo"/></label>
+                <input type="number" class="form-control" id="experienceTo" name="experienceTo" min="0" max="50" <#if vacancyDto.experienceTo??>value="${vacancyDto.experienceTo?c}"</#if> required>
+            </div>
+        </div>
+
         <div class="mb-3">
             <label for="description" class="form-label"><@spring.message "vacancyForm.description"/></label>
             <textarea class="form-control" id="description" name="description" rows="6" required>${vacancyDto.description!''}</textarea>
