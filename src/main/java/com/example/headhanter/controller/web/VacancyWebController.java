@@ -3,8 +3,8 @@ package com.example.headhanter.controller.web;
 import com.example.headhanter.dto.request.VacancyCreateDto;
 import com.example.headhanter.dto.response.ResumeResponseDto;
 import com.example.headhanter.dto.response.VacancyResponseDto;
+import com.example.headhanter.dto.response.VacancySearchResultDto;
 import com.example.headhanter.models.User;
-import com.example.headhanter.repository.VacancyRepository;
 import com.example.headhanter.service.CategoryService;
 import com.example.headhanter.service.ResponseService;
 import com.example.headhanter.service.ResumeService;
@@ -46,18 +46,12 @@ public class VacancyWebController {
             @RequestParam(value = "category", required = false) Long category,
             Model model
     ) {
-        boolean ascending = "asc".equalsIgnoreCase(direction);
-
-        Page<VacancyResponseDto> vacancyPage;
+        Page<VacancyResponseDto> vacancyPage = fetchVacancies(page, sort, direction, search, company, category);
 
         if (search != null && !search.trim().isEmpty()) {
-            vacancyPage = vacancyService.searchVacancy(search.trim(), page, PAGE_SIZE);
             model.addAttribute("search", search.trim());
         } else if (company != null && !company.trim().isEmpty()) {
-            vacancyPage = vacancyService.getVacanciesByCompany(company.trim(), page, PAGE_SIZE);
             model.addAttribute("company", company.trim());
-        } else {
-            vacancyPage = vacancyService.getAllPaged(page, PAGE_SIZE, sort, ascending, category);
         }
 
         model.addAttribute("vacancies", vacancyPage.getContent());
@@ -69,6 +63,37 @@ public class VacancyWebController {
         model.addAttribute("selectedCategory", category);
 
         return "vacancies/vacancies";
+    }
+
+    @GetMapping("/data")
+    @ResponseBody
+    public VacancySearchResultDto getVacanciesData(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String sort,
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "company", required = false) String company,
+            @RequestParam(value = "category", required = false) Long category
+    ) {
+        Page<VacancyResponseDto> vacancyPage = fetchVacancies(page, sort, direction, search, company, category);
+
+        VacancySearchResultDto result = new VacancySearchResultDto();
+        result.setVacancies(vacancyPage.getContent());
+        result.setCurrentPage(page);
+        result.setTotalPages(vacancyPage.getTotalPages());
+        return result;
+    }
+
+    private Page<VacancyResponseDto> fetchVacancies(int page, String sort, String direction, String search, String company, Long category) {
+        boolean ascending = "asc".equalsIgnoreCase(direction);
+
+        if (search != null && !search.trim().isEmpty()) {
+            return vacancyService.searchVacancy(search.trim(), page, PAGE_SIZE);
+        }
+        if (company != null && !company.trim().isEmpty()) {
+            return vacancyService.getVacanciesByCompany(company.trim(), page, PAGE_SIZE);
+        }
+        return vacancyService.getAllPaged(page, PAGE_SIZE, sort, ascending, category);
     }
 
     @GetMapping("/create")
