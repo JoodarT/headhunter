@@ -78,3 +78,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/migration/25_add_surname_and_age_to_users.yaml
 
+  - include:
+      file: db/changelog/migration/26_add_experience_range_to_vacancies.yaml
+
