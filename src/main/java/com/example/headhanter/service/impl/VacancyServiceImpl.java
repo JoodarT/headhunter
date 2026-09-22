@@ -87,6 +87,8 @@ public class VacancyServiceImpl implements VacancyService {
                 .company(dto.getCompany())
                 .description(dto.getDescription())
                 .salary(dto.getSalary())
+                .experienceFrom(dto.getExperienceFrom())
+                .experienceTo(dto.getExperienceTo())
                 .category(categoryService.getById(dto.getCategoryId()))
                 .employer(employer)
                 .views(0)
@@ -112,6 +114,8 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setCompany(dto.getCompany());
         vacancy.setDescription(dto.getDescription());
         vacancy.setSalary(dto.getSalary());
+        vacancy.setExperienceFrom(dto.getExperienceFrom());
+        vacancy.setExperienceTo(dto.getExperienceTo());
         if (dto.getIsActive() != null) {
             vacancy.setIsActive(dto.getIsActive());
         }
@@ -156,6 +160,8 @@ public class VacancyServiceImpl implements VacancyService {
         dto.setCompany(vacancy.getCompany());
         dto.setDescription(vacancy.getDescription());
         dto.setSalary(vacancy.getSalary());
+        dto.setExperienceFrom(vacancy.getExperienceFrom());
+        dto.setExperienceTo(vacancy.getExperienceTo());
         dto.setViews(vacancy.getViews());
         dto.setIsActive(vacancy.getIsActive());
         dto.setUpdateTime(vacancy.getUpdateTime());

@@ -204,6 +204,8 @@ public class VacancyWebController {
         dto.setCompany(vacancy.getCompany());
         dto.setDescription(vacancy.getDescription());
         dto.setSalary(vacancy.getSalary());
+        dto.setExperienceFrom(vacancy.getExperienceFrom());
+        dto.setExperienceTo(vacancy.getExperienceTo());
         dto.setCategoryId(vacancy.getCategoryId());
         dto.setIsActive(vacancy.getIsActive());
 
