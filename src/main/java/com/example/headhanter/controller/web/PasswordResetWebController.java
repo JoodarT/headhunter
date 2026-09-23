@@ -27,8 +27,7 @@ public class PasswordResetWebController {
     @PostMapping("/forgot-password")
     public String requestReset(@RequestParam("email") String email, Model model) {
         try {
-            String token = userService.createPasswordResetToken(email);
-            model.addAttribute("resetLink", "/reset-password?token=" + token);
+            model.addAttribute("resetToken", userService.createPasswordResetToken(email));
         } catch (NoSuchElementException e) {
         }
         model.addAttribute("submitted", true);
@@ -53,10 +52,11 @@ public class PasswordResetWebController {
             Model model
     ) {
         if (!password.equals(confirmPassword)) {
-            model.addAttribute("token", token);
+            model.addAttribute("resetToken", token);
+            model.addAttribute("submitted", true);
             model.addAttribute("error", messageSource.getMessage(
                     "resetPassword.error.mismatch", null, LocaleContextHolder.getLocale()));
-            return "reset-password";
+            return "forgot-password";
         }
 
         try {
