@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19-add-updated-date-to-resumes
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: resumes
+                columnName: updated_date
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: updated_date
+                  type: timestamp
+
+  - changeSet:
+      id: 19-backfill-updated-date-from-created-date
+      author: joodar
+      changes:
+        - sql:
+            sql: >
+              UPDATE resumes SET updated_date = created_date
+              WHERE updated_date IS NULL;

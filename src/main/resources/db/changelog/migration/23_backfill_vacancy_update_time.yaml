@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 23-backfill-vacancy-update-time
+      author: joodar
+      changes:
+        - sql:
+            sql: >
+              UPDATE vacancies
+              SET update_time = COALESCE(created_date, CURRENT_TIMESTAMP)
+              WHERE update_time IS NULL;
+        - sql:
+            sql: >
+              UPDATE vacancies
+              SET created_date = update_time
+              WHERE created_date IS NULL;

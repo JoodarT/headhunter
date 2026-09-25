@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 24-add-sender-to-messages
+      author: joodar
+      changes:
+        - addColumn:
+            tableName: messages
+            columns:
+              - column:
+                  name: sender_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_messages_sender
+                    references: users(id)

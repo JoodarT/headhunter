@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17-rename-contact-info-value-column
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: contact_info
+                columnName: contact_value
+      changes:
+        - renameColumn:
+            tableName: contact_info
+            oldColumnName: value
+            newColumnName: contact_value
+            columnDataType: varchar(255)

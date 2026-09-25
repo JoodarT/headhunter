@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12-insert-authorities
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM authorities
+      changes:
+        - insert:
+            tableName: authorities
+            columns:
+              - column: { name: authority, value: "ROLE_APPLICANT" }
+        - insert:
+            tableName: authorities
+            columns:
+              - column: { name: authority, value: "ROLE_EMPLOYER" }
+        - insert:
+            tableName: authorities
+            columns:
+              - column: { name: authority, value: "ROLE_ADMIN" }
+
+  - changeSet:
+      id: 12-insert-roles
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM roles
+      changes:
+        - sql:
+            splitStatements: true
+            endDelimiter: ";"
+            sql: >
+              INSERT INTO roles (role, authority_id) VALUES ('APPLICANT', (SELECT id FROM authorities WHERE authority = 'ROLE_APPLICANT'));
+              INSERT INTO roles (role, authority_id) VALUES ('EMPLOYER', (SELECT id FROM authorities WHERE authority = 'ROLE_EMPLOYER'));
+              INSERT INTO roles (role, authority_id) VALUES ('ADMIN', (SELECT id FROM authorities WHERE authority = 'ROLE_ADMIN'));
+
+  - changeSet:
+      id: 12-add-role-id-to-users
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: users
+                columnName: role_id
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_users_role
+                    references: roles(id)
+
+  - changeSet:
+      id: 12-backfill-users-role-id
+      author: joodar
+      changes:
+        - sql:
+            sql: >
+              UPDATE users SET role_id = (SELECT r.id FROM roles r WHERE r.role = users.account_type)
+              WHERE role_id IS NULL AND account_type IS NOT NULL;
+
+  - changeSet:
+      id: 12-relax-account-type-not-null
+      author: joodar
+      comment: role_id/roles теперь источник истины для роли; account_type больше не заполняется новым кодом
+      changes:
+        - dropNotNullConstraint:
+            tableName: users
+            columnName: account_type
+            columnDataType: varchar(50)

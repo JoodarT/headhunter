@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13-add-company-to-vacancies
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: vacancies
+                columnName: company
+      changes:
+        - addColumn:
+            tableName: vacancies
+            columns:
+              - column:
+                  name: company
+                  type: VARCHAR(150)
+
+  - changeSet:
+      id: 13-backfill-company-from-employer-name
+      author: joodar
+      changes:
+        - sql:
+            sql: >
+              UPDATE vacancies SET company = (SELECT u.name FROM users u WHERE u.id = vacancies.employer_id)
+              WHERE company IS NULL;

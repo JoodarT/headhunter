@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: joodar
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: name
+                  value: "Тестовый Пользователь"
+              - column:
+                  name: email
+                  value: "test@example.com"
+              - column:
+                  name: account_type
+                  value: "APPLICANT"
+              # Добавь поле password:
+              - column:
+                  name: password
+                  value: "$2a$10$e8.s4k...хеш_или_просто_пароль"

@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 21-create-role-authorities
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: role_authorities
+      changes:
+        - createTable:
+            tableName: role_authorities
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_role_authorities_role
+                    references: roles(id)
+              - column:
+                  name: authority_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_role_authorities_authority
+                    references: authorities(id)
+        - addPrimaryKey:
+            tableName: role_authorities
+            columnNames: role_id, authority_id
+            constraintName: pk_role_authorities
+
+  - changeSet:
+      id: 21-backfill-role-authorities
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM role_authorities
+      changes:
+        - sql:
+            sql: INSERT INTO role_authorities (role_id, authority_id) SELECT id, authority_id FROM roles WHERE authority_id IS NOT NULL;
+
+  - changeSet:
+      id: 21-drop-roles-authority-id
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists:
+            tableName: roles
+            columnName: authority_id
+      changes:
+        - dropColumn:
+            tableName: roles
+            columnName: authority_id

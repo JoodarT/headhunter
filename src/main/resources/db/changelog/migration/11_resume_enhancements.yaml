@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11-add-applicant-name-to-resumes
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: resumes
+                columnName: applicant_name
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: applicant_name
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 11-add-skills-to-resumes
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: resumes
+                columnName: skills
+      changes:
+        - addColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: skills
+                  type: VARCHAR(2000)
+
+  - changeSet:
+      id: 11-add-graduation-year-to-education-info
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: education_info
+                columnName: graduation_year
+      changes:
+        - addColumn:
+            tableName: education_info
+            columns:
+              - column:
+                  name: graduation_year
+                  type: INT

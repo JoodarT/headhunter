@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 18-add-created-date-to-vacancies
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: vacancies
+                columnName: created_date
+      changes:
+        - addColumn:
+            tableName: vacancies
+            columns:
+              - column:
+                  name: created_date
+                  type: timestamp
+
+  - changeSet:
+      id: 18-backfill-created-date-from-update-time
+      author: joodar
+      changes:
+        - sql:
+            sql: >
+              UPDATE vacancies SET created_date = update_time
+              WHERE created_date IS NULL;

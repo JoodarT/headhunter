@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16-migrate-legacy-contact-columns
+      author: joodar
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists:
+            tableName: resumes
+            columnName: phone
+      changes:
+        - sql:
+            splitStatements: true
+            endDelimiter: ";"
+            sql: >
+              INSERT INTO contact_info (resume_id, contact_type_id, "VALUE")
+              SELECT id, (SELECT id FROM contact_types WHERE type_name = 'PHONE'), phone
+              FROM resumes WHERE phone IS NOT NULL AND phone <> '';
+
+              INSERT INTO contact_info (resume_id, contact_type_id, "VALUE")
+              SELECT id, (SELECT id FROM contact_types WHERE type_name = 'EMAIL'), email
+              FROM resumes WHERE email IS NOT NULL AND email <> '';
+
+              INSERT INTO contact_info (resume_id, contact_type_id, "VALUE")
+              SELECT id, (SELECT id FROM contact_types WHERE type_name = 'TELEGRAM'), telegram
+              FROM resumes WHERE telegram IS NOT NULL AND telegram <> '';
+
+              INSERT INTO contact_info (resume_id, contact_type_id, "VALUE")
+              SELECT id, (SELECT id FROM contact_types WHERE type_name = 'LINKEDIN'), linkedin
+              FROM resumes WHERE linkedin IS NOT NULL AND linkedin <> '';
+        - dropColumn:
+            tableName: resumes
+            columns:
+              - column:
+                  name: phone
+              - column:
+                  name: email
+              - column:
+                  name: telegram
+              - column:
+                  name: linkedin

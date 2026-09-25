@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 26-add-experience-range-to-vacancies
+      author: joodar
+      changes:
+        - addColumn:
+            tableName: vacancies
+            columns:
+              - column:
+                  name: experience_from
+                  type: integer
+              - column:
+                  name: experience_to
+                  type: integer
